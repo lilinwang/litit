@@ -1,0 +1,99 @@
+#example2 h6
+{margin:0 0 15px;
+font-family:'Segoe UI',Arial,Verdana,sans-serif;
+line-height:80%;font-weight:normal;color:#222
+}
+#example2 span
+{font-family:Arial,Verdana,sans-serif;
+padding:15px 20px 20px;
+margin:0;
+color:#444;
+background:#fff
+}
+#example2 .front
+{margin-top:0
+}
+#example2 .front img
+{margin:10px
+}
+#example2 .front h6
+{font-size:36px
+}
+#example2 .front span
+{font-size:15px
+}
+#example2 .behind
+{margin-top:62px
+}
+#example2 .behind img
+{margin:6px
+}
+#example2 .behind h6
+{
+font-size:22px
+}
+#example2 .behind span
+{font-size:12px
+}
+#example2 .back
+{
+margin-top:88px
+}
+#example2 img
+{
+margin:4px
+}
+#example2 .back h6
+{
+font-size:12px
+}
+#example2 .back span
+{
+font-size:7px
+}
+#example2
+{
+margin:0;
+padding:0;
+position:relative;
+z-index:1
+}
+#example2 li
+{
+margin:0;
+padding:0;
+list-style:none;
+position:absolute;
+z-index:1;
+display:none;
+border-width:0px
+}
+#example2 img
+{
+border:0;
+vertical-align:bottom;
+width:120px;
+height:120px
+}
+#example2 span
+{
+display:block;
+position:absolute;
+left:0;
+right:0;
+bottom:0;
+text-align:left;
+cursor:default;
+opacity:0.7;
+-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+filter:alpha(opacity=70)
+}
+#example2 h6
+{
+cursor:default
+}
+#example2 a
+{
+cursor:default;
+text-decoration:none
+}

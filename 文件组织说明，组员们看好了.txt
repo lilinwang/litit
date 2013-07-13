@@ -1,0 +1,14 @@
+﻿1、image文件夹：存网站图片素材
+2、upload文件夹：image:存放音乐人和图片（音乐人头像，音乐图片）
+		 music：存放音乐人的音乐
+		 user_image：听众的头像
+3、js文件夹：存js文件
+4、css文件夹：存css文件
+5、view文件夹：html的界面代码
+6、controller：逻辑
+7、model：对数据库的操作
+
+（bootstrap的文件看着分存）
+
+MVC CI框架
+
