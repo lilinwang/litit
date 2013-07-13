@@ -1,0 +1,3 @@
+http://hi.baidu.com/tp100/item/b48debf7f6fa8909d99e7253
+
+注意：先装msysgit，再装tortoisegit
