@@ -42,9 +42,20 @@
 			}
 		});
 		$(".next_song").click(function(){
+	        $.get("<?php echo base_url('ajax/getmusic')?>", function(data, $status){
+	            data = eval ("(" + data + ")");
+		        $("#player source").attr("src","<?php echo base_url()?>"+data.dir);
+		        $("#player").get(0).load();
+		        $("#player").get(0).play();
+		        $("#left_1 img").attr("src","<?php echo base_url()?>"+data.image_dir);
+		        $("#name b").html(data.name);
+		        $("#story").html(data.story);
+                $("#musicianintro").html(data.musician.introduction);
+                $("#musicianpt").attr("src", "<?php echo base_url();?>"+data.musician.portaitdir);
+                $("#musiciannick span").html(data.musician.nickname);
+                $("#musicianatt span").html(data.musician.attention);
 			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
-				document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
-				$("#player").get(0).play();            
+	        });
 		});
 		$(".like").click(function(){
 			$(".panel_login").slideToggle("slow");
@@ -189,7 +200,7 @@ function changemusic(num){
         <div class="music_clear"></div>
         <div class="music_left_1_right_2">
 			<audio id="player" controls="controls" >
-				<source name="player" src="<?php echo base_url().$dir ?>" type="audio/mp3" preload="load">
+				<source name="player" src="<?php echo base_url().$dir ?>" type="audio/mp3" preload="auto">
 				Your browser does not support this audio format.
 			</audio>
 		</div>
@@ -256,21 +267,21 @@ function changemusic(num){
       <div class="music_right_2_left" id="left_2">
         <div class="music_right_2_left_1"><b>音乐人介绍</b></div>
           <div class="music_right_2_left_2">
-            <div style="text-indent:20px"><?php echo $musician['introduction']?> </div>
+            <div style="text-indent:20px" id="musicianintro"><?php echo $musician['introduction']?> </div>
             <div class="music_clear"></div>
           </div>
         <div class="music_clear"></div>
       </div>
       <div class="music_right_2_right" id="right_2">
         <div class="music_right_2_right_1">
-			<img src="<?php echo base_url().$musician['portaitdir']?>" />
-			<div class="music_right_2_right_1_yyr"><b>音乐人：</b><?php echo $musician['nickname']?></div>
+			<img id="musicianpt" src="<?php echo base_url().$musician['portaitdir']?>" />
+			<div id="musiciannick" class="music_right_2_right_1_yyr"><b>音乐人：</b><span><?php echo $musician['nickname']?></span></div>
 		</div>
         <div class="music_clear"></div>
         <div class="music_right_2_right_2">
           <div class="music_right_2_right_3"><a href="#">关注</a><a href="#">私信TA</a></div>
           <div class="music_clear"></div>
-          <div class="music_right_2_right_4">人气：<b><?php echo $musician['attention']?></b></div>
+          <div id="musicianatt" class="music_right_2_right_4">人气：<b><span><?php echo $musician['attention']?></span></b></div>
           <div class="music_clear"></div>
         </div>
       </div>
