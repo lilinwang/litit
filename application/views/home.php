@@ -121,10 +121,11 @@ function changemusic(num){
 <!------------------>
 </script>
 </head>
-
-<body>
+<body oncontextmenu=window.event.returnValue=false onselectstart=event.returnValue=false ondragstart=window.event.returnValue=false onsource="event.returnValue=false">
 <div class="music_all">
+<!--所有的悬浮在表面的页面，包括黑色面纱，注册登录页面-->
 <div class="all_hover">
+	<!--所有的悬浮在表面的页面，包括黑色面纱，注册登录页面-->
 	<div id="home_hover">
 		<div id="play_button_background"></div>
 		<img class="motto" src="<?php echo base_url()?>image/motto.png">
@@ -134,6 +135,7 @@ function changemusic(num){
 			<img src="<?php echo base_url()?>image/music2_logo_hover.png">
 			 <button class="demo"></button>
 		</div>
+		<input type="password" name="email"  placeholder="邮箱" />
 	</div>
 	<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
         <div class="modal-header">
@@ -184,7 +186,8 @@ function changemusic(num){
         <div class="music_left_1_right_1" id="name"><b><?php echo $name ?></b></div>
         <div class="music_left_1_right_btm">
 			<span><img class="like" name="like" src="<?php echo base_url()?>image/like_button1.png" href="#" class="music_left_1_right_btm_2"></span>
-			<span><wb:share-button ></wb:share-button></span>
+			<span><wb:share-button title="litit独立音乐" url='<?php echo site_url("litit.me"); ?>'>
+			</wb:share-button></span>
 		</div>
         <div class="music_clear"></div>
         <div class="music_left_1_right_2">
