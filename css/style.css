@@ -83,7 +83,8 @@ audio{ width:100%; background:#ffcd0a;}
 
 
 div.music_right_1_hover{width:400px; height:30px; line-height:30px; float:right;}
-div.panel_login{width:400px;height:196px;margin-top:10px;float:right;background-color:#c9caca;display:none;opacity:0.99;}
+p.login_wrong{text-align:center;color:red;display:none;font-family:"Times New Roman",Georgia,Serif;}
+div.panel_login{float:left;position:absolute;left:633px;top:300px;color:white;}
 div#home_hover{width:100%;height:100%;margin:0 0 0 0;float:left;position:absolute;left:0;top:0;right:0;bottom:0;z-index:98;background-color:#000000;display:none;opacity:0.95;}
 a.btn-login{width:36px;height:22px;margin:3px 1px 3px 12px;padding:0 0 0 0;background: #ecf336;color:white;font-family:黑体;font-size:14px;}
 a.btn-signin{width:36px;height:22px;margin:3px 0 3px 1px;padding:0 0 0 0;background: #ecf336;color:white;font-family:黑体;font-size:14px;}
@@ -94,8 +95,8 @@ img.litit_motto{float:left;margin-top:300px;margin-left:500px;z-index:100}
 btn.share{width:25px;height:20px;background-image:url('<?php echo base_url()?>image/music_pic_6.jpg')}
 btn.btn-group{width:25px;height:20px;}
 div.btn-group{margin-left:15px;}
-img.play_button{float:left;position:absolute;left:633px;top:300px;z-index:99;}
-img.next_song{float:left;position:absolute;left:720px;top:400px;z-index:99;}
+img.play_button{float:left;position:absolute;left:633px;top:300px;z-index:99;display:none}
+img.next_song{float:left;position:absolute;left:720px;top:400px;z-index:99;display:none}
 img.motto{float:left;position:absolute;left:533px;top:200px;}
 .infobox-login{margin:40px 0 0 0;text-align:center;}
 .modal-body{margin:10px 0 0 0;vertical-align: center;text-align:center;}
@@ -120,7 +121,7 @@ div#play_button_background{
 	float:left;
 	position:absolute;left:633px;top:300px;right:0;bottom:0;display:none;
 	z-index:98;
-    display:block;
+    display:none;
 	width: 100px; 
 	height: 100px; 
 	background: #ccc; 

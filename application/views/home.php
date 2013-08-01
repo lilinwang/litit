@@ -17,7 +17,13 @@
 <script type="text/javascript" src="<?php echo base_url()?>js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery-migrate-1.1.1.js"></script>
 <script type="text/javascript" src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=" charset="utf-8"></script>
+<!--用户登陆检测-->
+<script type="text/javascript" src="<?php echo base_url()?>js/jlogin_wrong.js" charset="utf-8"></script>
+<!--用户注册检测-->
+<script type="text/javascript" src="<?php echo base_url()?>js/jsignup_wrong.js" charset="utf-8"></script>
 <script type="text/javascript"> 
+
+
 	$(document).ready(function(){
     $("#musician-option").hide();
     $("#choose-musician").click(function(){
@@ -118,7 +124,41 @@ function changemusic(num){
 	document.getElementById("player").load();
 	document.getElementById("player").play();
 } 
-<!------------------>
+//------------------------------------------------------------
+</script>
+<script>
+/*function submitcheck()
+{
+  var pwd = document.getElementByName("password").value
+  var pwd2 = document.getElementByName("password2").value
+  if(pwd!=pwd2){
+					document.getElementById("errormessage").innerHTML=“密码不一致”;
+					document.getElementById("errormessage").type="input";
+					return false;
+  } else
+  $.ajax({
+                type: "POST",
+                url: <?php echo site_url('sign_up')?>,
+                data: dataString,
+  });
+  
+}*/
+function login_check()
+{
+	var	dataString1;
+	var	dataString1
+    dataString1=document.getElementById("login_email").value;
+    dataString2=document.getElementById("login_password").value;
+    
+    $.ajax({
+                type: "POST",
+                url: <?php echo site_url('login')?>,
+                data: {dataString1,dataString2},
+               //	success:function(data){}
+  });
+    document.getElementById("errorMessage").style.display="block";
+    return;	
+}
 </script>
 </head>
 
@@ -126,8 +166,29 @@ function changemusic(num){
 <div class="music_all">
 <div class="all_hover">
 	<div id="home_hover">
+		
+	    <!------------登陆界面------------------>
+	    
+	    <div class="panel_login">
+	    
+		<form  name='input' class="infobox-login" action="<?php echo site_url('login')?>" method="post">
+	    <input  type="email" name="email" id="login_email" placeholder="邮箱" />
+		</br>
+		<input type="password" name="password"  id="login_password" placeholder="密码"  />
+		</br>
+        听众：<input type="radio" checked="checked" name="type" value="1" />
+        音乐人：<input type="radio" name="type" value="0" />
+        </br>
+        </br>
+       	<input type="button" class="btn btn-primary" onclick="login_check()"  value="登陆" />
+		<!--<input class="btn btn-primary" type="submit" value="登陆" />-->
+    	<a href="#myModal" role="button" data-toggle="modal" class="btn btn-primary">注册</a>
+		</form>
+        	<p class="login_wrong" id="errorMessage">您的用户名和密码不匹配</p>
+	     </div>
+		<!------------------------------>
+		<img class="motto" src="<?php echo base_url()?>image/motto.png">	
 		<div id="play_button_background"></div>
-		<img class="motto" src="<?php echo base_url()?>image/motto.png">
 		<img class="play_button" name="play_button" src="<?php echo base_url()?>image/Play_Button.png">
 		<img class="next_song" src="<?php echo base_url()?>image/Next_Song.png">
 		<div id="logo_hover">
@@ -147,31 +208,39 @@ function changemusic(num){
 				音乐人：<input id="choose-musician" type="radio" name="type" value="0" />
 				<br/><br/>
 			</div>  
-			邮箱：*<input type="email" name="email"  placeholder="邮箱" />
+			邮箱：*<input type="email"name="email" onkeyup="email_sign_wrong(this.value)" placeholder="邮箱" />
+	               <span id="signup_wrong1"></span>
 			<br/>
-			密码：*<input type="password" name="password" placeholder="密码" />
+			密码：*<input type="password" name="password" onkeyup="password_sign_wrong(this.value)" placeholder="密码" />
+	               <span id="signup_wrong2"></span>
 			<br/>
-			确认：*<input type="password" name="password2" placeholder="确认密码" />
+			确认：*<input type="password" name="password2" onkeyup="password2_sign_wrong(this.value,)" placeholder="确认密码" />              
+	              <span id="signup_wrong3"></span>
 			<br/>		
 			<div class="choose-line">
 			</div>
       <div id="musician-option">
-			姓名：*<input type="text" name="name2" placeholder="姓名" />
+			姓名：*<input type="text" name="name2" onkeyup="name2_sign_wrong(this.value)" placeholder="姓名" />
+	               <span id="signup_wrong4"></span>
 			<br/>
 			昵称： <input type="text" name="name" placeholder="昵称" />
 			<br/>
 			生日：  <input type="date" name="birthday"/>
 			<br/>
-        身份证号:*<input type="text" name="identity" placeholder="身份证号" /><br/> 
-        介绍：*<input type="text" name="introduction" placeholder="介绍" /><br/>
-					男：<input type="radio" checked="checked" name="gender" value="1" />
+        身份证号:*<input type="text" name="identity" onkeyup="identity_sign_wrong(this.value)" placeholder="身份证号" />
+                  <span id="signup_wrong5"></span>
+            <br/> 
+        介绍：*<input type="text" name="introduction" onkeyup="introduction_sign_wrong(this.value)" placeholder="介绍" />
+               <span id="signup_wrong6"></span>
+            <br/>
+				男：<input type="radio" checked="checked" name="gender" value="1" />
 				女：<input type="radio" name="gender" value="0" />
 				<br/>
       </div>
       (注：有 * 标记的为必填项)<br/>
     </div>
     <div class="modal-footer">
-     <input type="submit" class="btn btn-primary" value="注册" />
+     <input type="button" onclick="submitcheck()" class="btn btn-primary" value="注册" />
    </div>
  </form>
 </form>
@@ -235,14 +304,16 @@ function changemusic(num){
   </div>
   <div class="music_right">
   <div class="music_right_1_hover">
-    <div class="music_right_1"><div class="btn-group"><a href="#" class="btn btn-login">登陆</a><a href="#myModal" role="button" data-toggle="modal" class="btn btn-signin">注册</a></div></div>
+    <!--
     <div class="panel_login">
 		<form  name='input' class="infobox-login" action="<?php echo site_url('login')?>" method="post">
 		邮箱: 
 		<input  type="text" name="email" placeholder="邮箱" />
+		<span id="login_wrong1"></span>
 		</br>
 		密码: 
-		<input type="password" name="password" placeholder="密码" />
+		<input type="password" name="password"  placeholder="密码" />
+		<span id="login_wrong2"></span>
 		</br>
         听众：<input type="radio" checked="checked" name="type" value="1" />
         音乐人：<input type="radio" name="type" value="0" />
@@ -250,6 +321,7 @@ function changemusic(num){
 		<input class="btn btn-primary" type="submit" value="登陆" />
 		</form>
 	</div>
+	-->
   </div>
     <div class="music_clear"></div>
     <div class="music_right_2">

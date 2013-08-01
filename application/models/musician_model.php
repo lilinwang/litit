@@ -4,10 +4,20 @@ class musician_model extends CI_Model{
 		parent::__construct();
 	}
 
-	function login($email,$password){
-		$sql="SELECT * FROM musician WHERE email=? and password=? ";
-		$query=$this->db->query($sql,array($email,$password));
-		return $query->result_array();
+	//登录
+	function login($email,$password){//登录检查
+		$sql="SELECT * FROM musician WHERE email=?";
+		$query=$this->db->query($sql,array($email));
+		$result1=$query->result_array();
+		$query=$query->row();
+		if($result1)//检查账户密码是否正确
+		{
+		$result2=($query->password==sha1($password));
+		if($result2){return 1;}
+		else{return 2;}//密码错误
+		}
+     	else{return 3;}//无此用户
+	
 	}
 
 	function check_user($email){

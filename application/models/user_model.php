@@ -5,7 +5,7 @@ class user_model extends CI_Model{
 		parent::__construct();
 	}
 
-	//查询用户是否存在
+	//查询用户是否存在和获取用户所有信息
 	function check($email){
 		$sql="SELECT * FROM user WHERE email=?";
 		$query=$this->db->query($sql,array($email));
@@ -13,15 +13,19 @@ class user_model extends CI_Model{
 	}
 	
 	//登录
-	function login($email,$password){//登录检查和获取用户所有信息
-		$sql="SELECT * FROM user WHERE email=? and password=? ";
-		$query=$this->db->query($sql,array($email,$password));
-		$result=$query->result_array();
-		if($result){
-			return $result[0];
-		}else{
-			return null;
+	function login($email,$password){//登录检查
+		$sql="SELECT * FROM user WHERE email=?";
+		$query=$this->db->query($sql,array($email));
+		$result1=$query->result_array();
+		$query=$query->row();
+		if($result1)//检查账户密码是否正确
+		{
+		$result2=($query->password==sha1($password));
+		if($result2){return 1;}//用户名与密码匹配
+		else{return 2;}//密码错误
 		}
+     	else{return 3;}//无此用户
+	
 	}
 	
 	//注册
@@ -30,7 +34,7 @@ class user_model extends CI_Model{
 		$this->db->query($sql,array($email,$password,$name,$nickname,$gender,$birthday));	
 	}
 	function register_simple($email,$password){//必填项
-		$sql="INSERT INTO user (email,password) VALUES (?,?)";
+		$sql="INSERT INTO user (email,sha1（password）) VALUES (?,?)";
 		$this->db->query($sql,array($email,$password));	
 	}
 	

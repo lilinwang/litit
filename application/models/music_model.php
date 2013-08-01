@@ -82,12 +82,37 @@ class music_model extends CI_Model{
 		$result=$query->result_array();
         return $result[0];
     }
+    
 	
 	function rand_by_musician($musician_id){
         $sql = 'select * from music where musician_id=? order by rand()  limit 1';
         $query = $this->db->query($sql,$musician_id);
 		$result=$query->result_array();
         return $result[0];
+    }
+    function music_download_top_10(){
+        $sql = 'select * from music order by download_cnt DESC limit 10';
+        $query = $this->db->query($sql);
+		$result=$query->result_array();
+        return $result;
+    }
+    function music_share_top_10(){
+        $sql = 'select * from music order by share_cnt DESC limit 10';
+        $query = $this->db->query($sql);
+		$result=$query->result_array();
+        return $result;
+    }
+    function music_collect_top_10(){
+        $sql = 'select * from music order by collect_cnt DESC limit 10';
+        $query = $this->db->query($sql);
+		$result=$query->result_array();
+        return $result;
+    }
+    function musician_attention_top_10(){
+        $sql = 'select * from musician order by attention DESC limit 10';
+        $query = $this->db->query($sql);
+		$result=$query->result_array();
+        return $result;
     }
 	//add
 	function getallmusic_by_musician_id($musician_id){

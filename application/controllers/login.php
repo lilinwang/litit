@@ -16,7 +16,8 @@ class Login extends CI_Controller {
         $this->load->model('user_model');
         if($this->input->post('type')=="1"){
             $result=$this->user_model->login($this->input->post('email'),$this->input->post('password'));
-            if ($result) {
+            if ($result==1) 
+            {
                 $session['is_login'] = TRUE;
 				$this->session->set_userdata($session);
                 $session['email'] = $this->input->post('email');
@@ -33,13 +34,17 @@ class Login extends CI_Controller {
 				$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 				$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
                 $this->load->view('home_in',$data);
-            }else {
-                    echo '登陆失败，返回'.anchor('home','上一页').'，请检查你的登陆信息并重新登陆或进行注册操作。';
+            }
+            //else 
+            {
+            header('Location:http://localhost/www/litit');	
+            //	if($result==2){echo '密码错误，返回'.anchor('home','上一页').'，请检查你的登陆信息并重新登陆或进行注册操作。';}
+            //	if($result==3){echo '无此用户，返回'.anchor('home','上一页').'，请检查你的登陆信息并重新登陆或进行注册操作。';}
             }
         }else{
             $this->load->model('musician_model');
             $result=$this->musician_model->login($this->input->post('email'),$this->input->post('password'));
-            if ($result) {
+            if ($result==1) {
                 $session['is_login'] = TRUE;
 				$this->session->set_userdata($session);
                 $session['email'] = $this->input->post('email');
@@ -58,7 +63,8 @@ class Login extends CI_Controller {
 				$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
                 $this->load->view('home_in',$data);
             }else {
-                    echo '登陆失败，返回'.anchor('home','上一页').'，请检查你的信息。';
+                 	header('Location:http://localhost/www/litit');	
+                    //echo '登陆失败，返回'.anchor('home','上一页').'，请检查你的信息。';
             }
         }        
     }
