@@ -109,7 +109,7 @@ function changemusic(num){
 <!------------------>
 </script>
 </head>
-<body>
+<body oncontextmenu=window.event.returnValue=false onselectstart=event.returnValue=false ondragstart=window.event.returnValue=false onsource="event.returnValue=false">
 <div class="music_all">
 <div class="all_hover">
 	<div id="home_hover">
@@ -144,7 +144,8 @@ function changemusic(num){
         <div class="music_left_1_right_1" id="name"><b><?php echo $name ?></b></div>
         <div class="music_left_1_right_btm">
 			<span><img class="like" name="like" src="<?php echo base_url()?>image/like_button1.png" href="#" class="music_left_1_right_btm_2"></span>
-			<span><wb:share-button ></wb:share-button></span>
+			<span><wb:share-button title="litit独立音乐" url='<?php echo site_url("litit.me"); ?>'>
+			</wb:share-button></span>
 		</div>
         <div class="music_clear"></div>
         <div class="music_left_1_right_2">
