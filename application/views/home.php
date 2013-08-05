@@ -71,7 +71,7 @@
 			$("#player").get(0).load();
 			$("#player").get(0).play();
 		});             
-		$(".demo").click(function(){
+		/*$(".demo").click(function(){
 			$("#home_hover").fadeToggle("quick");
 			if ($("#player").get(0).paused) 
 			{               
@@ -80,7 +80,7 @@
 			else {                
 				document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
 			}
-		});
+		});*/
 		$(document).ready(function(){
 			$("#home_hover").fadeIn("quick");
 		});
@@ -138,38 +138,59 @@ function changemusic(num){
 //------------------------------------------------------------
 </script>
 <script>
-/*function submitcheck()
-{
-  var pwd = document.getElementByName("password").value
-  var pwd2 = document.getElementByName("password2").value
-  if(pwd!=pwd2){
-					document.getElementById("errormessage").innerHTML=“密码不一致”;
-					document.getElementById("errormessage").type="input";
-					return false;
-  } else
-  $.ajax({
-                type: "POST",
-                url: <?php echo site_url('sign_up')?>,
-                data: dataString,
-  });
-  
-}*/
+
 function login_check()
 {
-	var	dataString1;
-	var	dataString1
-    dataString1=document.getElementById("login_email").value;
-    dataString2=document.getElementById("login_password").value;
-    
-    $.ajax({
-                type: "POST",
-                url: <?php echo site_url('login')?>,
-                data: {dataString1,dataString2},
-               //	success:function(data){}
-  });
-    document.getElementById("errorMessage").style.display="block";
-    return;	
+	var	dataString;
+    dataString=document.getElementById("login_email").value;
+	if (dataString=="") {document.getElementById("errorMessage").innerHTML="<?php echo "邮箱不能为空";?>";document.getElementById("login").disabled=true;return;}
+	if (dataString.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) == -1)
+	{document.getElementById("errorMessage").innerHTML="<?php echo "邮箱格式错误";?>";document.getElementById("login").disabled=true;return;}
+	//document.getElementById("errorMessage").innerHTML="<?php echo "";?>"; 
+
+    dataString=document.getElementById("login_password").value;
+	if (dataString=="") {document.getElementById("errorMessage").innerHTML="<?php echo "密码不能为空";?>";document.getElementById("login").disabled=true;return;}
+	if ((dataString.length>12) || (dataString.length<8))
+	{document.getElementById("errorMessage").innerHTML="<?php echo "密码长度为8-12位";?>";document.getElementById("login").disabled=true;return;}
+	document.getElementById("login").disabled=false;return;
 }
+function sign_check()
+{
+	var	dataString;
+    dataString=document.getElementById("sign_email").value;
+	if (dataString=="") {document.getElementById("signMessage").innerHTML="<?php echo "邮箱不能为空";?>";document.getElementById("sign").disabled=true;return;}
+	if (dataString.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) == -1)
+	{document.getElementById("signMessage").innerHTML="<?php echo "邮箱格式错误";?>";document.getElementById("sign").disabled=true;return;}
+	
+    dataString=document.getElementById("sign_password").value;
+	if (dataString=="") {document.getElementById("signMessage").innerHTML="<?php echo "密码不能为空";?>";document.getElementById("sign").disabled=true;return;}
+	if ((dataString.length>12) || (dataString.length<8))
+	{document.getElementById("signMessage").innerHTML="<?php echo "密码长度为8-12位";?>";document.getElementById("sign").disabled=true;return;}
+	
+	dataString=document.getElementById("sign_password2").value;
+	if (dataString=="") {document.getElementById("signMessage").innerHTML="<?php echo "请再次输入密码";?>";document.getElementById("sign").disabled=true;return;}
+	if ((dataString.length>12) || (dataString.length<8))
+	{document.getElementById("signMessage").innerHTML="<?php echo "两次密码长度都为8-12位";?>";document.getElementById("sign").disabled=true;return;}
+	if (document.getElementById("sign_password2").value!=dataString) 
+	{document.getElementById("signMessage").innerHTML="<?php echo "两次的密码不一致";?>"; document.getElementById("sign").disabled=true;return;}
+	
+	if (document.getElementById("choose-audience").checked==0){
+	dataString=document.getElementById("sign_name").value;
+	if (dataString=="") {document.getElementById("signMessage").innerHTML="<?php echo "姓名不能为空";?>";document.getElementById("sign").disabled=true;return;}
+	
+	dataString=document.getElementById("sign_id").value;
+	if (dataString=="") {document.getElementById("signMessage").innerHTML="<?php echo "身份证号不能为空";?>";document.getElementById("sign").disabled=true;return;}
+	if(!((dataString.length==15) && (dataString.search(/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/)==-1) || (dataString.length==18)&&(dataString.search(/^[0-9]{17}([0-9]|X)$/)!=-1)))
+	{document.getElementById("signMessage").innerHTML="<?php echo "身份证号不合法";?>";document.getElementById("sign").disabled=true;return;}
+	
+	dataString=document.getElementById("sign_intro").value;
+	if (dataString=="") {document.getElementById("signMessage").innerHTML="<?php echo "介绍不能为空";?>";document.getElementById("sign").disabled=true;return;}
+	}
+	document.getElementById("sign").disabled=false;return;
+}
+function login_enable(){document.getElementById("login").disabled=false;}
+function sign_enable(){document.getElementById("sign").disabled=false;}
+
 </script>
 </head>
 <body oncontextmenu=window.event.returnValue=false onselectstart=event.returnValue=false ondragstart=window.event.returnValue=false onsource="event.returnValue=false">
@@ -182,68 +203,65 @@ function login_check()
 	    <!------------登陆界面------------------>
 	    
 	    <div class="panel_login">
-	    
+	    <p class="login_wrong" id="errorMessage"><?php echo $message;?></p>
 		<form  name='input' class="infobox-login" action="<?php echo site_url('login')?>" method="post">
-	    <input  type="email" name="email" id="login_email" placeholder="邮箱" />
+	    <input  type="email" name="email" id="login_email" onfocus="login_enable()" placeholder="邮箱" />
 		</br>
-		<input type="password" name="password"  id="login_password" placeholder="密码"  />
+		<input type="password" name="password"  id="login_password" onfocus="login_enable()" placeholder="密码"  />
 		</br>
-        听众：<input type="radio" checked="checked" name="type" value="1" />
-        音乐人：<input type="radio" name="type" value="0" />
+        听众：<input type="radio" checked="checked" name="usertype" value="1" />
+        音乐人：<input type="radio" name="usertype" value="0" />
         </br>
         </br>
-       	<input type="button" class="btn btn-primary" onclick="login_check()"  value="登陆" />
-		<!--<input class="btn btn-primary" type="submit" value="登陆" />-->
+       <!--	<input type="button" class="btn btn-primary"  value="登陆" />-->
+		<input class="btn btn-primary" type="submit" id="login" onclick="login_check()" value="登陆" />
     	<a href="#myModal" role="button" data-toggle="modal" class="btn btn-primary">注册</a>
 		</form>
-        	<p class="login_wrong" id="errorMessage">您的用户名和密码不匹配</p>
+        
 	     </div>
 		<!------------------------------>
 		<img class="motto" src="<?php echo base_url()?>image/motto.png">	
-		<div id="play_button_background"></div>
-		<img class="play_button" name="play_button" src="<?php echo base_url()?>image/Play_Button.png">
-		<img class="next_song" src="<?php echo base_url()?>image/Next_Song.png">
 		<div id="logo_hover">
 			<img src="<?php echo base_url()?>image/music2_logo_hover.png">
 			 <button class="demo"></button>
 		</div>
-		<input type="password" name="email"  placeholder="邮箱" />
 	</div>
 	<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
         <div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			<h3 id="myModalLabel">Litit账号注册</h3>
 		</div>
+		
         <form name="input" action="<?php echo site_url('sign_up')?>" method="post">
 		<div class="modal-body">
+			<div class="login_wrong" id="signMessage" ></div>
             <div class="choose-line">
-				听众：<input id="choose-audience" type="radio" checked="checked" name="type" value="1" />
-				音乐人：<input id="choose-musician" type="radio" name="type" value="0" />
+				听众：<input id="choose-audience" type="radio" checked="checked" name="usertype" value="1" />
+				音乐人：<input id="choose-musician" type="radio" name="usertype" value="0" />
 				<br/><br/>
 			</div>  
-			邮箱：*<input type="email"name="email" onkeyup="email_sign_wrong(this.value)" placeholder="邮箱" />
+			邮箱：*<input type="email" name="email" id="sign_email" onfocus="sign_enable()" placeholder="邮箱" />
 	               <span id="signup_wrong1"></span>
 			<br/>
-			密码：*<input type="password" name="password" onkeyup="password_sign_wrong(this.value)" placeholder="密码" />
+			密码：*<input type="password" name="password" id="sign_password" onfocus="sign_enable()" placeholder="密码" />
 	               <span id="signup_wrong2"></span>
 			<br/>
-			确认：*<input type="password" name="password2" onkeyup="password2_sign_wrong(this.value,)" placeholder="确认密码" />              
+			确认：*<input type="password" name="password2" id="sign_password2" onfocus="sign_enable()" placeholder="确认密码" />              
 	              <span id="signup_wrong3"></span>
 			<br/>		
-			<div class="choose-line">
-			</div>
+
       <div id="musician-option">
-			姓名：*<input type="text" name="name2" onkeyup="name2_sign_wrong(this.value)" placeholder="姓名" />
+			姓名：*<input type="text" name="name2" id="sign_name" onfocus="sign_enable()" placeholder="姓名" />
 	               <span id="signup_wrong4"></span>
 			<br/>
-			昵称： <input type="text" name="name" placeholder="昵称" />
+			昵称： <input type="text" name="name"  placeholder="昵称" />
 			<br/>
-			生日：  <input type="date" name="birthday"/>
+			生日：  <input type="date" name="birthday" />
 			<br/>
-        身份证号:*<input type="text" name="identity" onkeyup="identity_sign_wrong(this.value)" placeholder="身份证号" />
+        身份证号:*<input type="text" name="identity" id="sign_id" onfocus="sign_enable()" placeholder="身份证号" />
                   <span id="signup_wrong5"></span>
             <br/> 
-        介绍：*<input type="text" name="introduction" onkeyup="introduction_sign_wrong(this.value)" placeholder="介绍" />
+        介绍：*<input type="text" name="introduction" id="sign_intro" onfocus="sign_enable()" placeholder="介绍" />
                <span id="signup_wrong6"></span>
             <br/>
 				男：<input type="radio" checked="checked" name="gender" value="1" />
@@ -253,7 +271,7 @@ function login_check()
       (注：有 * 标记的为必填项)<br/>
     </div>
     <div class="modal-footer">
-     <input type="button" onclick="submitcheck()" class="btn btn-primary" value="注册" />
+     <input type="submit" onclick="sign_check()" id="sign" class="btn btn-primary" value="注册" />
    </div>
  </form>
 </form>

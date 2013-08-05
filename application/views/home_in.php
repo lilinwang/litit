@@ -21,6 +21,14 @@
 <script type="text/javascript" src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=" charset="utf-8"></script>
 <script type="text/javascript"> 
 	$(document).ready(function(){
+ $("#musician-option").hide();
+    $("#choose-musician").click(function(){
+       $("#musician-option").show();
+    });
+
+    $("#choose-audience").click(function(){
+       $("#musician-option").hide();
+    });
 		$(".btn-login").click(function(){
 			$(".panel_login").slideToggle("slow");
 		});
@@ -34,6 +42,22 @@
 				document.play_button.src="<?php echo base_url()?>image/Play_Button.png";
 				$("#player").get(0).pause();    
 			}
+		});
+	$(".next_song").click(function(){
+	        $.get("<?php echo base_url('ajax/getmusic')?>", function(data, $status){
+	            data = eval ("(" + data + ")");
+		        $("#player source").attr("src","<?php echo base_url()?>"+data.dir);
+		        $("#player").get(0).load();
+		        $("#player").get(0).play();
+		        $("#left_1 img").attr("src","<?php echo base_url()?>"+data.image_dir);
+		        $("#name b").html(data.name);
+		        $("#story").html(data.story);
+                $("#musicianintro").html(data.musician.introduction);
+                $("#musicianpt").attr("src", "<?php echo base_url();?>"+data.musician.portaitdir);
+                $("#musiciannick span").html(data.musician.nickname);
+                $("#musicianatt span").html(data.musician.attention);
+			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
+	        });
 		});
 		$(".like").click(function(){
 			document.like.src="<?php echo base_url()?>image/like_button2.png";
@@ -65,22 +89,7 @@
 		$(".play_button").mouseout(function(){
 			$(".musician_additional_info").slideDown("slow");
 		});
-		$(".next_song").click(function(){
-	        $.get("<?php echo base_url('ajax/getmusic')?>", function(data, $status){
-	            data = eval ("(" + data + ")");
-		        $("#player source").attr("src","<?php echo base_url()?>"+data.dir);
-		        $("#player").get(0).load();
-		        $("#player").get(0).play();
-		        $("#left_1 img").attr("src","<?php echo base_url()?>"+data.image_dir);
-		        $("#name b").html(data.name);
-		        $("#story").html(data.story);
-                $("#musicianintro").html(data.musician.introduction);
-                $("#musicianpt").attr("src", "<?php echo base_url();?>"+data.musician.portaitdir);
-                $("#musiciannick span").html(data.musician.nickname);
-                $("#musicianatt span").html(data.musician.attention);
-			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
-	        });
-		});
+	
 		$(document).ready(function(){
 			$('#example2').boutique({
 				starter:			1,
