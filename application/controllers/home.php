@@ -20,11 +20,12 @@ class Home extends CI_Controller {
             $data['musician'] = $this->musician_model->check_id($data['musician_id']);
 			$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 			$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
+			$data['message']=' ';
             $this->load->view('home',$data);
         }else{
 			$data = $this->music_model->rand();
             $data['useremail'] = $this->session->userdata('email');
-            $data['usertype'] = $this->session->userdata('type');
+            $data['usertype'] = $this->session->userdata('usertype');
             if($data['usertype']==1){
                 $name=$this->user_model->check($data['useremail']);
             }
@@ -35,7 +36,7 @@ class Home extends CI_Controller {
             $data['musician'] = $this->musician_model->check_id($data['musician_id']);
 			$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 			$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
-            //var_dump($data);
+			$data['message']=' ';
             $this->load->view('home_in',$data);
         }
 	}

@@ -13,60 +13,47 @@ class Login extends CI_Controller {
 	function index() {
         $this->load->model('musician_model');
         $this->load->model('music_model');
-        $this->load->model('user_model');
-        if($this->input->post('type')=="1"){
+        if($this->input->post('usertype')=="1"){
+			$this->load->model('user_model');
             $result=$this->user_model->login($this->input->post('email'),$this->input->post('password'));
-            if ($result==1) 
-            {
+		} else{
+			$this->load->model('musician_model');
+			$result=$this->musician_model->login($this->input->post('email'),$this->input->post('password'));
+		};		
+        if ($result==1) 
+        {
                 $session['is_login'] = TRUE;
 				$this->session->set_userdata($session);
                 $session['email'] = $this->input->post('email');
-                $session['password'] = $this->input->post('password');
-                $session['type'] = 1;
-				$username=$this->user_model->check($this->input->post('email'));
-				$session['userid'] =$username[0]['user_id'];
+                $session['usertype'] = $this->input->post('usertype');
+				if ($session['usertype']=="1") {
+					$username=$this->user_model->check($this->input->post('email'));
+					$session['userid'] =$username[0]['user_id'];
+				}else {					
+					$username=$this->musician_model->watch_by_email($this->input->post('email'));
+					$session['userid'] =$username[0]['musician_id'];
+				}
+				
                 $this->session->set_userdata($session);	
-                
-                //echo $name[0]["name"];
                 $data = $this->music_model->rand();
+				$data['useremail'] = $this->session->userdata('email');
+				$data['usertype'] = $this->session->userdata('usertype');
                 $data['username'] = $username[0]['name'];
 				$data['musician'] = $this->musician_model->check_id($data['musician_id']);
 				$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 				$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
+				$data['message']=' ';
                 $this->load->view('home_in',$data);
-            }
-            //else 
-            {
-            header('Location:http://localhost/www/litit');	
-            //	if($result==2){echo '密码错误，返回'.anchor('home','上一页').'，请检查你的登陆信息并重新登陆或进行注册操作。';}
-            //	if($result==3){echo '无此用户，返回'.anchor('home','上一页').'，请检查你的登陆信息并重新登陆或进行注册操作。';}
-            }
-        }else{
-            $this->load->model('musician_model');
-            $result=$this->musician_model->login($this->input->post('email'),$this->input->post('password'));
-            if ($result==1) {
-                $session['is_login'] = TRUE;
-				$this->session->set_userdata($session);
-                $session['email'] = $this->input->post('email');
-                $session['password'] = $this->input->post('password');
-                $session['type'] = '0';
-				$username=$this->musician_model->watch_by_email($this->input->post('email'));
-				$session['userid'] =$username[0]['musician_id'];
-                $this->session->set_userdata($session);	
-                
-				
-                //echo $name[0]["name"];
-                $data = $this->music_model->rand();
-                $data['username'] = $username[0]['name'];
+        }
+		else 
+        {
+            	$data = $this->music_model->rand();
 				$data['musician'] = $this->musician_model->check_id($data['musician_id']);
-				$data['list']= $this->music_model->getallmusic_by_musicianid($data['musician_id']);
+				$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 				$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
-                $this->load->view('home_in',$data);
-            }else {
-                 	header('Location:http://localhost/www/litit');	
-                    //echo '登陆失败，返回'.anchor('home','上一页').'，请检查你的信息。';
-            }
-        }        
+				if($result==2) $data['message']='密码错误'; else $data['message']='用户名不存在';
+				$this->load->view('home',$data);
+        } 
     }
 }
 ?>

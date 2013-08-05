@@ -11,7 +11,7 @@ class Personal extends CI_Controller {
 	}
 	
 	function index(){
-	    if($this->session->userdata('type') == '1'){
+	    if($this->session->userdata('usertype') == '1'){
 			$this->load->model('user_model');
 			$result=$this->user_model->login($this->session->userdata('email'),$this->session->userdata('password'));
 			$name=$this->user_model->check($this->session->userdata('email'));
