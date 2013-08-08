@@ -43,7 +43,7 @@
 				$("#player").get(0).pause();    
 			}
 		});
-	$(".next_song").click(function(){
+	function next_song(){
 	        $.get("<?php echo base_url('ajax/getmusic')?>", function(data, $status){
 	            data = eval ("(" + data + ")");
 		        $("#player source").attr("src","<?php echo base_url()?>"+data.dir);
@@ -58,7 +58,9 @@
                 $("#musicianatt span").html(data.musician.attention);
 			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
 	        });
-		});
+		};
+		$(".next_song").click(next_song);
+		$("#player").bind("ended", next_song);
 		$(".like").click(function(){
 			document.like.src="<?php echo base_url()?>image/like_button2.png";
 		});
