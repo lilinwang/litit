@@ -17,5 +17,18 @@ class Ajax extends CI_Controller {
 		$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
 		echo json_encode($data);
     }
+    function likemusic()
+    {
+		$this->load->model('music_model');
+        $this->load->model('musician_model');
+    	$this->music_model->collect_inc($_POST['music_id']);	
+    }
+    function attention_musician()
+    {
+    	$this->load->model('music_model');
+        $this->load->model('musician_model');
+    	$data=$this->musician_model->attention_inc($_POST['musician_id']);
+        echo $data;
+    }
 }
 

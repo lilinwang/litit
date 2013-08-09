@@ -60,8 +60,21 @@ class musician_model extends CI_Model{
     function check_id($id){
         $sql='select * from musician where musician_id=?';
         $query=$this->db->query($sql,$id);
-		$result=$query->result_array();;
+		$result=$query->result_array();
         return $result[0];
+    }
+    function musician_attention_top_10(){
+        $sql = 'select * from musician order by attention DESC limit 10';
+        $query = $this->db->query($sql);
+		$result=$query->result_array();
+        return $result;
+    }
+    function attention_inc($id){
+       $this->db->query('update musician set attention=attention+1 where musician_id=?',$id);
+       	$sql="SELECT attention FROM musician WHERE musician_id=?";
+		$query=$this->db->query($sql,$id);
+		$query=$query->row();	
+    	return $query->attention;
     }
 }
 ?>

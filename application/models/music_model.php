@@ -108,12 +108,6 @@ class music_model extends CI_Model{
 		$result=$query->result_array();
         return $result;
     }
-    function musician_attention_top_10(){
-        $sql = 'select * from musician order by attention DESC limit 10';
-        $query = $this->db->query($sql);
-		$result=$query->result_array();
-        return $result;
-    }
 	//add
 	function getallmusic_by_musician_id($musician_id){
         $sql='select music_id,album_dir,dir,name,story from music where musician_id=?';
@@ -131,5 +125,10 @@ class music_model extends CI_Model{
 		foreach ($result as $key) {$re[]=$key['name'];};
 		return $re;
 	}
+	function collect_inc($id){
+        $this->db->query('update music set collect_cnt=collect_cnt+1 where music_id=?',$id);
+		return;	
+    }
+	
 }
 ?>
