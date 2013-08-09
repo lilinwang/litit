@@ -57,20 +57,21 @@
                 $("#musiciannick span").html(data.musician.nickname);
                 $("#musicianatt span").html(data.musician.attention);
 			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
-	        });
-<<<<<<< HEAD
-	        document.like.src="<?php echo base_url()?>image/like_button1.png";
-		});
-		/********************************************************/
-=======
+	            document.like.src="<?php echo base_url()?>image/like_button1.png"; 
+	       });
+//<<<<<<< HEAD
+	        
 		};
+		/********************************************************/
+//=======
+	//	});
 		$(".next_song").click(next_song);
 		$("#player").bind("ended", next_song);
->>>>>>> 4239c438521c07e4aef0763ad5e73ccf3d74b14f
+//>>>>>>> 4239c438521c07e4aef0763ad5e73ccf3d74b14f
 		$(".like").click(function(){
 	      if(document.like.src=="<?php echo base_url()?>image/like_button1.png")
 	       {
-		$.post("<?php echo base_url('ajax/likemusic')?>", 
+	     	$.post("<?php echo base_url('ajax/likemusic')?>", 
 			{
              musician_id:<?php echo $musician['musician_id'];?>,
              music_id:<?php echo $music_id ;?>
@@ -81,8 +82,9 @@
              	 document.getElementById("likemusic").style.display="block";
              	 $("p.likemusic").fadeToggle(1000);
 			});
-		   }
 			document.like.src="<?php echo base_url()?>image/like_button2.png";
+		   }
+			
 		});
 		/********************************************************/
 			$(".attention").click(function(){
@@ -95,6 +97,7 @@
              	 document.getElementById("attention").innerHTML="人气："+"<b>"+data+"</b>";
                  document.getElementById("musician_attention").style.display="block";
              	 $("p.musician_attention").fadeToggle(1000);
+             	 
              	 
 			});
 			
@@ -129,6 +132,9 @@
 		});
 	
 		$(document).ready(function(){
+			$('#example2').click(function(){
+				document.like.src="<?php echo base_url()?>image/like_button1.png";
+			})
 			$('#example2').boutique({
 				starter:			1,
 				speed:				800,
