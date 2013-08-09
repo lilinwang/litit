@@ -47,7 +47,7 @@
 				$("#player").get(0).pause();    
 			}
 		});
-		$(".next_song").click(function(){
+	function next_song(){
 	        $.get("<?php echo base_url('ajax/getmusic')?>", function(data, $status){
 	            data = eval ("(" + data + ")");
 		        $("#player source").attr("src","<?php echo base_url()?>"+data.dir);
@@ -62,7 +62,10 @@
                 $("#musicianatt span").html(data.musician.attention);
 			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
 	        });
-		});
+		};
+		$(".next_song").click(next_song());
+		$("#player").bind("ended", next_song());
+		
 		$(".like").click(function(){
 			$(".panel_login").slideToggle("slow");
 		});
@@ -289,7 +292,7 @@ function sign_enable(){document.getElementById("sign").disabled=false;}
 		</div>
         <div class="music_clear"></div>
         <div class="music_left_1_right_2">
-			<audio id="player" controls="controls" >
+			<audio id="player" controls="controls">
 				<source name="player" src="<?php echo base_url().$dir ?>" type="audio/mp3" preload="auto">
 				Your browser does not support this audio format.
 			</audio>

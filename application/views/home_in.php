@@ -43,7 +43,7 @@
 				$("#player").get(0).pause();    
 			}
 		});
-	$(".next_song").click(function(){
+	function next_song(){
 	        $.get("<?php echo base_url('ajax/getmusic')?>", function(data, $status){
 	            data = eval ("(" + data + ")");
 		        $("#player source").attr("src","<?php echo base_url()?>"+data.dir);
@@ -58,9 +58,15 @@
                 $("#musicianatt span").html(data.musician.attention);
 			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
 	        });
+<<<<<<< HEAD
 	        document.like.src="<?php echo base_url()?>image/like_button1.png";
 		});
 		/********************************************************/
+=======
+		};
+		$(".next_song").click(next_song);
+		$("#player").bind("ended", next_song);
+>>>>>>> 4239c438521c07e4aef0763ad5e73ccf3d74b14f
 		$(".like").click(function(){
 	      if(document.like.src=="<?php echo base_url()?>image/like_button1.png")
 	       {
