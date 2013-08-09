@@ -83,6 +83,8 @@ audio{ width:100%; background:#ffcd0a;}
 
 
 div.music_right_1_hover{width:400px; height:30px; line-height:30px; float:right;}
+p.likemusic{position:absolute;top:2%;font-weight:bold;color:red;display:none;float:left;}
+p.musician_attention{position:absolute;right:13%;margin-top:0px;font-weight:bold;color:red;display:none;float:left;}
 p.login_wrong{text-align:center;color:white;display:block;font-family:"宋体",Georgia,Serif;}
 div.panel_login{float:left;position:absolute;left:570px;top:280px;color:white;}
 div#home_hover{width:100%;height:100%;margin:0 0 0 0;float:left;position:absolute;left:0;top:0;right:0;bottom:0;z-index:98;background-color:#000000;display:none;opacity:0.95;}

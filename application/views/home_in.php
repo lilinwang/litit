@@ -58,10 +58,42 @@
                 $("#musicianatt span").html(data.musician.attention);
 			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
 	        });
+	        document.like.src="<?php echo base_url()?>image/like_button1.png";
 		});
+		/********************************************************/
 		$(".like").click(function(){
+	      if(document.like.src=="<?php echo base_url()?>image/like_button1.png")
+	       {
+		$.post("<?php echo base_url('ajax/likemusic')?>", 
+			{
+             musician_id:<?php echo $musician['musician_id'];?>,
+             music_id:<?php echo $music_id ;?>
+             },
+             function(data,status){
+             	 document.getElementById("likemusic").style.left=$('.like').css('left');
+             	 document.getElementById("likemusic").style.top="-33px";
+             	 document.getElementById("likemusic").style.display="block";
+             	 $("p.likemusic").fadeToggle(1000);
+			});
+		   }
 			document.like.src="<?php echo base_url()?>image/like_button2.png";
 		});
+		/********************************************************/
+			$(".attention").click(function(){
+		$.post("<?php echo base_url('ajax/attention_musician')?>", 
+			{
+             musician_id:<?php echo $musician['musician_id'];?>,
+             music_id:<?php echo $music_id ;?>
+             },
+             function(data,status){
+             	 document.getElementById("attention").innerHTML="人气："+"<b>"+data+"</b>";
+                 document.getElementById("musician_attention").style.display="block";
+             	 $("p.musician_attention").fadeToggle(1000);
+             	 
+			});
+			
+		});
+		/********************************************************/
 		$("#player").get(0).addEventListener("ended",function(){
 			$("#player").get(0).src="<?php echo base_url().$dir?>";
 			$("#player").get(0).load();
@@ -162,12 +194,15 @@ function changemusic(num){
         </form>
 		</form>
 	</div>
+  
   <div class="music_left">
     <div class="music_left_1">
       <div class="music_left_1_left" id="left_1"><img src="<?php echo base_url().$image_dir?>" /></div>
       <div class="music_left_1_right" id="right_1">
+         
         <div class="music_left_1_right_1" id="name"><b><?php echo $name ?></b></div>
         <div class="music_left_1_right_btm">
+            <p class=likemusic id=likemusic>+1</p>
 			<span><img class="like" name="like" src="<?php echo base_url()?>image/like_button1.png" href="#" class="music_left_1_right_btm_2"></span>
 			<span><wb:share-button title="litit独立音乐" url='<?php echo site_url("litit.me"); ?>'>
 			</wb:share-button></span>
@@ -242,13 +277,19 @@ function changemusic(num){
       <div class="music_right_2_right" id="right_2">
         <div class="music_right_2_right_1">
 			<img src="<?php echo base_url().$musician['portaitdir']?>" />
-			<div class="music_right_2_right_1_yyr"><b>音乐人：</b><?php echo $musician['nickname']?></div>
+			<div class="music_right_2_right_1_yyr">
+				<p class=musician_attention id=musician_attention>+1</p>
+				<b>音乐人：</b><?php echo $musician['nickname']?>
+				</div>
 		</div>
         <div class="music_clear"></div>
-        <div class="music_right_2_right_2">
-          <div class="music_right_2_right_3"><a href="#">关注</a><a href="#">私信TA</a></div>
+        <div class="music_right_2_right_2">	
+          <div class="music_right_2_right_3">
+          	    
+          			<a class=attention href="#">关注</a><a href="#">私信TA</a>
+          			</div>
           <div class="music_clear"></div>
-          <div class="music_right_2_right_4">人气：<b><?php echo $musician['attention']?></b></div>
+          <div class="music_right_2_right_4" id=attention>人气：<b ><?php echo $musician['attention']?></b></div>
           <div class="music_clear"></div>
         </div>
       </div>
