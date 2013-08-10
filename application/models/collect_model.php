@@ -16,6 +16,13 @@ function addcollect($user_id,$music_id){
   $query=$this->db->query($sql,array($user_id));
   return $query->result_array();
   }
+  function is_collect($user_id,$music_id)
+  {
+  	  $sql='select count(collect_id) as count from collect where (user_id,music_id)=(?,?)';
+  	  $query=$this->db->query($sql,array($user_id,$music_id));
+  	  $query=$query->row();
+  	  return $query->count;
+  }
 }
 
 

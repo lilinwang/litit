@@ -69,10 +69,19 @@ class musician_model extends CI_Model{
 		$result=$query->result_array();
         return $result;
     }
-    function attention_inc($id){
-       $this->db->query('update musician set attention=attention+1 where musician_id=?',$id);
+    function attention_inc($id1,$id2,$id3){
+       $this->db->query('update musician set attention=attention+1 where musician_id=?',$id1);
        	$sql="SELECT attention FROM musician WHERE musician_id=?";
-		$query=$this->db->query($sql,$id);
+		$query=$this->db->query($sql,$id1);
+		$this->db->query('insert into follow (musician_id,user_id) values (?,?)',array($id1,$id3));
+		$query=$query->row();	
+    	return $query->attention;
+    }
+    function attention_dec($id1,$id2,$id3){
+       $this->db->query('update musician set attention=attention-1 where musician_id=?',$id1);
+       	$sql="SELECT attention FROM musician WHERE musician_id=?";
+		$query=$this->db->query($sql,$id1);
+		$this->db->query('delete from follow where (musician_id,user_id)=(?,?) ',array($id1,$id3));
 		$query=$query->row();	
     	return $query->attention;
     }

@@ -13,6 +13,8 @@ class Login extends CI_Controller {
 	function index() {
         $this->load->model('musician_model');
         $this->load->model('music_model');
+        $this->load->model('collect_model');
+        $this->load->model('follow_model');
         if($this->input->post('usertype')=="1"){
 			$this->load->model('user_model');
             $result=$this->user_model->login($this->input->post('email'),$this->input->post('password'));
@@ -36,6 +38,9 @@ class Login extends CI_Controller {
 				
                 $this->session->set_userdata($session);	
                 $data = $this->music_model->rand();
+               	$data['userid'] =$username[0]['user_id'];
+               	$data['follow'] =$this->follow_model->is_follow($username[0]['user_id'],$data['musician_id']);
+               	$data['collect'] =$this->collect_model->is_collect($username[0]['user_id'],$data['music_id']);
 				$data['useremail'] = $this->session->userdata('email');
 				$data['usertype'] = $this->session->userdata('usertype');
                 $data['username'] = $username[0]['name'];

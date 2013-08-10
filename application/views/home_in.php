@@ -44,8 +44,9 @@
 			}
 		});
 	function next_song(){
-	        $.get("<?php echo base_url('ajax/getmusic')?>", function(data, $status){
-	            data = eval ("(" + data + ")");
+	        $.get("<?php echo base_url('ajax/getmusic')?>", 
+             function(data, $status){
+	            data = eval("(" + data + ")");
 		        $("#player source").attr("src","<?php echo base_url()?>"+data.dir);
 		        $("#player").get(0).load();
 		        $("#player").get(0).play();
@@ -57,14 +58,31 @@
                 $("#musiciannick span").html(data.musician.nickname);
                 $("#musicianatt span").html(data.musician.attention);
 			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
-	            document.like.src="<?php echo base_url()?>image/like_button1.png"; 
+			    $.post("<?php echo base_url('ajax/islike_follow')?>", 
+		     	{
+			    user_id:<?php echo $userid;?>,
+                musician_id:data.musician_id,
+                music_id:data.music_id 
+                },
+                function(data,status){
+             	 data = eval("(" + data + ")");        	  
+                 if(data.follow==0){	
+             	 document.getElementById("attention_1").innerHTML="关注";
+             	 }
+             	 else{
+             	 document.getElementById("attention_1").innerHTML="取消关注";
+             	 }
+             	 if(data.collect==0){
+             	 document.like.src="<?php echo base_url()?>image/like_button1.png";
+             	 }
+             	 else{
+             	 document.like.src="<?php echo base_url()?>image/like_button2.png";	 
+             	 } 
+	       	     });
 	       });
-//<<<<<<< HEAD
-	        
 		};
 		/********************************************************/
 //=======
-	//	});
 		$(".next_song").click(next_song);
 		$("#player").bind("ended", next_song);
 //>>>>>>> 4239c438521c07e4aef0763ad5e73ccf3d74b14f
@@ -73,6 +91,7 @@
 	       {
 	     	$.post("<?php echo base_url('ajax/likemusic')?>", 
 			{
+			 user_id:<?php echo $userid;?>,
              musician_id:<?php echo $musician['musician_id'];?>,
              music_id:<?php echo $music_id ;?>
              },
@@ -84,22 +103,56 @@
 			});
 			document.like.src="<?php echo base_url()?>image/like_button2.png";
 		   }
-			
-		});
-		/********************************************************/
-			$(".attention").click(function(){
-		$.post("<?php echo base_url('ajax/attention_musician')?>", 
+		    else
+		   {
+		   	$.post("<?php echo base_url('ajax/no_likemusic')?>", 
 			{
+			 user_id:<?php echo $userid;?>,
              musician_id:<?php echo $musician['musician_id'];?>,
              music_id:<?php echo $music_id ;?>
              },
              function(data,status){
-             	 document.getElementById("attention").innerHTML="人气："+"<b>"+data+"</b>";
+             	 document.getElementById("no_likemusic").style.left=$('.like').css('left');
+             	 document.getElementById("no_likemusic").style.top="-33px";
+             	 document.getElementById("no_likemusic").style.display="block";
+             	 $("p.no_likemusic").fadeToggle(1000);
+			});
+			document.like.src="<?php echo base_url()?>image/like_button1.png";
+		   }
+			
+		});
+		/********************************************************/
+			$(".attention").click(function(){
+				if(document.getElementById("attention_1").innerHTML=="关注")
+				{
+	     	$.post("<?php echo base_url('ajax/attention_musician')?>", 
+			{
+			 user_id:<?php echo $userid;?>,
+             musician_id:<?php echo $musician['musician_id'];?>,
+             music_id:<?php echo $music_id ;?>
+             },
+             function(data,status){
+             	 document.getElementById("attention_2").innerHTML="人气："+"<b>"+data+"</b>";
+             	 document.getElementById("attention_1").innerHTML="取消关注";
                  document.getElementById("musician_attention").style.display="block";
              	 $("p.musician_attention").fadeToggle(1000);
-             	 
-             	 
-			});
+           	});
+	          }
+	         else
+	          {
+	          $.post("<?php echo base_url('ajax/no_attention_musician')?>", 
+			{
+			 user_id:<?php echo $userid;?>,
+             musician_id:<?php echo $musician['musician_id'];?>,
+             music_id:<?php echo $music_id ;?>
+             },
+             function(data,status){
+             	 document.getElementById("attention_2").innerHTML="人气："+"<b>"+data+"</b>";
+             	 document.getElementById("attention_1").innerHTML="关注";
+                 document.getElementById("no_musician_attention").style.display="block";
+             	 $("p.no_musician_attention").fadeToggle(1000);
+           	});	  
+	          }
 			
 		});
 		/********************************************************/
@@ -132,9 +185,6 @@
 		});
 	
 		$(document).ready(function(){
-			$('#example2').click(function(){
-				document.like.src="<?php echo base_url()?>image/like_button1.png";
-			})
 			$('#example2').boutique({
 				starter:			1,
 				speed:				800,
@@ -155,6 +205,8 @@
 				move_twice_easeout:	'easeOutQuart',
 				text_front_only:	true,
 			});
+		 	$('#example2').click(function(){      	 
+		    });
 		});
 	});
 </script>
@@ -165,12 +217,53 @@ function changemusic(num){
 			document.getElementById("name").innerHTML="<?php echo $list[0]['name']?>";			
 			document.getElementById("story").innerHTML="<?php echo $list[0]['story']?>";
 			document.getElementById("player").src="<?php echo base_url().$list[0]['dir']?>";
+				$.post("<?php echo base_url('ajax/islike_follow')?>", 
+		     	{
+			    user_id:<?php echo $userid;?>,
+                musician_id:<?php echo $list[0]['musician_id']?>,
+                music_id:<?php echo $list[0]['music_id']?> 
+                },
+                function(data,status){
+             	 data = eval("(" + data + ")");
+             	 if(data.follow==0){	
+             	 document.getElementById("attention_1").innerHTML="关注";
+             	 }
+             	 else{
+             	 document.getElementById("attention_1").innerHTML="取消关注";
+             	 }        	  
+             	 if(data.collect==0){
+             	 document.like.src="<?php echo base_url()?>image/like_button1.png";
+             	 }
+             	 else{
+             	 document.like.src="<?php echo base_url()?>image/like_button2.png";	 
+             	 } 
+	       	     });
 			break;
 		case 1:
 			document.getElementById("name").innerHTML="<?php echo $list[1]['name']?>";			
 			document.getElementById("story").innerHTML="<?php echo $list[1]['story']?>";			
 			document.getElementById("player").src="<?php echo base_url().$list[1]['dir']?>";
-			break;	
+			   	$.post("<?php echo base_url('ajax/islike_follow')?>", 
+		     	{
+			    user_id:<?php echo $userid;?>,
+                musician_id:<?php echo $list[1]['musician_id']?>,
+                music_id:<?php echo $list[1]['music_id']?> 
+                },
+                function(data,status){
+             	 data = eval("(" + data + ")");
+             	 if(data.follow==0){	
+             	 document.getElementById("attention_1").innerHTML="关注";
+             	 }
+             	 else{
+             	 document.getElementById("attention_1").innerHTML="取消关注";
+             	 }        	  
+             	 if(data.collect==0){
+             	 document.like.src="<?php echo base_url()?>image/like_button1.png";
+             	 }
+             	 else{
+             	 document.like.src="<?php echo base_url()?>image/like_button2.png";	 
+             	 } 
+	       	     });		
 	}
 	document.getElementById("player").load();
 	document.getElementById("player").play();
@@ -215,7 +308,12 @@ function changemusic(num){
         <div class="music_left_1_right_1" id="name"><b><?php echo $name ?></b></div>
         <div class="music_left_1_right_btm">
             <p class=likemusic id=likemusic>+1</p>
+            <p class=no_likemusic id=no_likemusic>-1</p>
+            <?php if($collect==0):?>
 			<span><img class="like" name="like" src="<?php echo base_url()?>image/like_button1.png" href="#" class="music_left_1_right_btm_2"></span>
+			<?php else:?>
+			<span><img class="like" name="like" src="<?php echo base_url()?>image/like_button2.png" href="#" class="music_left_1_right_btm_2"></span>
+			<?php endif;?>
 			<span><wb:share-button title="litit独立音乐" url='<?php echo site_url("litit.me"); ?>'>
 			</wb:share-button></span>
 		</div>
@@ -291,17 +389,22 @@ function changemusic(num){
 			<img src="<?php echo base_url().$musician['portaitdir']?>" />
 			<div class="music_right_2_right_1_yyr">
 				<p class=musician_attention id=musician_attention>+1</p>
+			    <p class=no_musician_attention id=no_musician_attention>-1</p>
 				<b>音乐人：</b><?php echo $musician['nickname']?>
 				</div>
 		</div>
         <div class="music_clear"></div>
         <div class="music_right_2_right_2">	
           <div class="music_right_2_right_3">
-          	    
-          			<a class=attention href="#">关注</a><a href="#">私信TA</a>
+          	        <?php if($follow==0):?>
+          			<a class=attention id=attention_1 href="#">关注</a>
+          	        <?php else:?>
+          	        <a class=attention id=attention_1 href="#">取消关注</a>
+          	        <?php endif;?>
+          			<a href="#">私信TA</a>
           			</div>
           <div class="music_clear"></div>
-          <div class="music_right_2_right_4" id=attention>人气：<b ><?php echo $musician['attention']?></b></div>
+          <div class="music_right_2_right_4" id=attention_2>人气：<b ><?php echo $musician['attention']?></b></div>
           <div class="music_clear"></div>
         </div>
       </div>
