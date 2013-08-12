@@ -51,5 +51,21 @@ class Ajax extends CI_Controller {
         $data['collect']=$this->collect_model->is_collect($_POST['user_id'],$_POST['music_id']);
         echo json_encode($data);
     }
+    function copyright_sign()
+    {   
+       $this->load->model('copyright_model'); 
+       $this->copyright_model->insert_new_copyright($_POST['musician_id'],$_POST['user_id'],$_POST['music_id'],$_POST['name'],$_POST['company'],$_POST['identity'],$_POST['phone'],$_POST['email'],$_POST['content']);
+    }
+    function no_copyright_sign()
+    {   
+       $this->load->model('copyright_model'); 
+       $this->copyright_model->drop_copyright($_POST['user_id'],$_POST['music_id'],$_POST['name'],$_POST['company'],$_POST['identity'],$_POST['phone'],$_POST['email'],$_POST['content']);
+    }
+    function iscopyright_sign()
+    {
+        $this->load->model('copyright_model'); 
+       	$data=$this->copyright_model->is_copyright_sign($_POST['user_id'],$_POST['music_id']);
+        echo $data;
+    }
 }
 

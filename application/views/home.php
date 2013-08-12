@@ -158,7 +158,7 @@ function login_check()
 	document.getElementById("login").disabled=false;return;
 }
 function sign_check()
-{
+{   
 	var	dataString;
     dataString=document.getElementById("sign_email").value;
 	if (dataString=="") {document.getElementById("signMessage").innerHTML="<?php echo "邮箱不能为空";?>";document.getElementById("sign").disabled=true;return;}

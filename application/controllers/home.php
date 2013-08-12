@@ -16,6 +16,7 @@ class Home extends CI_Controller {
         $this->load->model('music_model');
         $this->load->model('collect_model');
         $this->load->model('follow_model');
+        $this->load->model('copyright_model');
 
         if(!$this->session->userdata('is_login')){
             $data = $this->music_model->rand();
@@ -36,6 +37,7 @@ class Home extends CI_Controller {
             }
            	$data['follow'] =$this->follow_model->is_follow($name[0]['user_id'],$data['musician_id']);
            	$data['collect'] =$this->collect_model->is_collect($name[0]['user_id'],$data['music_id']);
+       		$data['copyright'] =$this->copyright_model->is_copyright_sign($name[0]['user_id'],$data['music_id']);
             $data['userid'] =$name[0]['user_id'];
             $data['username'] = $name[0]['name'];
             $data['musician'] = $this->musician_model->check_id($data['musician_id']);

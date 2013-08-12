@@ -2,7 +2,7 @@
 class admin_model extends CI_Model{
 
     function __construct(){
-       parent::__constrct();
+       parent::__construct();
     
     }
 //查询admin元组是否存在

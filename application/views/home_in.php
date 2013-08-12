@@ -79,13 +79,42 @@
              	 document.like.src="<?php echo base_url()?>image/like_button2.png";	 
              	 } 
 	       	     });
+	       	  	$.post("<?php echo base_url('ajax/iscopyright_sign')?>", 
+			   {
+			    user_id:<?php echo $userid;?>,
+                 music_id:data.music_id 	 	 
+                 },
+                function(data,status){
+                	if(data==0)
+                	{
+             	     document.getElementById("copyright").innerHTML="版权申请";
+             	     document.getElementById("copyright").href="#myModal";
+             	    }
+             	    else
+             	    {
+             	   	document.getElementById("copyright").innerHTML="取消申请";
+             	    document.getElementById("copyright").href="#myModal_1";
+             	    }
+		    	});
 	       });
-		};
-		/********************************************************/
-//=======
+		};	
 		$(".next_song").click(next_song);
 		$("#player").bind("ended", next_song);
-//>>>>>>> 4239c438521c07e4aef0763ad5e73ccf3d74b14f
+	/********************************************************/		
+	  	     $("#no_copyright_sign").click(function(){
+	     	$.post("<?php echo base_url('ajax/no_copyright_sign')?>", 
+			{
+			 user_id:<?php echo $userid;?>,
+             musician_id:<?php echo $musician['musician_id'];?>,
+             music_id:<?php echo $music_id ;?>	 	 
+             },
+             function(data,status){
+             	 document.getElementById("copyright").innerHTML="版权申请";
+             	 document.getElementById("copyright").href="#myModal";
+             	 alert("提交成功，已经取消您的申请");
+			});
+   	     })
+	/********************************************************/
 		$(".like").click(function(){
 	      if(document.like.src=="<?php echo base_url()?>image/like_button1.png")
 	       {
@@ -205,8 +234,6 @@
 				move_twice_easeout:	'easeOutQuart',
 				text_front_only:	true,
 			});
-		 	$('#example2').click(function(){      	 
-		    });
 		});
 	});
 </script>
@@ -238,6 +265,23 @@ function changemusic(num){
              	 document.like.src="<?php echo base_url()?>image/like_button2.png";	 
              	 } 
 	       	     });
+	       	     	$.post("<?php echo base_url('ajax/iscopyright_sign')?>", 
+			   {
+			   user_id:<?php echo $userid;?>,
+                music_id:<?php echo $list[0]['music_id']?> 	 	 
+                 },
+                function(data,status){
+                	if(data==0)
+                	{
+             	     document.getElementById("copyright").innerHTML="版权申请";
+             	     document.getElementById("copyright").href="#myModal";
+             	    }
+             	    else
+             	    {
+             	   	document.getElementById("copyright").innerHTML="取消申请";
+             	    document.getElementById("copyright").href="#myModal_1";
+             	    }
+		    	});
 			break;
 		case 1:
 			document.getElementById("name").innerHTML="<?php echo $list[1]['name']?>";			
@@ -263,11 +307,82 @@ function changemusic(num){
              	 else{
              	 document.like.src="<?php echo base_url()?>image/like_button2.png";	 
              	 } 
-	       	     });		
+	       	     });
+	       	     	$.post("<?php echo base_url('ajax/iscopyright_sign')?>", 
+			   {
+			    user_id:<?php echo $userid;?>,
+                music_id:<?php echo $list[1]['music_id']?> 	 	 
+                 },
+                function(data,status){
+                	if(data==0)
+                	{
+             	     document.getElementById("copyright").innerHTML="版权申请";
+             	     document.getElementById("copyright").href="#myModal";
+             	    }
+             	    else
+             	    {
+             	   	document.getElementById("copyright").innerHTML="取消申请";
+             	    document.getElementById("copyright").href="#myModal_1";
+             	    }
+		    	});		
 	}
 	document.getElementById("player").load();
 	document.getElementById("player").play();
 } 
+	/********************************************************/
+		function copyright_sign(){
+	     	$.post("<?php echo base_url('ajax/copyright_sign')?>", 
+			{
+			 user_id:<?php echo $userid;?>,
+             musician_id:<?php echo $musician['musician_id'];?>,
+             music_id:<?php echo $music_id ;?>,
+          	  name:document.getElementById("copyright_sign_name").value,	 
+             company:document.getElementById("copyright_sign_company").value,
+             identity:document.getElementById("copyright_sign_identity").value,
+             email:document.getElementById("copyright_sign_email").value,
+             phone:document.getElementById("copyright_sign_phone").value,
+             content:document.getElementById("copyright_sign_content").value 	 	 
+             },
+             function(data,status){
+             	 document.getElementById("copyright").innerHTML="取消申请";
+             	 document.getElementById("copyright").href="#myModal_1";
+             	 alert("提交成功，音乐人会通过电话或邮件回复您");
+			});
+		};
+
+	/********************************************************/
+function copyright_sign_check()
+{ 
+	var	dataString;
+	dataString=document.getElementById("copyright_sign_name").value;
+	if (dataString=="") {document.getElementById("signMessage").innerHTML="<?php echo "姓名不能为空";?>";document.getElementById("copyright_sign").disabled=true;return;}
+
+    dataString=document.getElementById("copyright_sign_company").value;
+	if (dataString=="") {document.getElementById("signMessage").innerHTML="<?php echo "公司名称不能为空";?>";document.getElementById("copyright_sign").disabled=true;return;}
+
+	dataString=document.getElementById("copyright_sign_identity").value;
+	if (dataString=="") {document.getElementById("signMessage").innerHTML="<?php echo "身份证号不能为空";?>";document.getElementById("copyright_sign").disabled=true;return;}
+	if(!((dataString.length==15) && (dataString.search(/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/)==-1) || (dataString.length==18)&&(dataString.search(/^[0-9]{17}([0-9]|X)$/)!=-1)))
+	{document.getElementById("signMessage").innerHTML="<?php echo "身份证号不合法";?>";document.getElementById("copyright_sign").disabled=true;return;}
+		
+    dataString=document.getElementById("copyright_sign_email").value;
+	if (dataString=="") {document.getElementById("signMessage").innerHTML="<?php echo "邮箱不能为空";?>";document.getElementById("copyright_sign").disabled=true;return;}
+	if (dataString.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) == -1)
+	{document.getElementById("signMessage").innerHTML="<?php echo "邮箱格式错误";?>";document.getElementById("copyright_sign").disabled=true;return;}
+	
+    dataString=document.getElementById("copyright_sign_phone").value;
+	if (dataString=="") {document.getElementById("signMessage").innerHTML="<?php echo "联系电话不能为空";?>";document.getElementById("copyright_sign").disabled=true;return;}
+	if (dataString.length<5)
+	{document.getElementById("signMessage").innerHTML="<?php echo "联系电话长度太短";?>";document.getElementById("copyright_sign").disabled=true;return;}
+
+	dataString=document.getElementById("copyright_sign_content").value;
+	if (dataString=="") {document.getElementById("signMessage").innerHTML="<?php echo "请求内容不能为空";?>";document.getElementById("copyright_sign").disabled=true;return;}
+	document.getElementById("copyright_sign").disabled=false;
+	copyright_sign();return;
+}
+function copyright_sign_enable(){
+document.getElementById("copyright_sign").disabled=false;
+}
 <!------------------>
 </script>
 </head>
@@ -297,7 +412,7 @@ function changemusic(num){
             <input type="submit" class="btn btn-primary" value="下载" />
         </div>
         </form>
-		</form>
+		
 	</div>
   
   <div class="music_left">
@@ -340,7 +455,54 @@ function changemusic(num){
         </div>
         <div class="music_left_1_right_4">
 		<a href="#download" role="button" data-toggle="modal">我要下载</a>
-		<a href="#">版权申请</a></div>
+		<?php if($copyright==0):?>
+		<a href="#myModal" role="button" data-toggle="modal" class="copyright" id="copyright" >版权申请</a>		
+		<?php else:?>
+	    <a 	href="#myModal_1" role="button" data-toggle="modal" class="copyright" id="copyright" >取消申请</a>
+		<?php endif;?>
+		</div>
+	<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
+        <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="close">×</button>
+			<h3 id="myModalLabel">版权申请</h3>
+		</div>
+			
+		<div class="modal-body">
+			<div class="login_wrong" id="signMessage" ></div> 
+            姓名：  *<input type="text" name="name" id="copyright_sign_name" onfocus="copyright_sign_enable()" placeholder="真实姓名" />
+			<br/>
+			公司：  *<input type="text" name="company" id="copyright_sign_company" onfocus="copyright_sign_enable()" placeholder="公司名称" />
+            <br/>
+  			身份证号:*<input type="text" name="identity" id="copyright_sign_identity" onfocus="copyright_sign_enable()" placeholder="二代身份证号" />
+            <br/> 			                		
+			邮箱：  *<input type="email" name="email" id="copyright_sign_email" onfocus="copyright_sign_enable()" placeholder="常用邮箱" />
+			<br/>
+			联系电话:*<input type="text" name="phone" id="copyright_sign_phone" onfocus="copyright_sign_enable()" placeholder="常用电话号码"/>
+			<br/>			
+			请求内容：* <input type="text" name="content" id="copyright_sign_content" onfocus="copyright_sign_enable()" placeholder="请描述版权使用范围和目的" />
+			<br/>
+      (注：有 * 标记的为必填项)<br/>
+    </div>
+    <div class="modal-footer">
+   	<input type="button" data-dismiss="modal" class="btn btn-primary" aria-hidden="true" value="取消"/>
+     <input type="submit" onclick="copyright_sign_check()" id="copyright_sign" data-dismiss="modal" class="btn btn-primary" value="提交" />
+   </div>
+</div>
+	<!------------------------------------------------------------------------------>		
+			
+    	<div id="myModal_1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
+        <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="close">×</button>
+			<h3 id="myModalLabel">取消申请</h3>
+		</div>	
+		<div class="modal-body">
+            您确定取消申请？
+    </div>
+    <div class="modal-footer">
+   	<input type="button" data-dismiss="modal" class="btn btn-primary" aria-hidden="true" value="点错了"/>
+     <input type="submit" id="no_copyright_sign" data-dismiss="modal" class="btn btn-primary" value="确定取消" />
+   </div>
+</div>
         <div class="music_clear"></div>
       </div>
       <div class="music_clear"></div>
