@@ -12,7 +12,7 @@ class download_model extends CI_Model{
  
 //列出用户喜欢歌曲名称列表  
 	function display($user_id){
-		$sql="select music.name, music.dir ,music.image_dir,musician.nickname from music,download,musician where download.music_id=music.music_id AND musician.musician_id=music.musician_id AND download.user_id=?";
+		$sql="select music.music_id,music.name, music.dir ,music.image_dir,musician.nickname from (download left join music on download.music_id=music.music_id) left join musician on musician.musician_id=music.musician_id where download.user_id=?";
 		$query=$this->db->query($sql,array($user_id));
 		return $query->result_array();
 	}

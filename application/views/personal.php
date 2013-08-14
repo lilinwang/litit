@@ -9,7 +9,33 @@
 <link href="<?php echo base_url()?>css/style_personal.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery-1.9.1.js"></script>
 <script type="text/javascript">
+        function music2_right_detail_selectTag(showContent,selfObj){
+            var tag = document.getElementById("music2_right_tags").getElementsByTagName("li");
+            var taglength = tag.length;
+            for(i=0; i<taglength; i++){
+                tag[i].className = "";
+            }
+            selfObj.parentNode.className = "music2_right_detail_selectTag";
+            for(i=0; j=document.getElementById("music2_right_detail_tagContent"+i); i++){
+                j.style.display = "none";
+            }
+            document.getElementById(showContent).style.display = "block";
+        }
+    </script>
+<script type="text/javascript">
 	$(document).ready(function(){
+	$("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360+1360);?>);
+	       
+	$(".prev").click(function(){
+		 y=$("#music2_right_tab").position();
+		 if (y.left<0) $("#music2_right_tab").animate({left: '+=1360px'},"slow");
+	});
+	$(".next").click(function(){
+		 x=$("#music2_right_tab").position();
+		 y=$("#music2_right_tab").width();
+		 if ((x.left+y)>2720) $("#music2_right_tab").animate({left: '-=1360px'},"slow");
+		 
+	});
 	$("#update-info").hide();
 	$("#viewinfo-button").click(function(){
 		$("#update-info").hide();
@@ -40,15 +66,9 @@ $(function(){
 });
 </script>
 <style type="text/css">
-	#music2_left_tags li.music2_left_detail_selectTag a { background-position: right top; color:#fff; line-height: 30px; height:30px; background:url('<?php echo base_url()?>image/music2_7.jpg') no-repeat;}
-	#music2_left_tags li A { font-size:12px; float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 30px; text-align:center; width:100%; text-decoration:none; background:url('<?php echo base_url()?>image/music2_8.jpg') no-repeat;}
 	#music2_right_tags li A { font-size:12px; float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 30px; text-align:center; width:100%; text-decoration:none; background:url('<?php echo base_url()?>image/music2_10.jpg') no-repeat;}
 	#music2_right_tags li.music2_right_detail_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:30px; background:url('<?php echo base_url()?>image/music2_9.jpg') no-repeat;}
-	
 </style> 
-<script type="text/javascript">
-	document.getElementById("left_3").style.height = document.getElementById("right_3").offsetHeight + "px";
-</script>
 </head>
 <body>
 <!------------------>
@@ -67,125 +87,46 @@ function music(source)
   }
 </script>
 <audio id="video1">
-  <source src="" type="audio/mp3" preload="load">
+  <source src="" type="audio/mp3" preload="meta">
   Your browser does not support HTML5 audio.
 </audio>
 
 <!------------------>
 <div class="music_all">
-	<div id="home_hover">
-		<div id="play_button_background"></div>
-		<img class="motto" src="<?php echo base_url()?>image/motto.png">
-		<img class="play_button" name="play_button" src="<?php echo base_url()?>image/Play_Button.png">
-		<img class="next_song" src="<?php echo base_url()?>image/Next_Song.png">
-		<div id="logo_hover">
-			<img src="<?php echo base_url()?>image/music2_logo_hover.png">
-			 <button class="demo"></button>
-		</div>
-	</div>
-  <div class="music2_left" id="left_3">
-    <div class="music2_left_1">
-      <div class="music2_left_1_1"><img src="<?php echo base_url()?>image/music2_4.jpg" /></div>
-      <div class="music2_left_1_2">
-        <div class="music2_left_1_2_1">
-			我的信息
-			<span id="info-option">
-				|<a href="#" id="viewinfo-button">查看</a>
-				|<a href="#" id="updateinfo-button">修改</a>|
-			</span>
-		</div>
-		<form class="music2_left_1_2_2" id="update-info" method="post" action="update-userinfo.php">
-          <table class="basic-info">
-            <tr><td class="item-name">登录邮箱：</td><td class="item-value"><input type="email" name="email"/></td></tr>
-            <tr><td class="item-name">昵称：</td><td class="item-value"><input type="text" name="nickname"/></td></tr>
-            <tr><td class="item-name">TEL：</td><td class="item-value"><input type="tel" name="tel"/></td></tr>
-            <tr><td class="item-name">破壳日：</td><td class="item-value"><input type="date" name="birthday"/></td></tr>
-            <tr><td class="item-name">所在地：</td><td class="item-value"><input type="text" name="location"/></td></tr>
-            <tr><td class="item-name">实名信息：</td><td class="item-value"><input type="text" name="identity"/></td></tr>
-			<tr><td class="item-name">简介：</td><td class="item-value"><textarea name="intro"/>hello 6002</textarea></td></tr>
-          </table>
-        <div id="submit-button">
-          <button type="submit" class="submit"><a href="#">保存</a></button>
-          <button class="apply"><a href="#">申请成为音乐人</a></button>
-        </div>
-		</form>
-      <div id="view-info" class="music2_left_1_2_2">
-          <table class="basic-info">
-            <tr><td class="item-name">登录邮箱：</td><td class="item-value"><?php echo $email ?></td></tr>
-            <tr><td class="item-name">昵称：</td><td class="item-value"><?php echo $nickname ?></td></tr>
-            <tr><td class="item-name">TEL：</td><td class="item-value">12345678901</td></tr>
-            <tr><td class="item-name">破壳日：</td><td class="item-value"><?php echo $birthday ?></td></tr>
-            <tr><td class="item-name">所在地：</td><td class="item-value">sh</td></tr>
-            <tr><td class="item-name">实名信息：</td><td class="item-value"><?php echo $name ?></td></tr>
-			<tr><td class="item-name">简介：</td><td class="item-value"><textarea name="intro"/>hello 6002</textarea></td></tr>
-          </table>
-      </div>	
-      </div>
-      <div class="music2_left_1_3"><img src="<?php echo base_url()?>image/music2_4_1.jpg" /></div>
-    </div>
-    <div class="music_height10"></div>
-    <div class="music2_left_2">
-      <div class="music2_left_2_1"><img src="<?php echo base_url()?>image/music2_12.jpg" /></div>
-      <div id="music2_left_tab">
-        <ul id="music2_left_tags">
-          <li class="music2_left_detail_selectTag"><a onclick="music2_left_detail_selectTag('music2_left_detail_tagContent0',this)" href="javascript:void(0)">查看私信</a> </li>
-          <li><a onclick="music2_left_detail_selectTag('music2_left_detail_tagContent1',this)" href="javascript:void(0)">查看版权请求</a> </li>
-        </ul>
-        <div class="music_clear"></div>
-        <div id="music2_left_detail_tagContent">
-          <div class="music2_left_detail_tagContent music2_left_detail_selectTag" id="music2_left_detail_tagContent0">
-            <textarea name="" cols="" rows="">查看私信</textarea>
-          </div>
-          <div class="music2_left_detail_tagContent" id="music2_left_detail_tagContent1">
-            <textarea name="" cols="" rows="">查看版权请求</textarea>
-          </div>
-        </div>
-
-          <script type="text/javascript">
-        function music2_left_detail_selectTag(showContent,selfObj){
-            var tag = document.getElementById("music2_left_tags").getElementsByTagName("li");
-            var taglength = tag.length;
-            for(i=0; i<taglength; i++){
-                tag[i].className = "";
-            }
-            selfObj.parentNode.className = "music2_left_detail_selectTag";
-            for(i=0; j=document.getElementById("music2_left_detail_tagContent"+i); i++){
-                j.style.display = "none";
-            }
-            document.getElementById(showContent).style.display = "block";
-        }
-		</script>
-
-      </div>
-    <div class="music2_left_2_3">
-		<img src="<?php echo base_url()?>image/music2_12_1.jpg" /></div>
-    </div>
-	
-    <div class="music2_left_3">
-		<img src="<?php echo base_url()?>image/music2_logo.png">
-	</div>
-  </div>
-  <div class="music2_left2" id="right_3">
-    <div><img src="<?php echo base_url()?>image/music2_13.jpg" /></div>
-    <div class="music2_left2_2"></div>
-    <div><img src="<?php echo base_url()?>image/music2_14.jpg" /></div>
-  </div>
   <div class="music2_right">
     <div class="music2_right_1">
     <a href="<?php echo site_url('home')?>"><button class="btn" />返回首页</a>
     </div>
-    <div id="music2_right_tab">
-      <ul id="music2_right_tags">
+	<ul id="music2_right_tags" >
         <li class="music2_right_detail_selectTag"><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent0',this)" href="javascript:void(0)">收藏的歌曲</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent1',this)" href="javascript:void(0)">关注的音乐人</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent2',this)" href="javascript:void(0)">上传的音乐</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent3',this)" href="javascript:void(0)">下载的歌曲</a> </li>
-      </ul>
+    </ul>
+    <div id="music2_right_tab">
+		
       <div class="music_clear"></div>
       <div id="music2_right_detail_tagContent">
         <div class="music2_right_detail_tagContent music2_right_detail_selectTag" id="music2_right_detail_tagContent0">
 		<ul class="li_play_0">
-		  <?php foreach ($collects as $collect):?>
+		  <?php $num=(((int)((count($collects)-1)/24))+1)*24;$i=0;do {foreach ($collects as $collect):?>
+		  <li>
+              <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$collect['music_id']);?>"><img src="<?php echo base_url().$collect['image_dir'];?>" /></a>
+                <div class="li_play" style="display:none;">
+                  <dl class="li_play_left">
+                    <dt class="li_play_left_1"><?php echo $collect['name']; ?></dt>
+                    <dt class="li_play_left_2"><?php echo $collect['nickname']; ?></dt>
+                  </dl>
+                  <dl class="li_play_right">
+                    <a href="#"><img onclick="music('<?php echo base_url().$collect['dir']?>')" src="<?php echo base_url()?>image/li_play.png"/></a>
+                  </dl>
+                </div>
+              </div>
+		  </li>
+		  <?php $i++; endforeach;} while ($i<$num);?>
+		</ul>
+		<ul class="li_play_0">
+		  <?php $num=(((int)((count($collects)-1)/24))+1)*24;$i=0;do {foreach ($collects as $collect):?>
 		  <li>
               <div class="li_play_1"><a href="#"><img src="<?php echo base_url().$collect['image_dir'];?>" /></a>
                 <div class="li_play" style="display:none;">
@@ -199,39 +140,41 @@ function music(source)
                 </div>
               </div>
 		  </li>
-		  <?php endforeach;?>
-		  </ul>
-         <div class="music_clear"></div>
-          <div class="li_fanye"><dt><a href="#">上一页</a><a href="#" class="li_fanye_now">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#">5</a><a href="#">下一页</a></dt><dd><input id="addmusic" type="button" value="添加音乐" style="width:100px; height:30px; line-height:30px; text-align:center;"  /></dd></div>
-          <div class="music_clear"></div>
-        </div>
+		  <?php $i++; endforeach;} while ($i<$num);?>
+		</ul>
+		<div>
+		</div>
+		 <a  class="prev" href="#"></a>
+		 <a  class="next" href="#"></a>
+		 </div>
         <div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent1">
-		<ul >
-		  <?php foreach ($follows as $follow):?>
+		<ul class="li_play_0">
+		  <?php $num=(((int)((count($follows)-1)/24))+1)*24;$i=0;do {foreach ($follows as $follow):?>
 		  <li>
-              <div class="li_play_1"><a href="#"><img src="<?php echo base_url().$follow['portaitdir'];?>" /></a>
+              <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$follow['famousfor']);?>"><img src="<?php echo base_url().$follow['portaitdir'];?>" /></a>
                 <div class="li_play" style="display:none;">
                   <dl class="li_play_left">
                     <dt class="li_play_left_1"><?php echo $follow['name']; ?></dt>
                     <dt class="li_play_left_2"><?php echo $follow['nickname']; ?></dt>
                   </dl>
                   <dl class="li_play_right">
-                    
+				   <a href="#"><img onclick="music('<?php echo base_url().$upload['dir']?>')" src="<?php echo base_url()?>image/li_play.png"/></a>
                   </dl>
                 </div>
               </div>
 		  </li>
-		  <?php endforeach;?>
-		  </ul>
-          <div class="music_clear"></div>
-          <div class="li_fanye"><dt><a href="#">上一页</a><a href="#" class="li_fanye_now">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#">5</a><a href="#">下一页</a></dt><dd><input name="" type="button" value="添加音乐" style="width:100px; height:30px; line-height:30px; text-align:center;"  /></dd></div>
-          <div class="music_clear"></div>
+		  <?php $i++; endforeach;} while ($i<$num);?>
+		</ul>
+          </div>
+		 <a  class="prev" href="#"></a>
+		 <a  class="next" href="#"></a>
+		 </div>
         </div>
         <div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent2">
-          <ul >
-		  <?php foreach ($uploads as $upload):?>
+          <ul class="li_play_0">
+		  <?php $num=(((int)((count($uploads)-1)/24))+1)*24;$i=0;do {foreach ($uploads as $upload):?>
 		  <li>
-              <div class="li_play_1"><a href="#"><img src="<?php echo base_url().$upload['image_dir'];?>" /></a>
+              <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$upload['music_id']);?>"><img src="<?php echo base_url().$upload['image_dir'];?>" /></a>
                 <div class="li_play" style="display:none;">
                   <dl class="li_play_left">
                     <dt class="li_play_left_1"><?php echo $upload['name']; ?></dt>
@@ -243,17 +186,18 @@ function music(source)
                 </div>
               </div>
 		  </li>
-		  <?php endforeach;?>
-		  </ul>
-		  <div class="music_clear"></div>
-          <div class="li_fanye"><dt><a href="#">上一页</a><a href="#" class="li_fanye_now">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#">5</a><a href="#">下一页</a></dt><dd><input name="" type="button" value="添加音乐" style="width:100px; height:30px; line-height:30px; text-align:center;"  /></dd></div>
-          <div class="music_clear"></div>
+		  <?php $i++; endforeach;} while ($i<$num);?>
+		</ul>
+		   </div>
+		 <a  class="prev" href="#"></a>
+		 <a  class="next" href="#"></a>
+		 </div>
         </div>
         <div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent3">
-          <ul >
-		  <?php foreach ($downloads as $download):?>
+         <ul class="li_play_0">
+		  <?php $num=(((int)((count($downloads)-1)/24))+1)*24;$i=0;do {foreach ($downloads as $download):?>
 		  <li>
-              <div class="li_play_1"><a href="#"><img src="<?php echo base_url().$download['image_dir'];?>" /></a>
+              <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$download['music_id']);?>"><img src="<?php echo base_url().$download['image_dir'];?>" /></a>
                 <div class="li_play" style="display:none;">
                   <dl class="li_play_left">
                     <dt class="li_play_left_1"><?php echo $download['name']; ?></dt>
@@ -265,29 +209,15 @@ function music(source)
                 </div>
               </div>
 		  </li>
-		  <?php endforeach;?>
-		  </ul><div class="music_clear"></div>
-          <div class="li_fanye"><dt><a href="#">上一页</a><a href="#" class="li_fanye_now">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#">5</a><a href="#">下一页</a></dt><dd><input name="" type="button" value="添加音乐" style="width:100px; height:30px; line-height:30px; text-align:center;"  /></dd></div>
-          <div class="music_clear"></div>
-        </div>
+		  <?php $i++; endforeach;} while ($i<$num);?>
+		</ul>
+		</div>
+		 <a  class="prev" href="#"></a>
+		 <a  class="next" href="#"></a>
+		 </div>
       </div>
-      <p>
-        <script type="text/javascript">
-        function music2_right_detail_selectTag(showContent,selfObj){
-            var tag = document.getElementById("music2_right_tags").getElementsByTagName("li");
-            var taglength = tag.length;
-            for(i=0; i<taglength; i++){
-                tag[i].className = "";
-            }
-            selfObj.parentNode.className = "music2_right_detail_selectTag";
-            for(i=0; j=document.getElementById("music2_right_detail_tagContent"+i); i++){
-                j.style.display = "none";
-            }
-            document.getElementById(showContent).style.display = "block";
-        }
-    </script>
-      </p>
     </div>
+	 
   </div>
 </div>
 </body>
