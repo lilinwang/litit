@@ -16,6 +16,13 @@ class follow_model extends CI_Model{
 		$query=$this->db->query($sql,array($user_id));
 		return $query->result_array();
 	}
+	function is_follow($user_id,$musician_id)
+  {
+  	  $sql='select count(follow_id) as count from follow where (user_id,musician_id)=(?,?)';
+  	  $query=$this->db->query($sql,array($user_id,$musician_id));
+  	  $query=$query->row();
+  	  return $query->count;
+  }
 }
 
 
