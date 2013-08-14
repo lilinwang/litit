@@ -20,6 +20,13 @@
                 j.style.display = "none";
             }
             document.getElementById(showContent).style.display = "block";
+			switch (showContent.substring(30)){
+				case "0": $("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360+1360);?>);break;
+				case "1": $("#music2_right_tab").width(<?php echo((((int)((count($follows)-1)/24))+1)*1360);?>);break;
+				case "2": $("#music2_right_tab").width(<?php echo((((int)((count($uploads)-1)/24))+1)*1360);?>);break;
+				case "3": $("#music2_right_tab").width(<?php echo((((int)((count($downloads)-1)/24))+1)*1360);?>);
+			}
+			
         }
     </script>
 <script type="text/javascript">
@@ -142,12 +149,9 @@ function music(source)
 		  </li>
 		  <?php $i++; endforeach;} while ($i<$num);?>
 		</ul>
-		<div>
 		</div>
-		 <a  class="prev" href="#"></a>
-		 <a  class="next" href="#"></a>
-		 </div>
-        <div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent1">
+		
+		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent1">
 		<ul class="li_play_0">
 		  <?php $num=(((int)((count($follows)-1)/24))+1)*24;$i=0;do {foreach ($follows as $follow):?>
 		  <li>
@@ -158,20 +162,17 @@ function music(source)
                     <dt class="li_play_left_2"><?php echo $follow['nickname']; ?></dt>
                   </dl>
                   <dl class="li_play_right">
-				   <a href="#"><img onclick="music('<?php echo base_url().$upload['dir']?>')" src="<?php echo base_url()?>image/li_play.png"/></a>
+				   <a href="#"><img onclick="music('<?php echo base_url().$follow['dir']?>')" src="<?php echo base_url()?>image/li_play.png"/></a>
                   </dl>
                 </div>
               </div>
 		  </li>
 		  <?php $i++; endforeach;} while ($i<$num);?>
 		</ul>
-          </div>
-		 <a  class="prev" href="#"></a>
-		 <a  class="next" href="#"></a>
-		 </div>
-        </div>
-        <div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent2">
-          <ul class="li_play_0">
+		</div>
+		
+		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent2">
+         <ul class="li_play_0">
 		  <?php $num=(((int)((count($uploads)-1)/24))+1)*24;$i=0;do {foreach ($uploads as $upload):?>
 		  <li>
               <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$upload['music_id']);?>"><img src="<?php echo base_url().$upload['image_dir'];?>" /></a>
@@ -188,12 +189,9 @@ function music(source)
 		  </li>
 		  <?php $i++; endforeach;} while ($i<$num);?>
 		</ul>
-		   </div>
-		 <a  class="prev" href="#"></a>
-		 <a  class="next" href="#"></a>
-		 </div>
-        </div>
-        <div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent3">
+		</div>
+		
+		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent3">
          <ul class="li_play_0">
 		  <?php $num=(((int)((count($downloads)-1)/24))+1)*24;$i=0;do {foreach ($downloads as $download):?>
 		  <li>
@@ -212,13 +210,13 @@ function music(source)
 		  <?php $i++; endforeach;} while ($i<$num);?>
 		</ul>
 		</div>
-		 <a  class="prev" href="#"></a>
-		 <a  class="next" href="#"></a>
-		 </div>
-      </div>
+		
+		
     </div>
-	 
   </div>
+   <a  class="prev" href="#"></a>
+	<a  class="next" href="#"></a>
+</div>
 </div>
 </body>
 </html>

@@ -386,7 +386,7 @@ document.getElementById("copyright_sign").disabled=false;
 <!------------------>
 </script>
 </head>
-<body oncontextmenu=window.event.returnValue=false onselectstart=event.returnValue=false ondragstart=window.event.returnValue=false onsource="event.returnValue=false">
+<body >
 <div class="music_all">
 <div class="all_hover">
 	<div id="home_hover">
