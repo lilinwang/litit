@@ -8,19 +8,12 @@
 <link href="<?php echo base_url()?>css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/example2.min.css" rel="stylesheet" type="text/css">
-<script type="text/javascript">
-	document.getElementById("right_1").style.height = document.getElementById("left_1").offsetHeight + "px";
-	document.getElementById("left_2").style.height = document.getElementById("right_2").offsetHeight + "px";
-</script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery.boutique_min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery-migrate-1.1.1.js"></script>
 <script type="text/javascript" src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=" charset="utf-8"></script>
-<!--用户登陆检测-->
-<script type="text/javascript" src="<?php echo base_url()?>js/jlogin_wrong.js" charset="utf-8"></script>
-<!--用户注册检测-->
-<script type="text/javascript" src="<?php echo base_url()?>js/jsignup_wrong.js" charset="utf-8"></script>
+
 <script type="text/javascript"> 
 
 
@@ -196,7 +189,7 @@ function sign_enable(){document.getElementById("sign").disabled=false;}
 
 </script>
 </head>
-<body oncontextmenu=window.event.returnValue=false onselectstart=event.returnValue=false ondragstart=window.event.returnValue=false onsource="event.returnValue=false">
+<body >
 <div class="music_all">
 <!--所有的悬浮在表面的页面，包括黑色面纱，注册登录页面-->
 <div class="all_hover">
@@ -339,24 +332,6 @@ function sign_enable(){document.getElementById("sign").disabled=false;}
   </div>
   <div class="music_right">
   <div class="music_right_1_hover">
-    <!--
-    <div class="panel_login">
-		<form  name='input' class="infobox-login" action="<?php echo site_url('login')?>" method="post">
-		邮箱: 
-		<input  type="text" name="email" placeholder="邮箱" />
-		<span id="login_wrong1"></span>
-		</br>
-		密码: 
-		<input type="password" name="password"  placeholder="密码" />
-		<span id="login_wrong2"></span>
-		</br>
-        听众：<input type="radio" checked="checked" name="type" value="1" />
-        音乐人：<input type="radio" name="type" value="0" />
-        <br/>
-		<input class="btn btn-primary" type="submit" value="登陆" />
-		</form>
-	</div>
-	-->
   </div>
     <div class="music_clear"></div>
     <div class="music_right_2">

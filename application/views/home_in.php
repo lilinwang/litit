@@ -10,10 +10,6 @@
 <link href="<?php echo base_url()?>css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/example2.min.css" rel="stylesheet" type="text/css">
-<script type="text/javascript">
-	document.getElementById("right_1").style.height = document.getElementById("left_1").offsetHeight + "px";
-	document.getElementById("left_2").style.height = document.getElementById("right_2").offsetHeight + "px";
-</script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery.boutique_min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/bootstrap.min.js"></script>

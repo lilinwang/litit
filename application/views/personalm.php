@@ -98,13 +98,24 @@ function music(source)
   Your browser does not support HTML5 audio.
 </audio>
 
-<!------------------>
+<!---------    <div class="music2_right_1">
+    <a href=""><button class="btn" /></a>
+	</div>
+	<div class="music2_right1">
+	<a href="#"><button class="btn" />上传新歌</a>
+    </div>--------->
 <div class="music_all">
   <div class="music2_right">
-    <div class="music2_right_1">
-    <a href="<?php echo site_url('home')?>"><button class="btn" />返回首页</a>
-	<a href="<?php echo site_url('newsong')?>"><button class="btn" />上传新歌</a>
-    </div>
+	<div class="music_right_1">
+	<form name="input" action="<?php echo site_url('home')?>" method="post">
+	<input type="submit" class="btn" value="返回首页"/>
+	</div>
+    </form>
+	<div class="music_right1">
+	<form name="input" action="<?php echo site_url('newsong')?>" method="post">
+    <input type="submit" class="btn" value="上传新歌"/>
+    </form>
+	</div>
 	<ul id="music2_right_tags" >
         <li class="music2_right_detail_selectTag"><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent0',this)" href="javascript:void(0)">收藏的歌曲</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent1',this)" href="javascript:void(0)">关注的音乐人</a> </li>
