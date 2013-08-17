@@ -31,7 +31,7 @@
     </script>
 <script type="text/javascript">
 	$(document).ready(function(){
-	$("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360+1360);?>);
+	$("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360);?>);
 	       
 	$(".prev").click(function(){
 		 y=$("#music2_right_tab").position();
@@ -103,6 +103,7 @@ function music(source)
   <div class="music2_right">
     <div class="music2_right_1">
     <a href="<?php echo site_url('home')?>"><button class="btn" />返回首页</a>
+	<a href="<?php echo site_url('newsong')?>"><button class="btn" />上传新歌</a>
     </div>
 	<ul id="music2_right_tags" >
         <li class="music2_right_detail_selectTag"><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent0',this)" href="javascript:void(0)">收藏的歌曲</a> </li>
