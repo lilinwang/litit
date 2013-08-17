@@ -14,13 +14,14 @@ class Sign_up extends CI_Controller {
         $this->load->model('user_model');
         $this->load->model('musician_model');
         $this->load->model('music_model');
-
+        $time_stamp = date("Y-m-d H:i:s");
         if($this->input->post('usertype')=="1"){                       
             $result=$this->user_model->check($this->input->post('email'));            
             if(!$result){ 
                         $data['nickname'] = $this->input->post('name');
                         $data['email'] = $this->input->post('email');
-                        $data['password'] =sha1( $this->input->post('password'));
+                        $data['password'] =sha1( $this->input->post('password').$time_stamp);
+                        $data['reg_time'] = $time_stamp;
                         $data['name'] = $this->input->post('name2');
                         $data['gender'] = $this->input->post('gender');
                         $data['birthday'] = $this->input->post('birthday');
@@ -58,7 +59,8 @@ class Sign_up extends CI_Controller {
             if(!$result){ 
                     $data['nickname'] = $this->input->post('name');
                     $data['email'] = $this->input->post('email');
-                    $data['password'] = sha1($this->input->post('password'));
+                    $data['password'] = sha1($this->input->post('password').$time_stamp);
+                    $data['reg_time'] = $time_stamp;
                     $data['name'] = $this->input->post('name2');
                     $data['gender'] = $this->input->post('gender');
                     $data['birthday'] = $this->input->post('birthday');

@@ -12,7 +12,7 @@ class musician_model extends CI_Model{
 		$query=$query->row();
 		if($result1)//¼ì²éÕË»§ÃÜÂëÊÇ·ñÕıÈ·
 		{
-		$result2=($query->password==sha1($password));
+		$result2=($query->password==sha1($password.$query->reg_time));
 		if($result2){return 1;}
 		else{return 2;}//ÃÜÂë´íÎó
 		}
