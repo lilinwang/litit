@@ -14,9 +14,6 @@ class Home extends CI_Controller {
         $this->load->model('musician_model');
         $this->load->model('user_model');
         $this->load->model('music_model');
-        $this->load->model('collect_model');
-        $this->load->model('follow_model');
-        $this->load->model('copyright_model');
 
         if(!$this->session->userdata('is_login')){
             $data = $this->music_model->rand();
@@ -31,15 +28,27 @@ class Home extends CI_Controller {
             $data['usertype'] = $this->session->userdata('usertype');
             if($data['usertype']==1){
                 $name=$this->user_model->check($data['useremail']);
+				$this->load->model('collect_model');
+				$this->load->model('follow_model');
+				$this->load->model('copyright_model');
+				$data['follow'] =$this->follow_model->is_follow($name[0]['user_id'],$data['musician_id']);
+				$data['collect'] =$this->collect_model->is_collect($name[0]['user_id'],$data['music_id']);
+				$data['copyright'] =$this->copyright_model->is_copyright_sign($name[0]['user_id'],$data['music_id']);
+				$data['userid'] =$name[0]['user_id'];
+				
             }
             elseif($data['usertype']==0){
                 $name=$this->musician_model->check_user($data['useremail']);
+				$this->load->model('collectm_model');
+				$this->load->model('followm_model');
+				$this->load->model('copyrightm_model');
+				$data['follow'] =$this->followm_model->is_follow($name[0]['musician_id'],$data['musician_id']);
+				$data['collect'] =$this->collectm_model->is_collect($name[0]['musician_id'],$data['music_id']);
+				$data['copyright'] =$this->copyrightm_model->is_copyright_sign($name[0]['musician_id'],$data['music_id']);
+				$data['userid'] =$name[0]['musician_id'];
             }
-           	$data['follow'] =$this->follow_model->is_follow($name[0]['user_id'],$data['musician_id']);
-           	$data['collect'] =$this->collect_model->is_collect($name[0]['user_id'],$data['music_id']);
-       		$data['copyright'] =$this->copyright_model->is_copyright_sign($name[0]['user_id'],$data['music_id']);
-            $data['userid'] =$name[0]['user_id'];
-            $data['username'] = $name[0]['name'];
+           	
+            $data['username'] = $name[0]['nickname'];
             $data['musician'] = $this->musician_model->check_id($data['musician_id']);
 			$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 			$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
@@ -58,26 +67,35 @@ class Home extends CI_Controller {
 			$this->load->model('musician_model');
 			$this->load->model('user_model');
 			$this->load->model('music_model');
-			$this->load->model('collect_model');
-			$this->load->model('follow_model');
-			$this->load->model('copyright_model');
-
 			
 			$id=$this->input->get('id');
 			$data=$this->music_model->get_by_id($id);
             $data['useremail'] = $this->session->userdata('email');
             $data['usertype'] = $this->session->userdata('usertype');
+
             if($data['usertype']==1){
                 $name=$this->user_model->check($data['useremail']);
+				$this->load->model('collect_model');
+				$this->load->model('follow_model');
+				$this->load->model('copyright_model');
+				$data['follow'] =$this->follow_model->is_follow($name[0]['user_id'],$data['musician_id']);
+				$data['collect'] =$this->collect_model->is_collect($name[0]['user_id'],$data['music_id']);
+				$data['copyright'] =$this->copyright_model->is_copyright_sign($name[0]['user_id'],$data['music_id']);
+				$data['userid'] =$name[0]['user_id'];
+				
             }
             elseif($data['usertype']==0){
                 $name=$this->musician_model->check_user($data['useremail']);
+				$this->load->model('collectm_model');
+				$this->load->model('followm_model');
+				$this->load->model('copyrightm_model');
+				$data['follow'] =$this->followm_model->is_follow($name[0]['musician_id'],$data['musician_id']);
+				$data['collect'] =$this->collectm_model->is_collect($name[0]['musician_id'],$data['music_id']);
+				$data['copyright'] =$this->copyrightm_model->is_copyright_sign($name[0]['musician_id'],$data['music_id']);
+				$data['userid'] =$name[0]['musician_id'];
             }
-           	$data['follow'] =$this->follow_model->is_follow($name[0]['user_id'],$data['musician_id']);
-           	$data['collect'] =$this->collect_model->is_collect($name[0]['user_id'],$data['music_id']);
-       		$data['copyright'] =$this->copyright_model->is_copyright_sign($name[0]['user_id'],$data['music_id']);
-            $data['userid'] =$name[0]['user_id'];
-            $data['username'] = $name[0]['name'];
+           	
+            $data['username'] = $name[0]['nickname'];
             $data['musician'] = $this->musician_model->check_id($data['musician_id']);
 			$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 			$data['tag']=$this->music_model->gettag_by_id($data['music_id']);

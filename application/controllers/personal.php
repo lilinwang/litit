@@ -15,24 +15,22 @@ class Personal extends CI_Controller {
 			$data['user_id']=$this->session->userdata('userid');
 			$this->load->model('collect_model');
 			$this->load->model('follow_model');
-			$this->load->model('upload_model');
 			$this->load->model('download_model');
 			$data['collects']=$this->collect_model->display($data['user_id']);
 			$data['follows']=$this->follow_model->display($data['user_id']);
-			$data['uploads']=$this->upload_model->display($data['user_id']);
 			$data['downloads']=$this->download_model->display($data['user_id']);
             $this->load->view('personal',$data);
 		}else{
-			$this->load->model('collect_model');
-			$this->load->model('follow_model');
+			$this->load->model('collectm_model');
+			$this->load->model('followm_model');
 			$this->load->model('upload_model');
-			$this->load->model('download_model');
+			$this->load->model('downloadm_model');
 			$data['musician_id']=$this->session->userdata('userid');
-			$data['collects']=$this->collect_model->display($data['musician_id']);
-			$data['follows']=$this->follow_model->display($data['musician_id']);
+			$data['collects']=$this->collectm_model->display($data['musician_id']);
+			$data['follows']=$this->followm_model->display($data['musician_id']);
 			$data['uploads']=$this->upload_model->display($data['musician_id']);
-			$data['downloads']=$this->download_model->display($data['musician_id']);
-            $this->load->view('personal',$data);
+			$data['downloads']=$this->downloadm_model->display($data['musician_id']);
+            $this->load->view('personalm',$data);
 	    }
 	}
 	

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2013 年 08 月 14 日 13:11
+-- 生成日期: 2013 年 08 月 17 日 12:16
 -- 服务器版本: 5.6.12-log
 -- PHP 版本: 5.4.12
 
@@ -75,7 +75,20 @@ CREATE TABLE IF NOT EXISTS `collect` (
   `music_id` int(11) NOT NULL,
   PRIMARY KEY (`collect_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `collectm`
+--
+
+CREATE TABLE IF NOT EXISTS `collectm` (
+  `collect_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `music_id` int(50) DEFAULT NULL,
+  PRIMARY KEY (`collect_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -96,7 +109,27 @@ CREATE TABLE IF NOT EXISTS `copyright` (
   `content` text,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `copyrightm`
+--
+
+CREATE TABLE IF NOT EXISTS `copyrightm` (
+  `id` int(50) NOT NULL DEFAULT '0',
+  `musician_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `music_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `company` varchar(255) DEFAULT NULL,
+  `identity` int(18) NOT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `content` text,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -131,6 +164,19 @@ CREATE TABLE IF NOT EXISTS `download` (
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `downloadm`
+--
+
+CREATE TABLE IF NOT EXISTS `downloadm` (
+  `download_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `music_id` int(50) DEFAULT NULL,
+  PRIMARY KEY (`download_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `follow`
 --
 
@@ -140,7 +186,20 @@ CREATE TABLE IF NOT EXISTS `follow` (
   `musician_id` int(11) NOT NULL,
   PRIMARY KEY (`follow_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `followm`
+--
+
+CREATE TABLE IF NOT EXISTS `followm` (
+  `follow_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `musician_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`follow_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -186,7 +245,7 @@ CREATE TABLE IF NOT EXISTS `musician` (
   `famousfor` int(11) NOT NULL,
   PRIMARY KEY (`musician_id`),
   UNIQUE KEY `identity` (`identity`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
@@ -200,7 +259,7 @@ CREATE TABLE IF NOT EXISTS `music_musician` (
   `musician_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `musician_id` (`musician_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=39 ;
 
 -- --------------------------------------------------------
 
@@ -317,11 +376,11 @@ CREATE TABLE IF NOT EXISTS `tag` (
 
 CREATE TABLE IF NOT EXISTS `upload` (
   `upload_id` int(11) NOT NULL AUTO_INCREMENT,
+  `musician_id` int(11) NOT NULL,
   `music_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
   PRIMARY KEY (`upload_id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `user_id` (`music_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 -- --------------------------------------------------------
 
@@ -339,7 +398,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `birthday` date DEFAULT NULL,
   `port_dir` text,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

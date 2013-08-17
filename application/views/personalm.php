@@ -23,14 +23,15 @@
 			switch (showContent.substring(30)){
 				case "0": $("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360);?>);break;
 				case "1": $("#music2_right_tab").width(<?php echo((((int)((count($follows)-1)/24))+1)*1360);?>);break;
-				case "2": $("#music2_right_tab").width(<?php echo((((int)((count($downloads)-1)/24))+1)*1360);?>);
+				case "2": $("#music2_right_tab").width(<?php echo((((int)((count($uploads)-1)/24))+1)*1360);?>);break;
+				case "3": $("#music2_right_tab").width(<?php echo((((int)((count($downloads)-1)/24))+1)*1360);?>);
 			}
 			
         }
     </script>
 <script type="text/javascript">
 	$(document).ready(function(){
-	$("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360);?>);
+	$("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360+1360);?>);
 	       
 	$(".prev").click(function(){
 		 y=$("#music2_right_tab").position();
@@ -106,7 +107,8 @@ function music(source)
 	<ul id="music2_right_tags" >
         <li class="music2_right_detail_selectTag"><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent0',this)" href="javascript:void(0)">收藏的歌曲</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent1',this)" href="javascript:void(0)">关注的音乐人</a> </li>
-        <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent2',this)" href="javascript:void(0)">下载的歌曲</a> </li>
+        <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent2',this)" href="javascript:void(0)">上传的音乐</a> </li>
+        <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent3',this)" href="javascript:void(0)">下载的歌曲</a> </li>
     </ul>
     <div id="music2_right_tab">
 		
@@ -153,6 +155,26 @@ function music(source)
 		</div>
 		
 		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent2">
+         <ul class="li_play_0">
+		  <?php if (count($uploads)>0){$num=(((int)((count($uploads)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($uploads as $upload):?>
+		  <li>
+              <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$upload['music_id']);?>"><img src="<?php echo base_url().$upload['image_dir'];?>" /></a>
+                <div class="li_play" style="display:none;">
+                  <dl class="li_play_left">
+                    <dt class="li_play_left_1"><?php echo $upload['name']; ?></dt>
+                    <dt class="li_play_left_2"><?php echo $upload['nickname']; ?></dt>
+                  </dl>
+                  <dl class="li_play_right">
+                    <a href="#"><img onclick="music('<?php echo base_url().$upload['dir']?>')" src="<?php echo base_url()?>image/li_play.png"/></a>
+                  </dl>
+                </div>
+              </div>
+		  </li>
+		  <?php $i++; endforeach;}} ?>
+		</ul>
+		</div>
+		
+		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent3">
          <ul class="li_play_0">
 		  <?php if (count($downloads)>0){$num=(((int)((count($downloads)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($downloads as $download):?>
 		  <li>

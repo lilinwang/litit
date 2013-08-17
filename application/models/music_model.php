@@ -125,14 +125,16 @@ class music_model extends CI_Model{
 		foreach ($result as $key) {$re[]=$key['name'];};
 		return $re;
 	}
-	function collect_inc($id1,$id2,$id3){
+	function collect_inc($id1,$id2,$id3,$id4){
         $this->db->query('update music set collect_cnt=collect_cnt+1 where music_id=?',$id2);
-        $this->db->query('insert into collect (music_id,user_id) values (?,?)',array($id2,$id3));
+        if ($id4==1) $this->db->query('insert into collect (music_id,user_id) values (?,?)',array($id2,$id3));
+		else $this->db->query('insert into collectm (music_id,user_id) values (?,?)',array($id2,$id3));
 		return;	
     }
-   	function collect_dec($id1,$id2,$id3){
+   	function collect_dec($id1,$id2,$id3,$id4){
         $this->db->query('update music set collect_cnt=collect_cnt-1 where music_id=?',$id2);
-        $this->db->query('delete from collect where (music_id,user_id)=(?,?)',array($id2,$id3));
+        if ($id4==1) $this->db->query('delete from collect where (music_id,user_id)=(?,?)',array($id2,$id3));
+		else $this->db->query('delete from collectm where (music_id,user_id)=(?,?)',array($id2,$id3));
 		return;	
     }
 	

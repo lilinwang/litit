@@ -20,35 +20,37 @@ class Ajax extends CI_Controller {
     function likemusic()
     {
 		$this->load->model('music_model');
-        $this->load->model('musician_model');
-    	$this->music_model->collect_inc($_POST['musician_id'],$_POST['music_id'],$_POST['user_id']);	
+    	$this->music_model->collect_inc($_POST['musician_id'],$_POST['music_id'],$_POST['user_id'],$_POST['user_type']);	
     }
     function no_likemusic()
     {
 		$this->load->model('music_model');
-        $this->load->model('musician_model');
-    	$this->music_model->collect_dec($_POST['musician_id'],$_POST['music_id'],$_POST['user_id']);	
+    	$this->music_model->collect_dec($_POST['musician_id'],$_POST['music_id'],$_POST['user_id'],$_POST['user_type']);	
     }
     function attention_musician()
     {
     	$this->load->model('music_model');
         $this->load->model('musician_model');
-    	$data=$this->musician_model->attention_inc($_POST['musician_id'],$_POST['music_id'],$_POST['user_id']);
+    	$data=$this->musician_model->attention_inc($_POST['musician_id'],$_POST['music_id'],$_POST['user_id'],$_POST['user_type']);
         echo $data;
     }
     function no_attention_musician()
     {
-    	$this->load->model('music_model');
         $this->load->model('musician_model');
-    	$data=$this->musician_model->attention_dec($_POST['musician_id'],$_POST['music_id'],$_POST['user_id']);
+    	$data=$this->musician_model->attention_dec($_POST['musician_id'],$_POST['music_id'],$_POST['user_id'],$_POST['user_type']);
         echo $data;
     }
     function islike_follow()
     {
     	$this->load->model('collect_model');
         $this->load->model('follow_model');
-       	$data['follow']=$this->follow_model->is_follow($_POST['user_id'],$_POST['musician_id']);
-        $data['collect']=$this->collect_model->is_collect($_POST['user_id'],$_POST['music_id']);
+		if ($_POST['user_type']==1)
+       	{	$data['follow']=$this->follow_model->is_follow($_POST['user_id'],$_POST['musician_id']);
+			$data['collect']=$this->collect_model->is_collect($_POST['user_id'],$_POST['music_id']);
+		}else
+		{	$data['follow']=$this->followm_model->is_follow($_POST['user_id'],$_POST['musician_id']);
+			$data['collect']=$this->collectm_model->is_collect($_POST['user_id'],$_POST['music_id']);
+		}
         echo json_encode($data);
     }
     function copyright_sign()

@@ -14,6 +14,7 @@ class Sign_up extends CI_Controller {
         $this->load->model('user_model');
         $this->load->model('musician_model');
         $this->load->model('music_model');
+
         if($this->input->post('usertype')=="1"){                       
             $result=$this->user_model->check($this->input->post('email'));            
             if(!$result){ 
@@ -29,13 +30,21 @@ class Sign_up extends CI_Controller {
 						
 						$data = $this->music_model->rand();
 						$data['useremail'] = $this->session->userdata('email');
-						$data['usertype'] = $this->session->userdata('usertype');
-						$data['username'] = $this->input->post('name2');
+						$data['usertype'] = $this->session->userdata('usertype');																		
+						$name=$this->user_model->check($data['useremail']);
+						$this->load->model('collect_model');
+						$this->load->model('follow_model');
+						$this->load->model('copyright_model');
+						$data['follow'] =$this->follow_model->is_follow($name[0]['user_id'],$data['musician_id']);
+						$data['collect'] =$this->collect_model->is_collect($name[0]['user_id'],$data['music_id']);
+						$data['copyright'] =$this->copyright_model->is_copyright_sign($name[0]['user_id'],$data['music_id']);
+						$data['userid'] =$name[0]['user_id'];
+						$data['username'] = $name[0]['name'];
 						$data['musician'] = $this->musician_model->check_id($data['musician_id']);
 						$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 						$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
 						$data['message']=' ';
-						$this->load->view('home_in',$data);	
+						$this->load->view('home_in',$data);			           	
             }else{
                     $data = $this->music_model->rand();
 					$data['musician'] = $this->musician_model->check_id($data['musician_id']);
@@ -43,7 +52,7 @@ class Sign_up extends CI_Controller {
 					$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
 					$data['message']='该邮箱已被注册';
 					$this->load->view('home',$data);
-            }
+            };
         }else{                     
             $result=$this->musician_model->check_user($this->input->post('email'));        
             if(!$result){ 
@@ -65,13 +74,21 @@ class Sign_up extends CI_Controller {
 					
 					$data = $this->music_model->rand();
 					$data['useremail'] = $this->session->userdata('email');
-					$data['usertype'] = $this->session->userdata('usertype');
-					$data['username'] = $this->input->post('name2');
+					$data['usertype'] = $this->session->userdata('usertype');						
+					$name=$this->musician_model->check_user($data['useremail']);
+					$this->load->model('collectm_model');
+					$this->load->model('followm_model');
+					$this->load->model('copyrightm_model');
+					$data['follow'] =$this->followm_model->is_follow($name[0]['musician_id'],$data['musician_id']);
+					$data['collect'] =$this->collectm_model->is_collect($name[0]['musician_id'],$data['music_id']);
+					$data['copyright'] =$this->copyrightm_model->is_copyright_sign($name[0]['musician_id'],$data['music_id']);
+					$data['userid'] =$name[0]['musician_id'];
+					$data['username'] = $name[0]['name'];
 					$data['musician'] = $this->musician_model->check_id($data['musician_id']);
 					$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 					$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
 					$data['message']=' ';
-					$this->load->view('home_in',$data);	
+					$this->load->view('home_in',$data);
 					
             }else{
 					$data = $this->music_model->rand();

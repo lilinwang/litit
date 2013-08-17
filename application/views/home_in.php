@@ -62,7 +62,8 @@
 		     	{
 			    user_id:<?php echo $userid;?>,
                 musician_id:data.musician_id,
-                music_id:data.music_id 
+                music_id:data.music_id ,
+				user_type:<?php echo $usertype;?>
                 },
                 function(data,status){
              	 data = eval("(" + data + ")");        	  
@@ -106,7 +107,7 @@
 			{
 			 user_id:<?php echo $userid;?>,
              musician_id:<?php echo $musician['musician_id'];?>,
-             music_id:<?php echo $music_id ;?>	 	 
+             music_id:<?php echo $music_id ;?>  
              },
              function(data,status){
              	 document.getElementById("copyright").innerHTML="版权申请";
@@ -122,7 +123,8 @@
 			{
 			 user_id:<?php echo $userid;?>,
              musician_id:<?php echo $musician['musician_id'];?>,
-             music_id:<?php echo $music_id ;?>
+             music_id:<?php echo $music_id ;?>,
+			 user_type:<?php echo $usertype;?>
              },
              function(data,status){
              	 document.getElementById("likemusic").style.left=$('.like').css('left');
@@ -138,7 +140,8 @@
 			{
 			 user_id:<?php echo $userid;?>,
              musician_id:<?php echo $musician['musician_id'];?>,
-             music_id:<?php echo $music_id ;?>
+             music_id:<?php echo $music_id ;?>,
+			 user_type:<?php echo $usertype;?>
              },
              function(data,status){
              	 document.getElementById("no_likemusic").style.left=$('.like').css('left');
@@ -158,7 +161,8 @@
 			{
 			 user_id:<?php echo $userid;?>,
              musician_id:<?php echo $musician['musician_id'];?>,
-             music_id:<?php echo $music_id ;?>
+             music_id:<?php echo $music_id ;?>,
+			 user_type:<?php echo $usertype;?>
              },
              function(data,status){
              	 document.getElementById("attention_2").innerHTML="人气："+"<b>"+data+"</b>";
@@ -173,7 +177,8 @@
 			{
 			 user_id:<?php echo $userid;?>,
              musician_id:<?php echo $musician['musician_id'];?>,
-             music_id:<?php echo $music_id ;?>
+             music_id:<?php echo $music_id ;?>,
+			 user_type:<?php echo $usertype;?>
              },
              function(data,status){
              	 document.getElementById("attention_2").innerHTML="人气："+"<b>"+data+"</b>";
