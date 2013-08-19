@@ -6,6 +6,23 @@ class Ajax extends CI_Controller {
     {
         exit('Access denied');
     }
+    function get_message_push()
+    {
+        $this->load->model('follow_model');
+        $data['musician_name'] = "GAGA";
+        $data['url'] = "http://example.com";
+        $data['brief'] = "Aha!";
+        $data['status'] = "success";
+        if ($_POST['user_type'] == 1)
+        {
+
+        }
+        else
+        {
+
+        }
+        echo json_encode($data);
+    }
     
     function getmusic()
     {
