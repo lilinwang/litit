@@ -19,7 +19,7 @@ class music_model extends CI_Model{
 		return $query->result_array();
 	}
 	function insert_new_music($name,$story,$musician_id){    //上传成功后更新数据库
-	     $sql='INSERT INTO music(name,musician_id,story,download_cnt,share_cnt,like_cnt,view_cnt,randable) values (?,?,?,?,?,?,?,?)';
+	     $sql='INSERT INTO music(name,musician_id,story,download_cnt,share_cnt,collect_cnt,view_cnt,randable) values (?,?,?,?,?,?,?,?)';
 	     $this->db->query($sql,array($name,$musician_id,$story,0,0,0,0,0));
 	     $music_id_query=$this->getid($musician_id,$name);
 	     $music_id=$music_id_query['music_id'];

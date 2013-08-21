@@ -112,7 +112,7 @@ function music(source)
 	</div>
     </form>
 	<div class="music_right1">
-	<form name="input" action="<?php echo site_url('newsong')?>" method="post">
+	<form name="input" action="<?php echo site_url('upload')?>" method="post">
     <input type="submit" class="btn" value="上传新歌"/>
     </form>
 	</div>
@@ -128,7 +128,7 @@ function music(source)
       <div id="music2_right_detail_tagContent">
         <div class="music2_right_detail_tagContent music2_right_detail_selectTag" id="music2_right_detail_tagContent0">
 		<ul class="li_play_0">
-		  <?php if (count($collects)>0){$num=(((int)((count($collects)-1)/24))+1)*24;$i=0; while ($i<$num){foreach ($collects as $collect):?>
+		  <?php if (count($collects)>0){$num=(((int)((count($collects)-1)/24))+1)*24;$i=0; while ($i<$num){foreach ($collects as $collect):$i++; if ($i>$num) break;?>
 		  <li>
               <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$collect['music_id']);?>"><img src="<?php echo base_url().$collect['image_dir'];?>" /></a>
                 <div class="li_play" style="display:none;">
@@ -148,7 +148,7 @@ function music(source)
 		
 		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent1">
 		<ul class="li_play_0">
-		  <?php if (count($follows)>0){$num=(((int)((count($follows)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($follows as $follow):?>
+		  <?php if (count($follows)>0){$num=(((int)((count($follows)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($follows as $follow):$i++; if ($i>$num) break;?>
 		  <li>
               <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$follow['famousfor']);?>"><img src="<?php echo base_url().$follow['portaitdir'];?>" /></a>
                 <div class="li_play" style="display:none;">
@@ -168,7 +168,7 @@ function music(source)
 		
 		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent2">
          <ul class="li_play_0">
-		  <?php if (count($uploads)>0){$num=(((int)((count($uploads)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($uploads as $upload):?>
+		  <?php if (count($uploads)>0){$num=(((int)((count($uploads)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($uploads as $upload):$i++; if ($i>$num) break;?>
 		  <li>
               <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$upload['music_id']);?>"><img src="<?php echo base_url().$upload['image_dir'];?>" /></a>
                 <div class="li_play" style="display:none;">
@@ -188,7 +188,7 @@ function music(source)
 		
 		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent3">
          <ul class="li_play_0">
-		  <?php if (count($downloads)>0){$num=(((int)((count($downloads)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($downloads as $download):?>
+		  <?php if (count($downloads)>0){$num=(((int)((count($downloads)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($downloads as $download):$i++; if ($i>$num) break;?>
 		  <li>
               <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$download['music_id']);?>"><img src="<?php echo base_url().$download['image_dir'];?>" /></a>
                 <div class="li_play" style="display:none;">
