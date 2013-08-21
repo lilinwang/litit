@@ -15,12 +15,20 @@
 <script type="text/javascript" src="<?php echo base_url()?>js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery-migrate-1.1.1.js"></script>
 <script type="text/javascript" src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=" charset="utf-8"></script>
+
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/jquery.noty.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/layouts/topCenter.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/themes/default.js"></script>
+
 <script type="text/javascript"> 
+
 	$(document).ready(function(){
- $("#musician-option").hide();
-    $("#choose-musician").click(function(){
-       $("#musician-option").show();
-    });
+ 		$("#musician-option").hide();
+	    $("#choose-musician").click(function(){
+	       $("#musician-option").show();
+	    });
+
+
 
     $("#choose-audience").click(function(){
        $("#musician-option").hide();
@@ -191,7 +199,54 @@
 			$("#player").get(0).load();
 			$("#player").get(0).play();
 		});
+
 		$(".demo").click(function(){
+			function generate(layout) {
+				var push_interva = 10000;
+				if(!$("#home_hover").is(":visible")) {
+					$.post("<?php echo base_url('ajax/get_message_push')?>", 
+						{
+							user_id:<?php echo $userid;?>,
+							musician_id:<?php echo $musician_id;?>,
+							user_type:<?php echo $usertype;?>
+						},
+						function(data, status){
+							if(! status == 'success' ){
+								return;
+							}
+							data = eval("(" + data + ")");
+							if(! data.status == 'success' ){
+								return;
+							}
+							var n = noty({
+								text: data.musician_name + ' 发表了新状态: <a href="' + data.url + '">' + data.brief + '</a>',
+								type: 'alert',
+								dismissQueue: true,
+								layout: layout,
+								theme: 'defaultTheme'
+							});
+							// Close after 'duration' ms.
+							var duration = 5000;
+							setTimeout(function() {
+								$.noty.close(n.options.id);
+							}, duration);
+						}
+					);
+				}else{
+					push_interva = 5000;
+				}
+				// Pop up after 'interval' ms.
+				setTimeout(function() {
+					generate('topCenter');
+				}, push_interva);
+			}
+			if(!$("#home_hover").is(":visible")) { 			// The hover is not visible when the click is triggered.										
+				$.noty.closeAll();							// Thus all visible notys should be closed.
+			}
+			if(typeof noty.alreadySet === "undefined"){		// Avoid repetition of noty alert.
+				noty.alreadySet = 1;
+				generate('topCenter');
+			}
 			$("#home_hover").fadeToggle("quick");
 			if ($("#player").get(0).paused) 
 			{               
