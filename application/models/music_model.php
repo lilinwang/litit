@@ -25,7 +25,10 @@ class music_model extends CI_Model{
 	     $music_id=$music_id_query['music_id'];
 	     $sql='update music SET dir=? WHERE musician_id=? AND name=?';
 	     $dir='upload/music/user_'.$musician_id.'/music_'.$music_id.'.mp3';
+		 $image_dir='upload/image/user_'.$musician_id.'/music_'.$music_id.'.jpg';
 		 $this->db->query($sql,array($dir,$musician_id,$name));
+		 $sql='UPDATE music SET image_dir=? where music_id=?';
+		 $this->db->query($sql,array($image_dir,$music_id));
 		 return $music_id;
 	}
 	function add_download_count($musician_id,$name){        //当被下载时，下载次数加1

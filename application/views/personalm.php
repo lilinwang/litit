@@ -21,26 +21,59 @@
             }
             document.getElementById(showContent).style.display = "block";
 			switch (showContent.substring(30)){
-				case "0": $("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360);?>);break;
-				case "1": $("#music2_right_tab").width(<?php echo((((int)((count($follows)-1)/24))+1)*1360);?>);break;
-				case "2": $("#music2_right_tab").width(<?php echo((((int)((count($uploads)-1)/24))+1)*1360);?>);break;
-				case "3": $("#music2_right_tab").width(<?php echo((((int)((count($downloads)-1)/24))+1)*1360);?>);
+				case "0": document.getElementById("totalnum").value=<?php echo(((int)((count($collects)-1)/24))+1);?>;break;
+				case "1": document.getElementById("totalnum").value=<?php echo(((int)((count($follows)-1)/24))+1);?>;break;
+				case "2": document.getElementById("totalnum").value=<?php echo(((int)((count($downloads)-1)/24))+1);?>;break;
+				case "3": document.getElementById("totalnum").value=<?php echo(((int)((count($uploads)-1)/24))+1);?>;
 			}
-			
+			//alert(document.getElementById("totalnum").value);
+			$("#music2_right_tab").css({left:0});
+			$("#music2_right_tab").width(document.getElementById("totalnum").value*1360);
+        }
+		function page_selectTag(showNum,selfObj){
+            var tag = document.getElementById("page").getElementsByTagName("li");
+            var taglength = tag.length;
+            for(i=0; i<taglength; i++){
+                tag[i].className = "";
+            }
+            selfObj.parentNode.className = "page_selectTag";
+			document.getElementById("pagenum").value=showNum;
+			$("#music2_right_tab").animate({left: -1360*showNum},"slow");
         }
     </script>
 <script type="text/javascript">
 	$(document).ready(function(){
 	$("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360);?>);
-	       
 	$(".prev").click(function(){
-		 y=$("#music2_right_tab").position();
-		 if (y.left<0) $("#music2_right_tab").animate({left: '+=1360px'},"slow");
+		 //y=$("#music2_right_tab").position();
+		// if (y.left<0) 		 		 
+		 pagenum=parseInt(document.getElementById("pagenum").value);
+         if (pagenum>0) {
+			pagenum=pagenum-1;
+			$("#music2_right_tab").animate({left: '+=1360px'},"slow");
+			tag = document.getElementById("page").getElementsByTagName("li");
+			taglength = tag.length;
+			for(i=0; i<taglength; i++){
+				tag[i].className = "";
+			}
+			document.getElementById(pagenum).className = "page_selectTag";
+			document.getElementById("pagenum").value=pagenum;
+		 }
 	});
 	$(".next").click(function(){
-		 x=$("#music2_right_tab").position();
-		 y=$("#music2_right_tab").width();
-		 if ((x.left+y)>2720) $("#music2_right_tab").animate({left: '-=1360px'},"slow");
+		var pagenum=parseInt(document.getElementById("pagenum").value);
+        if ((pagenum+1)<document.getElementById("totalnum").value) {
+			pagenum=pagenum+1;
+			$("#music2_right_tab").animate({left: '-=1360px'},"slow");
+			tag = document.getElementById("page").getElementsByTagName("li");
+			taglength = tag.length;
+			for(i=0; i<taglength; i++){
+				tag[i].className = "";
+			}
+			//alert(pagenum);
+			document.getElementById(pagenum).className = "page_selectTag";
+			document.getElementById("pagenum").value=pagenum;
+		 }
 		 
 	});
 	$("#update-info").hide();
@@ -75,6 +108,8 @@ $(function(){
 <style type="text/css">
 	#music2_right_tags li A { font-size:12px; float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 30px; text-align:center; width:100%; text-decoration:none; background:url('<?php echo base_url()?>image/music2_10.jpg') no-repeat;}
 	#music2_right_tags li.music2_right_detail_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:30px; background:url('<?php echo base_url()?>image/music2_9.jpg') no-repeat;}
+	#page li A { float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 10px; text-align:center; width:10px; text-decoration:none; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -2px -32px;}
+	#page li.page_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:10px; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -12px -32px;}
 </style> 
 </head>
 <body>
@@ -98,19 +133,14 @@ function music(source)
   Your browser does not support HTML5 audio.
 </audio>
 
-<!---------    <div class="music2_right_1">
-    <a href=""><button class="btn" /></a>
-	</div>
-	<div class="music2_right1">
-	<a href="#"><button class="btn" />上传新歌</a>
-    </div>--------->
+<!------------------>
 <div class="music_all">
   <div class="music2_right">
-	<div class="music_right_1">
+    <div class="music_right_1">
 	<form name="input" action="<?php echo site_url('home')?>" method="post">
 	<input type="submit" class="btn" value="返回首页"/>
-	</div>
     </form>
+	</div>
 	<div class="music_right1">
 	<form name="input" action="<?php echo site_url('upload')?>" method="post">
     <input type="submit" class="btn" value="上传新歌"/>
@@ -119,8 +149,8 @@ function music(source)
 	<ul id="music2_right_tags" >
         <li class="music2_right_detail_selectTag"><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent0',this)" href="javascript:void(0)">收藏的歌曲</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent1',this)" href="javascript:void(0)">关注的音乐人</a> </li>
-        <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent2',this)" href="javascript:void(0)">上传的音乐</a> </li>
-        <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent3',this)" href="javascript:void(0)">下载的歌曲</a> </li>
+        <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent2',this)" href="javascript:void(0)">下载的音乐</a> </li>
+        <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent3',this)" href="javascript:void(0)">上传的歌曲</a> </li>
     </ul>
     <div id="music2_right_tab">
 		
@@ -142,8 +172,16 @@ function music(source)
                 </div>
               </div>
 		  </li>
-		  <?php $i++; endforeach;}}?>
+		  <?php endforeach;}}?>
 		</ul>
+		<a  class="prev" href="#"></a>
+		<ul id="page">
+		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
+		<?php for ($i=1;$i<(((int)((count($collects)-1)/24))+1);$i++):?>
+        <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
+		<?php endfor;?>
+		</ul>
+		<a  class="next" href="#"></a>
 		</div>
 		
 		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent1">
@@ -162,31 +200,19 @@ function music(source)
                 </div>
               </div>
 		  </li>
-		  <?php $i++; endforeach;}} ?>
+		  <?php endforeach;}} ?>
 		</ul>
+		<a  class="prev" href="#"></a>
+		<ul id="page">
+		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
+		<?php for ($i=1;$i<(((int)((count($follows)-1)/24))+1);$i++):?>
+        <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
+		<?php endfor;?>
+		</ul>
+		<a  class="next" href="#"></a>
 		</div>
 		
 		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent2">
-         <ul class="li_play_0">
-		  <?php if (count($uploads)>0){$num=(((int)((count($uploads)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($uploads as $upload):$i++; if ($i>$num) break;?>
-		  <li>
-              <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$upload['music_id']);?>"><img src="<?php echo base_url().$upload['image_dir'];?>" /></a>
-                <div class="li_play" style="display:none;">
-                  <dl class="li_play_left">
-                    <dt class="li_play_left_1"><?php echo $upload['name']; ?></dt>
-                    <dt class="li_play_left_2"><?php echo $upload['nickname']; ?></dt>
-                  </dl>
-                  <dl class="li_play_right">
-                    <a href="#"><img onclick="music('<?php echo base_url().$upload['dir']?>')" src="<?php echo base_url()?>image/li_play.png"/></a>
-                  </dl>
-                </div>
-              </div>
-		  </li>
-		  <?php $i++; endforeach;}} ?>
-		</ul>
-		</div>
-		
-		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent3">
          <ul class="li_play_0">
 		  <?php if (count($downloads)>0){$num=(((int)((count($downloads)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($downloads as $download):$i++; if ($i>$num) break;?>
 		  <li>
@@ -202,15 +228,49 @@ function music(source)
                 </div>
               </div>
 		  </li>
-		  <?php $i++; endforeach;}}?>
+		  <?php  endforeach;}}?>
 		</ul>
+		<a  class="prev" href="#"></a>
+		<ul id="page">
+		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
+		<?php for ($i=1;$i<(((int)((count($downloads)-1)/24))+1);$i++):?>
+        <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
+		<?php endfor;?>
+		</ul>
+		<a  class="next" href="#"></a>
 		</div>
 		
-		
+		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent3">
+         <ul class="li_play_0">
+		  <?php if (count($uploads)>0){$num=(((int)((count($uploads)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($uploads as $upload):$i++; if ($i>$num) break;?>
+		  <li>
+              <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$upload['music_id']);?>"><img src="<?php echo base_url().$upload['image_dir'];?>" /></a>
+                <div class="li_play" style="display:none;">
+                  <dl class="li_play_left">
+                    <dt class="li_play_left_1"><?php echo $upload['name']; ?></dt>
+                    <dt class="li_play_left_2"><?php echo $upload['nickname']; ?></dt>
+                  </dl>
+                  <dl class="li_play_right">
+                    <a href="#"><img onclick="music('<?php echo base_url().$upload['dir']?>')" src="<?php echo base_url()?>image/li_play.png"/></a>
+                  </dl>
+                </div>
+              </div>
+		  </li>
+		  <?php  endforeach;}}?>
+		</ul>
+		<a  class="prev" href="#"></a>
+		<ul id="page">
+		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
+		<?php for ($i=1;$i<(((int)((count($uploads)-1)/24))+1);$i++):?>
+        <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
+		<?php endfor;?>
+		</ul>
+		<a  class="next" href="#"></a>
+		</div>
     </div>
   </div>
-   <a  class="prev" href="#"></a>
-	<a  class="next" href="#"></a>
+  <input id="pagenum" type="hidden" value=0>
+  <input id="totalnum" type="hidden" value=<?php echo(((int)((count($collects)-1)/24))+1);?>>
 </div>
 </div>
 </body>

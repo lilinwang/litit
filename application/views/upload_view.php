@@ -13,8 +13,8 @@ $(document).ready(function(){
 </head>
 <body>
 <?php
-	if(!isset($id))
-		$id=0;
+	if(!isset($musician_id))
+		$musician_id=0;
 ?>
 <div id="upload_form" >
 <?php
@@ -23,7 +23,7 @@ $(document).ready(function(){
 		echo $info;
 		echo $html;
 	}else{
-		echo '<form id="subform" action="'.base_url().'index.php/upload/do_upload_music/'.$id.'" method="post" accept-charset="utf-8" enctype="multipart/form-data">';
+		echo '<form id="subform" action="'.base_url().'index.php/upload/do_upload_music/'.$musician_id.'" method="post" accept-charset="utf-8" enctype="multipart/form-data">';
 ?>
 “Ù¿÷<input type="file" name="userfile" size="20" />
 <input id="button_sub" type="button" value="…œ¥´“Ù¿÷" />
