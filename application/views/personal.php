@@ -103,6 +103,12 @@ function music(source)
     <div class="music2_right_1">
     <a href="<?php echo site_url('home')?>"><button class="btn" />返回首页</a>
     </div>
+    <div class="music_right_1">
+    <a href="<?php echo site_url('personal')?>"><button class="btn" />个人信息</a>
+    </div>
+    <div class="music_right1">
+    <a href="<?php echo site_url('personal_information_alteration')?>"><button class="btn" />修改信息</a>
+    </div>
 	<ul id="music2_right_tags" >
         <li class="music2_right_detail_selectTag"><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent0',this)" href="javascript:void(0)">收藏的歌曲</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent1',this)" href="javascript:void(0)">关注的音乐人</a> </li>

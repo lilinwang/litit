@@ -249,7 +249,8 @@ function changemusic(num){
 		     	{
 			    user_id:<?php echo $userid;?>,
                 musician_id:<?php echo $list[0]['musician_id']?>,
-                music_id:<?php echo $list[0]['music_id']?> 
+                music_id:<?php echo $list[0]['music_id']?>,
+                user_type:<?php echo $usertype;?>
                 },
                 function(data,status){
              	 data = eval("(" + data + ")");
@@ -268,7 +269,7 @@ function changemusic(num){
 	       	     });
 	       	     	$.post("<?php echo base_url('ajax/iscopyright_sign')?>", 
 			   {
-			   user_id:<?php echo $userid;?>,
+			    user_id:<?php echo $userid;?>,
                 music_id:<?php echo $list[0]['music_id']?> 	 	 
                  },
                 function(data,status){
@@ -292,7 +293,8 @@ function changemusic(num){
 		     	{
 			    user_id:<?php echo $userid;?>,
                 musician_id:<?php echo $list[1]['musician_id']?>,
-                music_id:<?php echo $list[1]['music_id']?> 
+                music_id:<?php echo $list[1]['music_id']?>,
+               	user_type:<?php echo $usertype;?>
                 },
                 function(data,status){
              	 data = eval("(" + data + ")");
