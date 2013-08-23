@@ -20,7 +20,7 @@ class user_model extends CI_Model{
 		$query=$query->row();
 		if($result1)//检查账户密码是否正确
 		{
-		$result2=($query->password==sha1($password));
+		$result2=($query->password==sha1($password.$query->reg_time));
 		if($result2){return 1;}//用户名与密码匹配
 		else{return 2;}//密码错误
 		}

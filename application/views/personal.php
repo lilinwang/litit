@@ -21,25 +21,58 @@
             }
             document.getElementById(showContent).style.display = "block";
 			switch (showContent.substring(30)){
-				case "0": $("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360);?>);break;
-				case "1": $("#music2_right_tab").width(<?php echo((((int)((count($follows)-1)/24))+1)*1360);?>);break;
-				case "2": $("#music2_right_tab").width(<?php echo((((int)((count($downloads)-1)/24))+1)*1360);?>);
+				case "0": document.getElementById("totalnum").value=<?php echo(((int)((count($collects)-1)/24))+1);?>;break;
+				case "1": document.getElementById("totalnum").value=<?php echo(((int)((count($follows)-1)/24))+1);?>;break;
+				case "2": document.getElementById("totalnum").value=<?php echo(((int)((count($downloads)-1)/24))+1);?>;
 			}
-			
+			//alert(document.getElementById("totalnum").value);
+			$("#music2_right_tab").css({left:0});
+			$("#music2_right_tab").width(document.getElementById("totalnum").value*1360);
+        }
+		function page_selectTag(showNum,selfObj){
+            var tag = document.getElementById("page").getElementsByTagName("li");
+            var taglength = tag.length;
+            for(i=0; i<taglength; i++){
+                tag[i].className = "";
+            }
+            selfObj.parentNode.className = "page_selectTag";
+			document.getElementById("pagenum").value=showNum;
+			$("#music2_right_tab").animate({left: -1360*showNum},"slow");
         }
     </script>
 <script type="text/javascript">
 	$(document).ready(function(){
 	$("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360);?>);
-	       
 	$(".prev").click(function(){
-		 y=$("#music2_right_tab").position();
-		 if (y.left<0) $("#music2_right_tab").animate({left: '+=1360px'},"slow");
+		 //y=$("#music2_right_tab").position();
+		// if (y.left<0) 		 		 
+		 pagenum=parseInt(document.getElementById("pagenum").value);
+         if (pagenum>0) {
+			pagenum=pagenum-1;
+			$("#music2_right_tab").animate({left: '+=1360px'},"slow");
+			tag = document.getElementById("page").getElementsByTagName("li");
+			taglength = tag.length;
+			for(i=0; i<taglength; i++){
+				tag[i].className = "";
+			}
+			document.getElementById(pagenum).className = "page_selectTag";
+			document.getElementById("pagenum").value=pagenum;
+		 }
 	});
 	$(".next").click(function(){
-		 x=$("#music2_right_tab").position();
-		 y=$("#music2_right_tab").width();
-		 if ((x.left+y)>2720) $("#music2_right_tab").animate({left: '-=1360px'},"slow");
+		var pagenum=parseInt(document.getElementById("pagenum").value);
+        if ((pagenum+1)<document.getElementById("totalnum").value) {
+			pagenum=pagenum+1;
+			$("#music2_right_tab").animate({left: '-=1360px'},"slow");
+			tag = document.getElementById("page").getElementsByTagName("li");
+			taglength = tag.length;
+			for(i=0; i<taglength; i++){
+				tag[i].className = "";
+			}
+			//alert(pagenum);
+			document.getElementById(pagenum).className = "page_selectTag";
+			document.getElementById("pagenum").value=pagenum;
+		 }
 		 
 	});
 	$("#update-info").hide();
@@ -74,6 +107,8 @@ $(function(){
 <style type="text/css">
 	#music2_right_tags li A { font-size:12px; float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 30px; text-align:center; width:100%; text-decoration:none; background:url('<?php echo base_url()?>image/music2_10.jpg') no-repeat;}
 	#music2_right_tags li.music2_right_detail_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:30px; background:url('<?php echo base_url()?>image/music2_9.jpg') no-repeat;}
+	#page li A { float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 10px; text-align:center; width:10px; text-decoration:none; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -2px -32px;}
+	#page li.page_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:10px; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -12px -32px;}
 </style> 
 </head>
 <body>
@@ -120,7 +155,7 @@ function music(source)
       <div id="music2_right_detail_tagContent">
         <div class="music2_right_detail_tagContent music2_right_detail_selectTag" id="music2_right_detail_tagContent0">
 		<ul class="li_play_0">
-		  <?php if (count($collects)>0){$num=(((int)((count($collects)-1)/24))+1)*24;$i=0; while ($i<$num){foreach ($collects as $collect):?>
+		  <?php if (count($collects)>0){$num=(((int)((count($collects)-1)/24))+1)*24;$i=0; while ($i<$num){foreach ($collects as $collect):$i++; if ($i>$num) break;?>
 		  <li>
               <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$collect['music_id']);?>"><img src="<?php echo base_url().$collect['image_dir'];?>" /></a>
                 <div class="li_play" style="display:none;">
@@ -134,13 +169,21 @@ function music(source)
                 </div>
               </div>
 		  </li>
-		  <?php $i++; endforeach;}}?>
+		  <?php endforeach;}}?>
 		</ul>
+		<a  class="prev" href="#"></a>
+		<ul id="page">
+		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
+		<?php for ($i=1;$i<($num/24);$i++):?>
+        <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
+		<?php endfor;?>
+		</ul>
+		<a  class="next" href="#"></a>
 		</div>
 		
 		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent1">
 		<ul class="li_play_0">
-		  <?php if (count($follows)>0){$num=(((int)((count($follows)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($follows as $follow):?>
+		  <?php if (count($follows)>0){$num=(((int)((count($follows)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($follows as $follow):$i++; if ($i>$num) break;?>
 		  <li>
               <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$follow['famousfor']);?>"><img src="<?php echo base_url().$follow['portaitdir'];?>" /></a>
                 <div class="li_play" style="display:none;">
@@ -154,13 +197,21 @@ function music(source)
                 </div>
               </div>
 		  </li>
-		  <?php $i++; endforeach;}} ?>
+		  <?php endforeach;}} ?>
 		</ul>
+		<a  class="prev" href="#"></a>
+		<ul id="page">
+		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
+		<?php for ($i=1;$i<($num/24);$i++):?>
+        <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
+		<?php endfor;?>
+		</ul>
+		<a  class="next" href="#"></a>
 		</div>
 		
 		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent2">
          <ul class="li_play_0">
-		  <?php if (count($downloads)>0){$num=(((int)((count($downloads)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($downloads as $download):?>
+		  <?php if (count($downloads)>0){$num=(((int)((count($downloads)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($downloads as $download):$i++; if ($i>$num) break;?>
 		  <li>
               <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$download['music_id']);?>"><img src="<?php echo base_url().$download['image_dir'];?>" /></a>
                 <div class="li_play" style="display:none;">
@@ -174,15 +225,21 @@ function music(source)
                 </div>
               </div>
 		  </li>
-		  <?php $i++; endforeach;}}?>
+		  <?php  endforeach;}}?>
 		</ul>
+		<a  class="prev" href="#"></a>
+		<ul id="page">
+		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
+		<?php for ($i=1;$i<($num/24);$i++):?>
+        <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
+		<?php endfor;?>
+		</ul>
+		<a  class="next" href="#"></a>
 		</div>
-		
-		
     </div>
   </div>
-   <a  class="prev" href="#"></a>
-	<a  class="next" href="#"></a>
+  <input id="pagenum" type="hidden" value=0>
+  <input id="totalnum" type="hidden" value=<?php echo(((int)((count($collects)-1)/24))+1);?>>
 </div>
 </div>
 </body>

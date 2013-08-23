@@ -18,11 +18,11 @@ class Upload extends CI_Controller {
         if(!$check1&&!$check2){
             echo '你还没有注册，点击'.anchor('home','这里').'先注册账号。';
         }else{
-            $identity = $this->session->userdata('type');
+            $identity = $this->session->userdata('usertype');
             if($identity==0){
                 $x = $this->session->userdata('email');
                 $result = $this->musician_model->check_user($x);
-                $a['musicianid'] = $result[0]['id'];
+                $a['musician_id'] = $result[0]['musician_id'];
                 $this->load->view('upload_view',$a);//array('error' => ' ' )
             }else{
                 echo '你不是音乐人，没有上传音乐的权限，点击'.anchor('home','这里').'返回主界面。';
