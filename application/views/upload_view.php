@@ -25,8 +25,8 @@ $(document).ready(function(){
 	}else{
 		echo '<form id="subform" action="'.base_url().'index.php/upload/do_upload_music/'.$musician_id.'" method="post" accept-charset="utf-8" enctype="multipart/form-data">';
 ?>
-“Ù¿÷<input type="file" name="userfile" size="20" />
-<input id="button_sub" type="button" value="…œ¥´“Ù¿÷" />
+Èü≥‰πê<input type="file" name="userfile" size="20" />
+<input id="button_sub" type="button" value="‰∏ä‰º†Èü≥‰πê" />
 </form>
 <?php } ?>
 </div>

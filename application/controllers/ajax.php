@@ -6,6 +6,7 @@ class Ajax extends CI_Controller {
     {
         exit('Access denied');
     }
+    
     function get_message_push()
     {
         $this->load->model('follow_model');
@@ -71,7 +72,7 @@ class Ajax extends CI_Controller {
         echo json_encode($data);
     }
     function copyright_sign()
-    {   
+    {  
        $this->load->model('copyright_model'); 
        $this->copyright_model->insert_new_copyright($_POST['musician_id'],$_POST['user_id'],$_POST['music_id'],$_POST['name'],$_POST['company'],$_POST['identity'],$_POST['phone'],$_POST['email'],$_POST['content']);
     }
@@ -86,5 +87,82 @@ class Ajax extends CI_Controller {
        	$data=$this->copyright_model->is_copyright_sign($_POST['user_id'],$_POST['music_id']);
         echo $data;
     }
+     function information_change()
+    {
+    	$this->load->model('user_model');
+    	$this->load->model('musician_model');	
+    	$data['name']=$_POST['name'];
+    	$data['nickname']=$_POST['nickname'];
+    	$data['gender']=$_POST['gender'];
+    	$data['birthday']=$_POST['birthday'];
+    	$data['introduction']=$_POST['self_intro'];
+    	if($_POST['type']==1)
+    	{
+    	$this->user_model->update_by_id($data,$_POST['id']);   
+    	}
+    	else
+    	{
+    	$data['identity']=$_POST['identity'];
+    	$this->musician_model->update_by_id($data,$_POST['id']);	
+    	}
+    }
+    function check_constellation()
+    {
+        $this->load->model('user_model');
+        $data=$this->user_model->check_constellation($_POST['birthday']); 
+        echo $data;
+    }
+    function password_change()
+    {   
+    	$this->load->model('user_model');
+    	$this->load->model('musician_model');
+    	if($_POST['type']==1)
+    	{
+    	$user=$this->user_model->get_from_id($_POST['id']);
+    	$password_old=$user['password'];
+    	$password=sha1($_POST['password'].$user['reg_time']);
+    	$password1=sha1($_POST['password1'].$user['reg_time']);
+    	$password2=sha1($_POST['password2'].$user['reg_time']);
+    	if($password!=$password_old){$data=1;} 
+    	else
+    	{
+    		if($password1!=$password2){$data=2;}
+    		else
+    		{
+    		if(strlen($_POST['password1'])<8){$data=3;}
+    		else
+    		{
+    		$data1['password']=$password1;
+    		$this->user_model->update_by_id($data1,$_POST['id']);
+    		$data=4;
+    		}
+    	    }
+	    }
+	    }
+	    else
+	    {
+	    $musician=$this->musician_model->get_from_id($_POST['id']);
+    	$password_old=$musician['password'];
+    	$password=sha1($_POST['password'].$musician['reg_time']);
+    	$password1=sha1($_POST['password1'].$musician['reg_time']);
+    	$password2=sha1($_POST['password2'].$musician['reg_time']);
+    	if($password!=$password_old){$data=1;} 
+    	else
+    	{
+    		if($password1!=$password2){$data=2;}
+    		else
+    		{
+    		if(strlen($_POST['password1'])<8){$data=3;}
+    		else
+    		{
+    		$data1['password']=$password1;
+    		$this->musician_model->update_by_id($data1,$_POST['id']);
+    		$data=4;
+    		}
+    	    }
+	    }	
+	    }
+   	echo $data;
+    }
+    
 }
-

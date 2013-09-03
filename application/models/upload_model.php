@@ -5,7 +5,7 @@ class upload_model extends CI_Model{
 	}
 //增添喜欢曲目 
 function addupload($musician_id,$music_id){
-   $sql="INSERT INTO upload(musician_id,music_id) VALUES(?,?)";
+   $sql="INSERT INTO upload (musician_id,music_id) VALUES(?,?)";
    $this->db->query($sql,array($musician_id,$music_id));
 }
  

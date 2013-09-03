@@ -21,7 +21,8 @@
 <script type="text/javascript" src="<?php echo base_url()?>js/noty/themes/default.js"></script>
 
 <script type="text/javascript"> 
-
+var music_id_html=<?php echo $music_id;?>;
+var musician_id_html=<?php echo $musician_id;?>;
 	$(document).ready(function(){
  		$("#musician-option").hide();
 	    $("#choose-musician").click(function(){
@@ -62,6 +63,8 @@
                 $("#musiciannick span").html(data.musician.nickname);
                 $("#musicianatt span").html(data.musician.attention);
 			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
+			    music_id_html=data.music_id;
+			    musician_id_html=data.musician_id;
 			    $.post("<?php echo base_url('ajax/islike_follow')?>", 
 		     	{
 			    user_id:<?php echo $userid;?>,
@@ -110,8 +113,8 @@
 	     	$.post("<?php echo base_url('ajax/no_copyright_sign')?>", 
 			{
 			 user_id:<?php echo $userid;?>,
-             musician_id:<?php echo $musician['musician_id'];?>,
-             music_id:<?php echo $music_id ;?>  
+             musician_id:musician_id_html,
+             music_id:music_id_html 
              },
              function(data,status){
              	 document.getElementById("copyright").innerHTML="版权申请";
@@ -126,8 +129,8 @@
 	     	$.post("<?php echo base_url('ajax/likemusic')?>", 
 			{
 			 user_id:<?php echo $userid;?>,
-             musician_id:<?php echo $musician['musician_id'];?>,
-             music_id:<?php echo $music_id ;?>,
+             musician_id:musician_id_html,
+             music_id:music_id_html,
 			 user_type:<?php echo $usertype;?>
              },
              function(data,status){
@@ -143,8 +146,8 @@
 		   	$.post("<?php echo base_url('ajax/no_likemusic')?>", 
 			{
 			 user_id:<?php echo $userid;?>,
-             musician_id:<?php echo $musician['musician_id'];?>,
-             music_id:<?php echo $music_id ;?>,
+             musician_id:musician_id_html,
+             music_id:music_id_html,
 			 user_type:<?php echo $usertype;?>
              },
              function(data,status){
@@ -164,8 +167,8 @@
 	     	$.post("<?php echo base_url('ajax/attention_musician')?>", 
 			{
 			 user_id:<?php echo $userid;?>,
-             musician_id:<?php echo $musician['musician_id'];?>,
-             music_id:<?php echo $music_id ;?>,
+             musician_id:musician_id_html,
+             music_id:music_id_html,
 			 user_type:<?php echo $usertype;?>
              },
              function(data,status){
@@ -180,8 +183,8 @@
 	          $.post("<?php echo base_url('ajax/no_attention_musician')?>", 
 			{
 			 user_id:<?php echo $userid;?>,
-             musician_id:<?php echo $musician['musician_id'];?>,
-             music_id:<?php echo $music_id ;?>,
+             musician_id:musician_id_html,
+             music_id:music_id_html,
 			 user_type:<?php echo $usertype;?>
              },
              function(data,status){
@@ -300,6 +303,8 @@ function changemusic(num){
 			document.getElementById("name").innerHTML="<?php echo $list[0]['name']?>";			
 			document.getElementById("story").innerHTML="<?php echo $list[0]['story']?>";
 			document.getElementById("player").src="<?php echo base_url().$list[0]['dir']?>";
+	        music_id_html=<?php echo $list[0]['music_id']?>;
+			musician_id_html=<?php echo $list[0]['musician_id']?>;	
 				$.post("<?php echo base_url('ajax/islike_follow')?>", 
 		     	{
 			    user_id:<?php echo $userid;?>,
@@ -344,6 +349,8 @@ function changemusic(num){
 			document.getElementById("name").innerHTML="<?php echo $list[1]['name']?>";			
 			document.getElementById("story").innerHTML="<?php echo $list[1]['story']?>";			
 			document.getElementById("player").src="<?php echo base_url().$list[1]['dir']?>";
+			music_id_html=<?php echo $list[1]['music_id']?>;
+			musician_id_html=<?php echo $list[1]['musician_id']?>;
 			   	$.post("<?php echo base_url('ajax/islike_follow')?>", 
 		     	{
 			    user_id:<?php echo $userid;?>,
