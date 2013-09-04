@@ -6,14 +6,57 @@ ul{list-style-type:none;margin:0 0 0 0;}
 body{font-family:Arial, Helvetica, sans-serif,'宋体';}
 img{border:none;}
 div#home_hover{width:100%;height:100%;margin:0 0 0 0;float:left;position:absolute;left:0;top:0;right:0;bottom:0;z-index:98;background-color:#000000;display:none;opacity:0.95;}
+div#personal_hover{width:100%;height:82%;margin:0 0 0 0;float:left;position:absolute;left:0;top:70px;right:0;bottom:0;z-index:9999;background-color:#EFEFEF;display:block;opacity:0.95;}
+div#information_right{float:right;width:70%;height:70%;margin-top:0px; margin-left:0px; font-size:16px; line-height:16px;color:black;font-family: "微软雅黑","Arial";font-weight: bold;}
+div#information_left{float:left;width:25%;height:78%;margin-top:0px; margin-left:5%;font-size:16px; line-height:16px;color:black;font-family: "微软雅黑","Arial";font-weight: bold;}
+div#information_left_1{float:left;width:45%;height:20%;margin-top:0px; margin-left:0;font-size:16px; line-height:16px;color:black;font-family: "微软雅黑","Arial";font-weight: bold;}
+div#information_left_2{float:right;width:55%;height:20%;margin-top:0px; margin-left:0;font-size:16px; line-height:16px;color:black;font-family: "微软雅黑","Arial";font-weight: bold;}
+h2{width:80%;margin-left:10%;}
+h2 p{text-align:center;color:yellow;}
+div#information_left p {text-align:center;}
+div#information_left img {margin:-15% 0 0 0;}
+div#information_left_1 p {text-align:right;}
+div#information_left_2 p {text-align:left;}
+div#select{height:25%;}
+div#upload{float:right;width:30%;height:70%;text-align:right;margin-top:0%; margin-left:0%;padding-right:20%;}
+div#myModalLabel2{width:37%;height:7.5%;margin:-3.5% 0 0 59%;float:left;text-align:right;position:absolute;}
+#information_Modal{
+	font-family: "微软雅黑","Arial";
+}
 
+#information_Modal.modal.fade.in{
+	top: 0%;
+}
+#information_Modal1{
+	font-family: "微软雅黑","Arial";
+}
+
+#information_Modal1.modal.fade.in{
+	top: 0%;
+}
+#information_Modal2{
+	font-family: "微软雅黑","Arial";
+}
+
+#information_Modal2.modal.fade.in{
+	top: 0%;
+}
+div#head_foot{width:100%;height:7%;margin:31.5% 0 0 0;text-align:right;}
+.information{display:none;}
+.modal-body{margin:10px 0 0 0;vertical-align: center;text-align:center;}
+.modal-body input[type="radio"]{
+	margin: 0;
+	margin-right: 30px;
+	margin-bottom: 1px;
+}
 .music_clear{ clear:both;}
 .music_all{ padding-top:5px;}
 
 .music2_right{ width:100%; float:left;}
 
-.music_right_1{height:30px; line-height:30px; float:right;}
+.music_right_1{height:30px; line-height:30px; float:right;position:absolute;top:5px;right:0px;}
 .music_right1{ width:105px; height:30px; line-height:30px; float:right;position:absolute;top:5px;right:60px;}
+
 #addmusic {}
 #music2_right_tab { margin-top:37px;position:fixed;bottom:0px;top:35px;left:3px;}
 #music2_right_tags {text-align:center; width:100%; background:#2e2c31;padding-top:2px;position:fixed;bottom:0px;top:40px;}

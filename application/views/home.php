@@ -237,28 +237,22 @@ function sign_enable(){document.getElementById("sign").disabled=false;}
 				<br/><br/>
 			</div>  
 			邮箱：*<input type="email" name="email" id="sign_email" onfocus="sign_enable()" placeholder="邮箱" />
-	               <span id="signup_wrong1"></span>
 			<br/>
 			密码：*<input type="password" name="password" id="sign_password" onfocus="sign_enable()" placeholder="密码" />
-	               <span id="signup_wrong2"></span>
 			<br/>
 			确认：*<input type="password" name="password2" id="sign_password2" onfocus="sign_enable()" placeholder="确认密码" />              
-	              <span id="signup_wrong3"></span>
 			<br/>		
 
       <div id="musician-option">
 			姓名：*<input type="text" name="name2" id="sign_name" onfocus="sign_enable()" placeholder="姓名" />
-	               <span id="signup_wrong4"></span>
 			<br/>
 			昵称： <input type="text" name="name"  placeholder="昵称" />
 			<br/>
 			生日：  <input type="date" name="birthday" />
 			<br/>
         身份证号:*<input type="text" name="identity" id="sign_id" onfocus="sign_enable()" placeholder="身份证号" />
-                  <span id="signup_wrong5"></span>
             <br/> 
         介绍：*<input type="text" name="introduction" id="sign_intro" onfocus="sign_enable()" placeholder="介绍" />
-               <span id="signup_wrong6"></span>
             <br/>
 				男：<input type="radio" checked="checked" name="gender" value="1" />
 				女：<input type="radio" name="gender" value="0" />

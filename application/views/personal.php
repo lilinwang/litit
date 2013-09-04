@@ -7,7 +7,18 @@
 <link href="<?php echo base_url()?>css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/style_personal.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="<?php echo base_url()?>js/jquery-1.9.1.js"></script>
+<link href="<?php echo base_url()?>css/example2.min.css" rel="stylesheet" type="text/css">
+<link href="<?php echo base_url()?>css/uploadify.css" rel="stylesheet" type="text/css" >
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/jquery.uploadify.min.js" ></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/jquery.uploadify.js" ></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/jquery.boutique_min.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/bootstrap.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/jquery-migrate-1.1.1.js"></script>
+		
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/jquery.noty.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/layouts/topCenter.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/themes/default.js"></script>
 <script type="text/javascript">
         function music2_right_detail_selectTag(showContent,selfObj){
             var tag = document.getElementById("music2_right_tags").getElementsByTagName("li");
@@ -75,12 +86,60 @@
 		 }
 		 
 	});
+	//用户修改信息
+	 $("#save").click(function(){
+	     	$.post("<?php echo base_url('ajax/information_change')?>", 
+			{
+			 id:<?php echo $user['user_id'];?>,
+			 type:<?php echo $usertype;?>,
+             name:document.getElementById("name").value,
+             nickname:document.getElementById("nickname").value,
+             gender:document.getElementById("gender").value,
+             birthday:document.getElementById("birthday").value,
+             self_intro:document.getElementById("introduction").value
+             },
+             function(data,status){
+             	 alert("提交成功，您的个人信息已修改！");
+			});
+   	     })
+   	//用户修改密码
+   	$("#password_change").click(function(){
+   			$.post("<?php echo base_url('ajax/password_change')?>", 
+			{
+			 id:<?php echo $user['user_id'];?>,
+			 type:<?php echo $usertype;?>,
+             password:document.getElementById("password").value,
+             password1:document.getElementById("password1").value,
+             password2:document.getElementById("password2").value
+             },
+             function(data,status){
+             	 document.getElementById("password1").value="";
+             	 document.getElementById("password2").value="";
+             	 if(data==1) 
+             	 {
+             	 document.getElementById("password").value="";
+             	 alert("密码错误，请重新输入！");
+             	 }
+             	 if(data==2) 
+             	 {    	 
+             	 alert("两次密码不一致！");
+             	 }
+             	  if(data==3) 
+             	 {    	 
+             	 alert("密码位数应大于等于8位");
+             	 }
+             	 if(data==4) 
+             	 {
+             	 document.getElementById("password").value="";
+             	 alert("密码已修改！");
+             	 }
+			});
+   	     });
 	$("#update-info").hide();
 	$("#viewinfo-button").click(function(){
 		$("#update-info").hide();
 		$("#view-info").show();
 	});
-
 	$("#updateinfo-button").click(function(){
 		$("#view-info").hide();
 		$("#update-info").show();
@@ -104,6 +163,31 @@ $(function(){
 	});
 });
 </script>
+<!--上传文件-->
+<script type="text/javascript">
+	<?php $timestamp = time();?>
+	$(document).ready(function()
+{
+		$('#file_upload').uploadify({
+			'formData'     : 
+			{
+				'timestamp' : '<?php echo $timestamp;?>',
+				'token'     : '<?php echo md5('unique_salt' . $timestamp);?>'
+			},
+			'swf'      : '<?php echo base_url()?>uploadify/uploadify.swf',
+			'uploader' : '<?php echo base_url()?>uploadify/uploadify.php/upload_image',
+			'onComplete': callback
+		});
+	});
+function callback(event, queueID, fileObj, response, data) {
+        if (response != "") {
+            alert(response + "成功上传!");
+        }
+        else {
+            alert("文件上传出错!");
+        }
+    }
+</script>
 <style type="text/css">
 	#music2_right_tags li A { font-size:12px; float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 30px; text-align:center; width:100%; text-decoration:none; background:url('<?php echo base_url()?>image/music2_10.jpg') no-repeat;}
 	#music2_right_tags li.music2_right_detail_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:30px; background:url('<?php echo base_url()?>image/music2_9.jpg') no-repeat;}
@@ -126,7 +210,17 @@ function music(source)
 	}
 	
   }
-</script>
+  function constellation()
+   	 {
+	     	$.post("<?php echo base_url('ajax/check_constellation')?>", 
+			{
+             birthday:document.getElementById("birthday").value
+             },
+             function(data,status){
+             	 document.getElementById("constellation").innerHTML="星座："+data;
+			});
+   	  }
+</script>	
 <audio id="video1">
   <source src="" type="audio/mp3" preload="meta">
   Your browser does not support HTML5 audio.
@@ -134,10 +228,122 @@ function music(source)
 
 <!------------------>
 <div class="music_all">
+<!------------------------用户信息修改界面------------------------------->	
+<div id="information_Modal" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" data-keyboard="true" data-show="true">
+    	<div id="personal_hover">
+		<div class="modal-header">
+		<h2>
+				<?php if($user['name']!=""):?>
+		    <?php echo $user['name'];?>
+				<?php else:?>
+			? ? ?
+				<?php endif;?>
+		
+	   	</h2>
+	    <div id="myModalLabel2">
+	     <input type="submit" id="sign" class="btn_personal" value="申请成为音乐人" />		
+		    </div>
+		</div>
+		<div id="information_left">
+		<div class="modal-body">
+			<div class="login_wrong" id="signMessage" ></div>
+			</div>
+				<?php if($check_photo==0):?>
+			<p>	<img src="<?php echo base_url().'image/public.jpg'?>"style="width:220px;height:200px;"/></p>
+				<?php elseif($check_photo==0):?>
+			<p>	<img src="<?php echo base_url().$user['port_dir']?>" style="width:220px;height:200px;"/></p>
+				<?php endif;?>
+		<div id="select">
+			<div id="upload">
+	     	<input type="button" id="button_upload2" class="uploadify-button" style="width:50px;height:34px;"value="上传"/>
+            </div>
+			<form>
+		    <div id="queue"></div> 
+	     	<input id="file_upload" name="file_upload" type="file" multiple="true">
+        	</form>
+        </div>
+			<!-- -->
+		    <p> 修改密码<br/></p>
+			<div id="information_left_1">
+			
+			<p>
+				原密码：
+				<br/><br/>
+				新密码：
+				<br/><br/>
+		    	确认密码：
+		    	<br/>		    	
+			</p>
+			</div>
+			<div id="information_left_2">
+			<p>
+			<input type="password" name="password" id="password" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="原密码" />
+			<input type="password" name="password1" id="password1" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="新密码" />
+			<input type="password" name="password2" id="password2" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="确认密码" />              
+			<br/>
+			<input type="submit" id="password_change" class="btn" value="确认" />
+			</p>
+			</div>	
+      </div>
+      <div id="information_right">
+      	  <br/><br/><br/><br/><br/>
+			邮箱：<?php echo $user['email'];?>
+			<br/>
+			<br/>
+			<br/>
+		姓名：<input type="text" name="name" id="name"  style="width:100px" value=<?php echo $user['name'];?> />
+		  	&nbsp;&nbsp;&nbsp;&nbsp;
+		昵称：<input type="text" name="nickname" id="nickname"  style="width:100px" value=<?php echo $user['nickname'];?> /> 
+		  <br/><br/>
+		 性别：<select style='width:100px' id="gender" name="gender" >  
+          <option value=<?php echo $user['gender'];?>>
+            <?php if($user['gender']==1):?>
+			男
+			<?php elseif($user['gender']==0):?>
+			女
+			<?php else:?>
+			保密
+			<?php endif;?>
+            </option>  
+          <?php if($user['gender']!=1):?>
+          <option value="1">男</option> 
+          <?php endif;?> 
+          <?php if($user['gender']!=0):?>
+          <option value="0">女</option> 
+          <?php endif;?> 
+          <?php if($user['gender']!=-1):?>
+          <option value="-1">保密</option> 
+          <?php endif;?>   
+          </select>  
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		破壳日：<input type="date" style="width:150px" id ="birthday" onblur=constellation() name="birthday" value=<?php echo $user['birthday'];?> />
+		  	<br/>
+		  	<br/> 
+        <p id=constellation>星座：<?php echo $constellation;?><p>
+          <br/> 
+           
+        自我介绍
+        	<br/> 
+        	<br/> 
+       	<textarea rows=4 style="width:700px" name="introduction" id="introduction"  ><?php echo $user['introduction'];?></textarea>
+            <br/>   
+    </div>
+    <div id="head_foot">
+     <input type="submit" id="save" class="btn" value="保存" />
+     <input type="submit" id="exit" data-dismiss="modal" aria-hidden="true"class="btn" value="退出" />
+    </div>	
+</div>
+    </div>
+ <!-----------------------> 
   <div class="music2_right">
     <div class="music2_right_1">
-    <a href="<?php echo site_url('home')?>"><button class="btn" />返回首页</a>
+    <form name="input" action="<?php echo site_url('home')?>" method="post">
+	<input type="submit" class="btn" value="返回首页"/>
+    </form>
     </div>
+    <div class="music_right_1">
+    <a href="#information_Modal" role="button" data-toggle="modal" class="btn" id="copyright" >个人信息</a>
+    </div>	
 	<ul id="music2_right_tags" >
         <li class="music2_right_detail_selectTag"><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent0',this)" href="javascript:void(0)">收藏的歌曲</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent1',this)" href="javascript:void(0)">关注的音乐人</a> </li>

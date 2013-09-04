@@ -11,8 +11,14 @@ class Personal extends CI_Controller {
 	}
 	
 	function index(){
+			$this->load->model('user_model');
+			$this->load->model('musician_model');
+			$data['usertype']=$this->session->userdata('usertype');
 	    if($this->session->userdata('usertype') == '1'){
 			$data['user_id']=$this->session->userdata('userid');
+			$data['user']=$this->user_model->get_from_id($data['user_id']);
+			$data['constellation']=$this->user_model->check_constellation($data['user']['birthday']);
+			$data['check_photo']=$this->user_model->check_photo($data['user_id']);
 			$this->load->model('collect_model');
 			$this->load->model('follow_model');
 			$this->load->model('download_model');
@@ -26,6 +32,9 @@ class Personal extends CI_Controller {
 			$this->load->model('upload_model');
 			$this->load->model('downloadm_model');
 			$data['musician_id']=$this->session->userdata('userid');
+			$data['musician']=$this->musician_model->get_from_id($data['musician_id']);
+			$data['constellation']=$this->musician_model->check_constellation($data['musician']['birthday']);
+			$data['check_photo']=$this->musician_model->check_photo($data['musician_id']);
 			$data['collects']=$this->collectm_model->display($data['musician_id']);
 			$data['follows']=$this->followm_model->display($data['musician_id']);
 			$data['uploads']=$this->upload_model->display($data['musician_id']);
