@@ -24,7 +24,37 @@ class Ajax extends CI_Controller {
         }
         echo json_encode($data);
     }
-    
+	/*
+	 * 用get方法传入user_id, sid, type, h, filter参数，返回一个播放列表(json)
+	 * 
+	 * user_id为用户id
+	 * sid为正在播放的歌曲
+	 * type为用户刚刚的操作，为一个字符，含义如下:
+	 *     n : new, 刚刚打开播放器
+	 *     p : playing, 歌曲正在播放，队列中还有歌曲，需要重新返回歌曲列表
+	 *     e : end, 当前歌曲播放完毕，但是队列中还有歌曲
+	 *     c : change, 改变筛选条件
+	 *     s : skip, 用户点击下一首
+	 *     r : rate, 用户点击喜欢
+	 *     u : unrate, 用户取消点击喜欢
+	 *     b : bye, 用户点击不喜欢，不再播放
+	 * h最近播放的音乐(最多9个)，格式为|song.sid:type，如|1386894:s|444482:p|460268:s|48180:s|1027376:s|188257:s
+	 * filter筛选条件,格式按需求来定
+	 *
+	 * 返回值目前为随机10首歌
+	 */ 
+	function fetchmusic()
+	{
+		$user_id=$this->input->get('user_id');
+		$sid=$this->input->get('sid');
+		$type=$this->input->get('type');
+		$h=$this->input->get('h');
+	   	$filter=$this->input->get('filter');
+
+		$this->load->model('music_model');
+		$data = $this->music_model->randmore();
+		echo json_encode($data);
+	}
     function getmusic()
     {
 		$this->load->model('music_model');

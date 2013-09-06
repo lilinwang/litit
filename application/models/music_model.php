@@ -86,6 +86,12 @@ class music_model extends CI_Model{
         return $result[0];
     }
     
+	function randmore(){
+        $sql = 'select * from music order by rand()  limit 10';
+        $query = $this->db->query($sql);
+		$result=$query->result_array();
+        return $result;
+	}
 	
 	function rand_by_musician($musician_id){
         $sql = 'select * from music where musician_id=? order by rand()  limit 1';
