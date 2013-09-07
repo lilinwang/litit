@@ -9,12 +9,15 @@
 <link href="<?php echo base_url()?>css/style_personal.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/example2.min.css" rel="stylesheet" type="text/css">
 <link href="<?php echo base_url()?>css/uploadify.css" rel="stylesheet" type="text/css" >
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
-<script type="text/javascript" src="<?php echo base_url()?>js/jquery.uploadify.min.js" ></script>
-<script type="text/javascript" src="<?php echo base_url()?>js/jquery.uploadify.js" ></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/jquery-1.9.1.js" ></script>
+
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery.boutique_min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery-migrate-1.1.1.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/ajaxfileupload.js"></script>		
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/jquery.noty.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/layouts/topCenter.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/themes/default.js"></script>
 
 <script type="text/javascript">
         function music2_right_detail_selectTag(showContent,selfObj){
@@ -84,11 +87,7 @@
 		 }
 		 
 	});
-	 $("#personal_information").click(function(){
-	 	 if(document.getElementById("information_Modal2").style.display==block)
-	 	 {
-	 	 	 document.getElementById("information_Modal2").style.display==none;
-	 	 }
+
 		//用户修改信息
 	 $("#save").click(function(){
 	     	$.post("<?php echo base_url('ajax/information_change')?>", 
@@ -139,6 +138,82 @@
              	 }
 			});
    	     })
+   	 	//个人照片上传
+   	   $("#button_upload").click(function(){
+                $.ajaxFileUpload
+                     (
+                       	{
+                            url:'<?php echo base_url('index.php/upload/upload_image')?>', //你处理上传文件的服务端
+                            secureuri:true,
+                            fileElementId:'userfile',
+                            dataType: 'json',
+                            data:
+                            {
+                            	id:<?php echo $musician['musician_id'];?>,
+			                    type:<?php echo $usertype;?>
+                            },
+                            success: function (data, status)
+							{   
+								if(typeof(data.error) != 'undefined')
+								{
+									if(data.error != '')
+								{
+									alert(data.error);
+								}else
+								{
+									alert(data.msg);
+								}
+							}
+						},
+						error: function (data, status, e)
+						{
+							alert(e);
+						}
+           	 		}
+            	     )
+                       return false;
+   			}) 
+   	//音乐和音乐照片上传
+   	 $("#uploadfile").click(function(){
+                $.ajaxFileUpload
+                     (
+                       	{
+                            url:'<?php echo base_url('index.php/upload/upload_music')?>', //你处理上传文件的服务端
+                            secureuri:true,
+                            fileElementId:['userfile1','userfile2'],
+                            dataType: 'json',
+                            data:
+                            {
+                            	musician_id:<?php echo $musician['musician_id'];?>,
+			                    song_writer:document.getElementById("songwriter").value,
+			                    musicby:document.getElementById("musicby").value,
+			                    arrangement:document.getElementById("arrangement").value,
+			                    disc_company:document.getElementById("disc_company").value,
+			                    perform_time:document.getElementById("perform_time").value,
+			                    style:document.getElementById("style").value,
+			                    story:document.getElementById("story").value
+                            },
+                            success: function (data, status)
+							{   
+								if(typeof(data.error) != 'undefined')
+								{
+									if(data.error != '')
+								{
+									alert(data.error);
+								}else
+								{
+									alert(data.msg);
+								}
+							}
+						},
+						error: function (data, status, e)
+						{
+							alert(e);
+						}
+           	 		}
+            	     )
+                       return false;
+   			}) 
 	$("#update-info").hide();
 	$("#viewinfo-button").click(function(){
 		$("#update-info").hide();
@@ -174,42 +249,6 @@ $(function(){
 	#page li A { float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 10px; text-align:center; width:10px; text-decoration:none; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -2px -32px;}
 	#page li.page_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:10px; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -12px -32px;}
 </style> 
-<!--上传文件-->
-<script type="text/javascript">
-	<?php $timestamp = time();?>
-	$(document).ready(function()
-{
-		$('#file_upload1').uploadify({
-			'formData'     : 
-			{
-				'timestamp' : '<?php echo $timestamp;?>',
-				'token'     : '<?php echo md5('unique_salt' . $timestamp);?>'
-			},
-			'swf'      : '<?php echo base_url()?>uploadify/uploadify.swf',
-			'uploader' : '<?php echo base_url()?>uploadify/uploadify.php/upload_music',
-			'onComplete': callback
-		});
-		$('#file_upload2').uploadify({
-			'formData'     : 
-			{
-				'timestamp' : '<?php echo $timestamp;?>',
-				'token'     : '<?php echo md5('unique_salt' . $timestamp);?>'
-			},
-			'swf'      : '<?php echo base_url()?>uploadify/uploadify.swf',
-			'uploader' : '<?php echo base_url()?>uploadify/uploadify.php/upload_image',
-			'onComplete': callback
-		});
-});
-function callback(event, queueID, fileObj, response, data) 
-{
-        if (response != "") {
-            alert(response + "成功上传!");
-        }
-        else {
-            alert("文件上传出错!");
-        }
-}
-</script>
 </head>
 <body>
 <!------------------>
@@ -261,19 +300,19 @@ function music(source)
 		<div class="modal-body">
 			<div class="login_wrong" id="signMessage" ></div>
 			</div>
-				<?php if($check_photo==0):?>
+				<?php if(!$check_photo):?>
 			<p><img src="<?php echo base_url().'image/public.jpg'?>"style="width:220px;height:200px;"/></p>
 				<?php else:?>
 			<p>	<img src="<?php echo base_url().$musician['portaitdir']?>" style="width:220px;height:200px;"/>	</p>
 				<?php endif;?>
 		<div id="select">
-			<div id="upload">
-	     	<input type="button" id="button_upload1" class="uploadify-button" style="width:50px;height:34px;"value="上传" />
-            </div>
-            <form>
+			<form>
 		    <div id="queue1"></div> 
-	        <input id="file_upload1" name="file_upload1" type="file" multiple="true" />
+	        <input id="userfile" name="userfile" class="uploadify-button" type="file" multiple="true" />
         	</form>
+        	<div id="upload">
+	     	<input type="button" id="button_upload" class="uploadify-button" style="width:50px;height:34px;"value="上传" />
+            </div>
         </div>
 			<!-- -->
 		    <p> 修改密码<br/></p>
@@ -290,9 +329,9 @@ function music(source)
 			</div>
 			<div id="information_left_2">
 			<p>
-			<input type="password" name="password" id="password" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="原密码" />
-			<input type="password" name="password1" id="password1" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="新密码" />
-			<input type="password" name="password2" id="password2" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="确认密码" />              
+			<input type="password" name="password" id="password" style="width:100px;height:12px;" placeholder="原密码" />
+			<input type="password" name="password1" id="password1" style="width:100px;height:12px;"  placeholder="新密码" />
+			<input type="password" name="password2" id="password2" style="width:100px;height:12px;"  placeholder="确认密码" />              
 			<br/>
 			<input type="submit" id="password_change" class="btn" value="确认" />
 			</p>
@@ -362,20 +401,13 @@ function music(source)
 		<div class="modal-body">
 			<div class="login_wrong" id="signMessage" ></div>
 			</div>
-				<?php if($check_photo==0):?>
 			<p>	<img src="<?php echo base_url().'image/public.jpg'?>"style="width:220px;height:200px;"/></p>
-				<?php else:?>
-			<p>	<img src="<?php echo base_url().$musician['portaitdir']?>" style="width:220px;height:200px;"/></p>
-				<?php endif;?>
-	     <div id="select">
-	        <div id="upload">
-	     	<input type="button" id="button_upload2" class="uploadify-button" style="width:50px;height:34px;"value="上传"/>
-            </div>
-			<form>
+	        <div id="select1">
+	        <form>
 		    <div id="queue2"></div> 
-	     	<input id="file_upload2" name="file_upload2" type="file" multiple="true" />
+	     	<p><input id="userfile2" name="userfile2"  type="file" multiple="true" /></p>
         	</form>
-        </div>
+			</div>
       </div>
       <div id="information_right">
 		所属专辑：<input type="text" name="album" id="album"  style="width:120px;height:15px;"  />
@@ -397,16 +429,18 @@ function music(source)
           <input type="text" name="custom_tag3" id="custom_tag3"  style="width:100px;height:15px;"  />
           <input type="text" name="custom_tag4" id="custom_tag4"  style="width:100px;height:15px;"  />
           <input type="text" name="custom_tag5" id="custom_tag5"  style="width:100px;height:15px;"  />
-          <br/> 
-         *上传音乐文件：<input type="text" name="nickname" id="nickname"  style="width:300px;height:15px;"  />
-	    	<br/><br/> 	
+          <br/> <br/> 
+            <form>
+         *上传音乐文件：<input type="file" name="userfile1" id="userfile1"  style="width:300px;height:20px;" multiple="true" />
+	    	<br/>
+	    	</form>	
 	    歌曲背后的故事：
         	<br/><br/> 
        	<textarea rows=3 style="width:700px" name="story" id="story"  ></textarea>
             <br/>   
 	    </div>
     <div id="head_foot">
-     <input type="submit" id="save" class="btn" value="保存" />
+     <input type="submit" id="uploadfile" class="btn" value="上传" />
      <input type="submit" id="exit" data-dismiss="modal" aria-hidden="true"class="btn" value="退出" />
     </div>	
 </div>
