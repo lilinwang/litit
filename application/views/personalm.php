@@ -15,7 +15,10 @@
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery.boutique_min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery-migrate-1.1.1.js"></script>
-
+		
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/jquery.noty.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/layouts/topCenter.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/themes/default.js"></script>
 <script type="text/javascript">
         function music2_right_detail_selectTag(showContent,selfObj){
             var tag = document.getElementById("music2_right_tags").getElementsByTagName("li");
@@ -89,6 +92,7 @@
 	 	 {
 	 	 	 document.getElementById("information_Modal2").style.display==none;
 	 	 }
+	 });
 		//用户修改信息
 	 $("#save").click(function(){
 	     	$.post("<?php echo base_url('ajax/information_change')?>", 
@@ -138,13 +142,12 @@
              	 alert("密码已修改！");
              	 }
 			});
-   	     })
+   	     });
 	$("#update-info").hide();
 	$("#viewinfo-button").click(function(){
 		$("#update-info").hide();
 		$("#view-info").show();
 	});
-
 	$("#updateinfo-button").click(function(){
 		$("#view-info").hide();
 		$("#update-info").show();
@@ -168,12 +171,6 @@ $(function(){
 	});
 });
 </script>
-<style type="text/css">
-	#music2_right_tags li A { font-size:12px; float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 30px; text-align:center; width:100%; text-decoration:none; background:url('<?php echo base_url()?>image/music2_10.jpg') no-repeat;}
-	#music2_right_tags li.music2_right_detail_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:30px; background:url('<?php echo base_url()?>image/music2_9.jpg') no-repeat;}
-	#page li A { float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 10px; text-align:center; width:10px; text-decoration:none; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -2px -32px;}
-	#page li.page_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:10px; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -12px -32px;}
-</style> 
 <!--上传文件-->
 <script type="text/javascript">
 	<?php $timestamp = time();?>
@@ -200,8 +197,7 @@ $(function(){
 			'onComplete': callback
 		});
 });
-function callback(event, queueID, fileObj, response, data) 
-{
+function callback(event, queueID, fileObj, response, data) {
         if (response != "") {
             alert(response + "成功上传!");
         }
@@ -210,6 +206,12 @@ function callback(event, queueID, fileObj, response, data)
         }
 }
 </script>
+<style type="text/css">
+	#music2_right_tags li A { font-size:12px; float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 30px; text-align:center; width:100%; text-decoration:none; background:url('<?php echo base_url()?>image/music2_10.jpg') no-repeat;}
+	#music2_right_tags li.music2_right_detail_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:30px; background:url('<?php echo base_url()?>image/music2_9.jpg') no-repeat;}
+	#page li A { float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 10px; text-align:center; width:10px; text-decoration:none; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -2px -32px;}
+	#page li.page_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:10px; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -12px -32px;}
+</style> 
 </head>
 <body>
 <!------------------>
@@ -423,8 +425,6 @@ function music(source)
     </div>
 	<div class="music_right1">
 	<a href="#information_Modal2" role="button" data-toggle="modal" class="btn" id="musicupload" >上传音乐</a>
-  <!--  <form name="input" action="<?php echo site_url('upload')?>" method="post">
-	<input type="submit" class="btn" value="上传音乐"/>-->
 	</div>
 	<ul id="music2_right_tags" >
         <li class="music2_right_detail_selectTag"><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent0',this)" href="javascript:void(0)">收藏的歌曲</a> </li>
@@ -457,7 +457,7 @@ function music(source)
 		<a  class="prev" href="#"></a>
 		<ul id="page">
 		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
-		<?php for ($i=1;$i<(((int)((count($collects)-1)/24))+1);$i++):?>
+		<?php for ($i=1;$i<($num/24);$i++):?>
         <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
 		<?php endfor;?>
 		</ul>
@@ -485,7 +485,7 @@ function music(source)
 		<a  class="prev" href="#"></a>
 		<ul id="page">
 		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
-		<?php for ($i=1;$i<(((int)((count($follows)-1)/24))+1);$i++):?>
+		<?php for ($i=1;$i<($num/24);$i++):?>
         <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
 		<?php endfor;?>
 		</ul>
@@ -541,7 +541,7 @@ function music(source)
 		<a  class="prev" href="#"></a>
 		<ul id="page">
 		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
-		<?php for ($i=1;$i<(((int)((count($uploads)-1)/24))+1);$i++):?>
+		<?php for ($i=1;$i<($num/24);$i++):?>
         <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
 		<?php endfor;?>
 		</ul>
