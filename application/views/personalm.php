@@ -307,11 +307,11 @@ function music(source)
 				<?php endif;?>
 		<div id="select">
 			<form>
-		    <div id="queue1"></div> 
-	        <input id="userfile" name="userfile" class="uploadify-button" type="file" multiple="true" />
+		    <div id="queue2"></div> 
+	        <p><input id="userfile" name="userfile"  style="height:25px;"type="file" multiple="true" /><p>
         	</form>
         	<div id="upload">
-	     	<input type="button" id="button_upload" class="uploadify-button" style="width:50px;height:34px;"value="上传" />
+	     	<input type="button" id="button_upload"  style="width:50px;height:25px;"value="上传" />
             </div>
         </div>
 			<!-- -->
@@ -465,6 +465,7 @@ function music(source)
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent1',this)" href="javascript:void(0)">关注的音乐人</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent2',this)" href="javascript:void(0)">下载的音乐</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent3',this)" href="javascript:void(0)">上传的歌曲</a> </li>
+        <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent4',this)" href="javascript:void(0)">版权申请</a> </li>
     </ul>
     <div id="music2_right_tab">
 		
@@ -581,6 +582,36 @@ function music(source)
 		</ul>
 		<a  class="next" href="#"></a>
 		</div>
+			
+		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent4">
+         <ul class="li_play_0">
+		  <?php if (count($copyrights)>0){$num=(((int)((count($copyrights)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($copyrights as $copyright):$i++; if ($i>$num) break;?>
+		  <li>
+              <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$copyright['music_id']);?>"><img src="<?php echo base_url().$copyright['image_dir'];?>" /></a>
+                <div class="li_play" style="display:none;">
+                  <dl class="li_play_left">
+                    <dt class="li_play_left_1"><?php echo $copyright['name']; ?></dt>
+                    <dt class="li_play_left_2"><?php echo $copyright['nickname']; ?></dt>
+                  </dl>
+                  <dl class="li_play_right">
+                    <a href="#"><img onclick="music('<?php echo base_url().$copyright['dir']?>')" src="<?php echo base_url()?>image/li_play.png"/></a>
+                  </dl>
+                </div>
+              </div>
+		  </li>
+		  <?php  endforeach;}}?>
+		</ul>
+		<a  class="prev" href="#"></a>
+		<ul id="page">
+		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
+		<?php for ($i=1;$i<(((int)((count($copyrights)-1)/24))+1);$i++):?>
+        <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
+		<?php endfor;?>
+		</ul>
+		<a  class="next" href="#"></a>
+		</div>
+			
+			
     </div>
   </div>
   <input id="pagenum" type="hidden" value=0>

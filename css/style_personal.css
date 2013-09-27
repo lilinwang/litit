@@ -19,7 +19,7 @@ div#select1{padding-left:30%;}
 div#information_left_1 p {text-align:right;}
 div#information_left_2 p {text-align:left;}
 div#select{height:10%;}
-div#upload{float:right;width:30%;height:70%;text-align:right;margin-top:-15%; margin-left:0%;padding-right:15%;}
+div#upload{float:right;width:20%;height:70%;text-align:right;margin-top:-15%; margin-left:0%;margin-right:15%;}
 div#myModalLabel2{width:37%;height:7.5%;margin:-3.5% 0 0 59%;float:left;text-align:right;position:absolute;}
 #information_Modal{
 	font-family: "微软雅黑","Arial";

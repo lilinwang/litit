@@ -36,6 +36,7 @@ class Personal extends CI_Controller {
 			$data['constellation']=$this->musician_model->check_constellation($data['musician']['birthday']);
 			$data['check_photo']=$this->musician_model->check_photo($data['musician_id']);
 			$data['collects']=$this->collectm_model->display($data['musician_id']);
+			$data['copyrights']=$this->copyright_model->display($data['musician_id']);
 			$data['follows']=$this->followm_model->display($data['musician_id']);
 			$data['uploads']=$this->upload_model->display($data['musician_id']);
 			$data['downloads']=$this->downloadm_model->display($data['musician_id']);
