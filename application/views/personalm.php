@@ -4,18 +4,20 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>个人中心</title>
+
+
+<!-- css -->
 <link href="<?php echo base_url()?>css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/style_personal.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/example2.min.css" rel="stylesheet" type="text/css">
-<link href="<?php echo base_url()?>css/uploadify.css" rel="stylesheet" type="text/css" >
+
+
+<!-- javascript -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
-<script type="text/javascript" src="<?php echo base_url()?>js/jquery.uploadify.min.js" ></script>
-<script type="text/javascript" src="<?php echo base_url()?>js/jquery.uploadify.js" ></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery.boutique_min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery-migrate-1.1.1.js"></script>
-		
 <script type="text/javascript" src="<?php echo base_url()?>js/noty/jquery.noty.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/noty/layouts/topCenter.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/noty/themes/default.js"></script>
@@ -171,47 +173,108 @@ $(function(){
 	});
 });
 </script>
-<!--上传文件-->
+
+
+<!--
+
+上传文件(图片以及音乐) Javascript 
+
+-->
+<!-- dependencies -->
+<script type="text/javascript" src="<?php echo base_url(); ?>js/fileupload/vendor/jquery.ui.widget.js" ></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>js/fileupload/jquery.iframe-transport.js" ></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>js/fileupload/jquery.fileupload.js" ></script>
+<!-- inline script -->
 <script type="text/javascript">
-	<?php $timestamp = time();?>
-	$(document).ready(function()
-{
-		$('#file_upload1').uploadify({
-			'formData'     : 
-			{
-				'timestamp' : '<?php echo $timestamp;?>',
-				'token'     : '<?php echo md5('unique_salt' . $timestamp);?>'
-			},
-			'swf'      : '<?php echo base_url()?>uploadify/uploadify.swf',
-			'uploader' : '<?php echo base_url()?>uploadify/uploadify.php/upload_music',
-			'onComplete': callback
-		});
-		$('#file_upload2').uploadify({
-			'formData'     : 
-			{
-				'timestamp' : '<?php echo $timestamp;?>',
-				'token'     : '<?php echo md5('unique_salt' . $timestamp);?>'
-			},
-			'swf'      : '<?php echo base_url()?>uploadify/uploadify.swf',
-			'uploader' : '<?php echo base_url()?>uploadify/uploadify.php/upload_image',
-			'onComplete': callback
-		});
-});
-function callback(event, queueID, fileObj, response, data) {
-        if (response != "") {
-            alert(response + "成功上传!");
-        }
-        else {
-            alert("文件上传出错!");
-        }
-}
+	$(function() {
+            'use strict';
+            
+            // fileupload for image
+            $("#fileupload-avatar").fileupload({
+                url: "<?php echo base_url(); ?>index.php/upload_ajax/do_upload_image",
+                dataType: 'json',
+                done: function(e ,data) {
+                    $.each(data.result.files, function (index, file) {
+                        if ('error' in file){
+                        	console.log(file);
+                        }
+                        else {
+                        	$("#musician-avatar").attr('src', '<?php echo base_url(); ?>' + file.url);
+                        	console.log(file);
+                        }
+                    });
+                },
+                progressall: function(e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('#upload-image .progress .progress-bar').css(
+                        'width',
+                        progress + '%'
+                    );
+                }
+            }).prop('disabled', !$.support.fileInput)
+                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+               
+            $("#fileupload-music-image").fileupload({
+                url: "<?php echo base_url(); ?>index.php/upload_ajax/do_upload_image",
+                dataType: 'json',
+                done: function(e ,data) {
+                    $.each(data.result.files, function (index, file) {
+                    	if ('error' in file){
+                        	console.log(file);
+                        }
+                        else {
+                        	$("#music-image").attr('src', '<?php echo base_url(); ?>' + file.url);
+                        }
+                    });
+                },
+                progressall: function(e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('#upload-image .progress .progress-bar').css(
+                        'width',
+                        progress + '%'
+                    );
+                }
+            }).prop('disabled', !$.support.fileInput)
+                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+               
+            // fileupload for music
+            $("#fileupload-music").fileupload({
+                url: "<?php echo base_url(); ?>index.php/upload_ajax/do_upload_music",
+                dataType: 'json',
+                done: function(e ,data) {
+                    $.each(data.result.files, function (index, file) {
+                        if ('error' in file){
+                        	$("#upload-music-status").html(file.error);
+                        }
+                        else {
+                        	$("#upload-music-status").html("上传成功啦！撒花！" + file.name);
+                        }
+                    });
+                },
+                progressall: function(e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('#upload-music-progress .progress-bar').css(
+                        'width',
+                        progress + '%'
+                    );
+                }
+            }).prop('disabled', !$.support.fileInput)
+                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+        });
 </script>
+
 <style type="text/css">
+	#upload-music-progress .progress-bar {
+		background-color: green;
+		width: 1px;
+		height: 10px;
+	}
 	#music2_right_tags li A { font-size:12px; float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 30px; text-align:center; width:100%; text-decoration:none; background:url('<?php echo base_url()?>image/music2_10.jpg') no-repeat;}
 	#music2_right_tags li.music2_right_detail_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:30px; background:url('<?php echo base_url()?>image/music2_9.jpg') no-repeat;}
 	#page li A { float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 10px; text-align:center; width:10px; text-decoration:none; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -2px -32px;}
 	#page li.page_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:10px; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -12px -32px;}
 </style> 
+
 </head>
 <body>
 <!------------------>
@@ -263,18 +326,14 @@ function music(source)
 		<div class="modal-body">
 			<div class="login_wrong" id="signMessage" ></div>
 			</div>
-				<?php if($check_photo==0):?>
-			<p><img src="<?php echo base_url().'image/public.jpg'?>"style="width:220px;height:200px;"/></p>
-				<?php else:?>
-			<p>	<img src="<?php echo base_url().$musician['portaitdir']?>" style="width:220px;height:200px;"/>	</p>
-				<?php endif;?>
+				
+			<p>	<img id="musician-avatar" src="<?php echo $check_photo==0 ? base_url().'image/public.jpg':base_url().$musician['portaitdir'];?>" style="width:220px;height:200px;"/></p>
 		<div id="select">
 			<div id="upload">
-	     	<input type="button" id="button_upload1" class="uploadify-button" style="width:50px;height:34px;"value="上传" />
+	        <input type="file" id="fileupload-avatar" />
             </div>
             <form>
 		    <div id="queue1"></div> 
-	        <input id="file_upload1" name="file_upload1" type="file" multiple="true" />
         	</form>
         </div>
 			<!-- -->
@@ -357,25 +416,20 @@ function music(source)
     	<div id="personal_hover">
 		<div class="modal-header">
 		<h2>	
-        <p>*专曲名：<input type="text" name="music_name" id="music_name"  style="width:150px；hight:15px"  /></p>		
+        <p>*专曲名：<input type="text" name="music_name" id="music_name" style="width:150px；hight:15px"  /></p>		
 	   	</h2>
 		</div>
 		<div id="information_left">
 		<div class="modal-body">
 			<div class="login_wrong" id="signMessage" ></div>
 			</div>
-				<?php if($check_photo==0):?>
-			<p>	<img src="<?php echo base_url().'image/public.jpg'?>"style="width:220px;height:200px;"/></p>
-				<?php else:?>
-			<p>	<img src="<?php echo base_url().$musician['portaitdir']?>" style="width:220px;height:200px;"/></p>
-				<?php endif;?>
+			<p>	<img id="music-image"src="<?php echo $check_photo==0 ? base_url().'image/public.jpg':base_url().$musician['portaitdir'];?>"style="width:220px;height:200px;"/></p>
 	     <div id="select">
 	        <div id="upload">
-	     	<input type="button" id="button_upload2" class="uploadify-button" style="width:50px;height:34px;"value="上传"/>
+	        <input type="file" id="fileupload-music-image" />
             </div>
 			<form>
 		    <div id="queue2"></div> 
-	     	<input id="file_upload2" name="file_upload2" type="file" multiple="true" />
         	</form>
         </div>
       </div>
@@ -400,7 +454,10 @@ function music(source)
           <input type="text" name="custom_tag4" id="custom_tag4"  style="width:100px;height:15px;"  />
           <input type="text" name="custom_tag5" id="custom_tag5"  style="width:100px;height:15px;"  />
           <br/> 
-         *上传音乐文件：<input type="text" name="nickname" id="nickname"  style="width:300px;height:15px;"  />
+         *上传音乐文件：<input type="file" id="fileupload-music"  style="width:300px;height:15px;"  /> 
+         <br><br>
+         <div id="upload-music-status"></div>
+         <div id="upload-music-progress"><div class="progress-bar"></div></div>
 	    	<br/><br/> 	
 	    歌曲背后的故事：
         	<br/><br/> 
