@@ -14,7 +14,14 @@
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery.boutique_min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery-migrate-1.1.1.js"></script>
+
 <script type="text/javascript" src="<?php echo base_url()?>js/ajaxfileupload.js"></script>		
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/jquery.noty.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/layouts/topCenter.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/noty/themes/default.js"></script>
+
+
+		
 <script type="text/javascript" src="<?php echo base_url()?>js/noty/jquery.noty.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/noty/layouts/topCenter.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/noty/themes/default.js"></script>
@@ -88,6 +95,13 @@
 		 
 	});
 
+	 $("#personal_information").click(function(){
+	 	 if(document.getElementById("information_Modal2").style.display==block)
+	 	 {
+	 	 	 document.getElementById("information_Modal2").style.display==none;
+	 	 }
+	 });
+
 		//用户修改信息
 	 $("#save").click(function(){
 	     	$.post("<?php echo base_url('ajax/information_change')?>", 
@@ -137,6 +151,7 @@
              	 alert("密码已修改！");
              	 }
 			});
+
    	     })
    	 	//个人照片上传
    	   $("#button_upload").click(function(){
@@ -214,12 +229,12 @@
             	     )
                        return false;
    			}) 
+   	     });
 	$("#update-info").hide();
 	$("#viewinfo-button").click(function(){
 		$("#update-info").hide();
 		$("#view-info").show();
 	});
-
 	$("#updateinfo-button").click(function(){
 		$("#view-info").hide();
 		$("#update-info").show();
@@ -242,6 +257,42 @@ $(function(){
 		$(this).find(".li_play").hide();
 	});
 });
+</script>
+
+<!--上传文件-->
+<script type="text/javascript">
+	<?php $timestamp = time();?>
+	$(document).ready(function()
+{
+		$('#file_upload1').uploadify({
+			'formData'     : 
+			{
+				'timestamp' : '<?php echo $timestamp;?>',
+				'token'     : '<?php echo md5('unique_salt' . $timestamp);?>'
+			},
+			'swf'      : '<?php echo base_url()?>uploadify/uploadify.swf',
+			'uploader' : '<?php echo base_url()?>uploadify/uploadify.php/upload_music',
+			'onComplete': callback
+		});
+		$('#file_upload2').uploadify({
+			'formData'     : 
+			{
+				'timestamp' : '<?php echo $timestamp;?>',
+				'token'     : '<?php echo md5('unique_salt' . $timestamp);?>'
+			},
+			'swf'      : '<?php echo base_url()?>uploadify/uploadify.swf',
+			'uploader' : '<?php echo base_url()?>uploadify/uploadify.php/upload_image',
+			'onComplete': callback
+		});
+});
+function callback(event, queueID, fileObj, response, data) {
+        if (response != "") {
+            alert(response + "成功上传!");
+        }
+        else {
+            alert("文件上传出错!");
+        }
+}
 </script>
 <style type="text/css">
 	#music2_right_tags li A { font-size:12px; float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 30px; text-align:center; width:100%; text-decoration:none; background:url('<?php echo base_url()?>image/music2_10.jpg') no-repeat;}
@@ -275,6 +326,11 @@ function music(source)
              	 document.getElementById("constellation").innerHTML="星座："+data;
 			});
    	  }
+ function user_image(user_id)
+  {
+
+	
+  }
 </script>
 <audio id="video1">
   <source src="" type="audio/mp3" preload="meta">
@@ -350,7 +406,7 @@ function music(source)
 		  	&nbsp;&nbsp;&nbsp;&nbsp;
 		昵称：<input type="text" name="nickname" id="nickname"  style="width:100px" value=<?php echo $musician['nickname'];?> /> 
 		  <br/><br/>
-		 性别：<select style='width:100px' id="gender" name="gender" >  
+		性别：<select style='width:100px' id="gender" name="gender" >  
           <option value=<?php echo $musician['gender'];?>>
             <?php if($musician['gender']==1):?>
 			男
@@ -370,14 +426,14 @@ function music(source)
           <option value="-1">保密</option> 
           <?php endif;?>   
           </select>  
-		&nbsp;&nbsp;&nbsp;&nbsp;
-		破壳日：<input type="date" style="width:150px" id ="birthday" onblur=constellation() name="birthday" value=<?php echo $musician['birthday'];?> />
+       	&nbsp;&nbsp;&nbsp;&nbsp;
+      破壳日：<input type="date" style="width:150px" id ="birthday" onblur=constellation() name="birthday" value=<?php echo $musician['birthday'];?> />
 		  	<br/>
 		  	<br/> 
         <p id=constellation>星座：<?php echo $constellation;?><p>
           <br/> 
            
-        自我介绍
+       自我介绍
         	<br/> 
         	<br/> 
        	<textarea rows=4 style="width:700px" name="introduction" id="introduction"  ><?php echo $musician['introduction'];?></textarea>
@@ -457,8 +513,6 @@ function music(source)
     </div>
 	<div class="music_right1">
 	<a href="#information_Modal2" role="button" data-toggle="modal" class="btn" id="musicupload" >上传音乐</a>
-  <!--  <form name="input" action="<?php echo site_url('upload')?>" method="post">
-	<input type="submit" class="btn" value="上传音乐"/>-->
 	</div>
 	<ul id="music2_right_tags" >
         <li class="music2_right_detail_selectTag"><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent0',this)" href="javascript:void(0)">收藏的歌曲</a> </li>
@@ -492,14 +546,14 @@ function music(source)
 		<a  class="prev" href="#"></a>
 		<ul id="page">
 		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
-		<?php for ($i=1;$i<(((int)((count($collects)-1)/24))+1);$i++):?>
+		<?php for ($i=1;$i<($num/24);$i++):?>
         <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
 		<?php endfor;?>
 		</ul>
 		<a  class="next" href="#"></a>
 		</div>
 		
-		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent1">
+		<!--<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent1">
 		<ul class="li_play_0">
 		  <?php if (count($follows)>0){$num=(((int)((count($follows)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($follows as $follow):$i++; if ($i>$num) break;?>
 		  <li>
@@ -520,7 +574,7 @@ function music(source)
 		<a  class="prev" href="#"></a>
 		<ul id="page">
 		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
-		<?php for ($i=1;$i<(((int)((count($follows)-1)/24))+1);$i++):?>
+		<?php for ($i=1;$i<($num/24);$i++):?>
         <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
 		<?php endfor;?>
 		</ul>
@@ -576,25 +630,25 @@ function music(source)
 		<a  class="prev" href="#"></a>
 		<ul id="page">
 		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
-		<?php for ($i=1;$i<(((int)((count($uploads)-1)/24))+1);$i++):?>
+		<?php for ($i=1;$i<($num/24);$i++):?>
         <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
 		<?php endfor;?>
 		</ul>
 		<a  class="next" href="#"></a>
-		</div>
-			
+		</div>-->
+<!-------------------------------------------------------->			
 		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent4">
          <ul class="li_play_0">
-		  <?php if (count($copyrights)>0){$num=(((int)((count($copyrights)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($copyrights as $copyright):$i++; if ($i>$num) break;?>
+		    <?php if (count($copyrights)>0){$num=(((int)((count($copyrights)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($copyrights as $copyright):$i++; if ($i>$num) break;?>
 		  <li>
-              <div class="li_play_1"><a href="<?php echo(site_url('home/playmusic?id=').$copyright['music_id']);?>"><img src="<?php echo base_url().$copyright['image_dir'];?>" /></a>
+              <div class="li_play_1"><img src="<?php echo base_url().'image/public.jpg'?>" />
                 <div class="li_play" style="display:none;">
                   <dl class="li_play_left">
-                    <dt class="li_play_left_1"><?php echo $copyright['name']; ?></dt>
-                    <dt class="li_play_left_2"><?php echo $copyright['nickname']; ?></dt>
+                    <dt class="li_play_left_1"><?php echo $copyright['name'];?></dt>
+                    <dt class="li_play_left_2"><?php echo $copyright['company'];?></dt>
                   </dl>
                   <dl class="li_play_right">
-                    <a href="#"><img onclick="music('<?php echo base_url().$copyright['dir']?>')" src="<?php echo base_url()?>image/li_play.png"/></a>
+                    <a href="#"><img src="<?php echo base_url()?>image/li_play.png"/></a>
                   </dl>
                 </div>
               </div>
@@ -610,8 +664,7 @@ function music(source)
 		</ul>
 		<a  class="next" href="#"></a>
 		</div>
-			
-			
+<!--------------------------------------------------------->						
     </div>
   </div>
   <input id="pagenum" type="hidden" value=0>
