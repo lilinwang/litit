@@ -21,6 +21,7 @@ div#information_left_2 p {text-align:left;}
 div#select{height:10%;}
 div#upload{float:right;width:20%;height:70%;text-align:right;margin-top:-15%; margin-left:0%;margin-right:15%;}
 div#myModalLabel2{width:37%;height:7.5%;margin:-3.5% 0 0 59%;float:left;text-align:right;position:absolute;}
+div#message_left{float:left;width:25%;height:78%;margin-top:0px; margin-left:5%;font-size:16px; line-height:16px;color:black;font-family: "微软雅黑","Arial";font-weight: bold;}
 #information_Modal{
 	font-family: "微软雅黑","Arial";
 }

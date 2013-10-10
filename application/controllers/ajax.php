@@ -104,12 +104,18 @@ class Ajax extends CI_Controller {
     function copyright_sign()
     {  
        $this->load->model('copyright_model'); 
-       $this->copyright_model->insert_new_copyright($_POST['musician_id'],$_POST['user_id'],$_POST['music_id'],$_POST['name'],$_POST['company'],$_POST['identity'],$_POST['phone'],$_POST['email'],$_POST['content']);
+       $this->load->model('user_model'); 
+       $this->load->model('music_model'); 
+       $tmp=$this->user_model->get_from_id($_POST['user_id']);
+       $user_image=$tmp['port_dir'];//添加照片信息，方便版权申请时的信息显示
+       $tmp=$this->user_model->get_by_id($_POST['music_id']);
+       $music_name=$tmp['name'];
+       $this->copyright_model->insert_new_copyright($_POST['musician_id'],$_POST['user_id'],$_POST['music_id'],$_POST['name'],$_POST['company'],$_POST['identity'],$_POST['phone'],$_POST['email'],$_POST['content'],$user_image,$music_name);
     }
     function no_copyright_sign()
     {   
        $this->load->model('copyright_model'); 
-       $this->copyright_model->drop_copyright($_POST['user_id'],$_POST['music_id'],$_POST['name'],$_POST['company'],$_POST['identity'],$_POST['phone'],$_POST['email'],$_POST['content']);
+       $this->copyright_model->drop_copyright($_POST['user_id'],$_POST['music_id']);
     }
     function iscopyright_sign()
     {
@@ -193,6 +199,24 @@ class Ajax extends CI_Controller {
 	    }	
 	    }
    	echo $data;
+    }
+    function copyright_message()
+    {
+    	$this->load->model('copyright_model');
+    	$map['copyright_message']=$_POST['message'];
+        $this->copyright_model->update_by_id($map,$_POST['copyright_id']);	
+    }
+    function copyright_click()
+    {
+    	$data['copyright_id']=$_POST['copyright_id'];
+    	$data['name_message']=$_POST['name_message'];
+    	$data['phone_message']=$_POST['phone_message'];
+    	$data['email_message']=$_POST['email_message'];
+    	$data['company_message']=$_POST['company_message'];
+    	$data['copyright_info']=$_POST['copyright_info'];
+    	$data['copyright_content']=$_POST['copyright_content'];
+    	$data['story_message']=$_POST['story_message'];
+    	echo json_encode($data);
     }
     
 }

@@ -1,4 +1,4 @@
-<!--<?php echo '这是用户信息：';print_r($nickname);?>-->
+<!--<?php echo '这是用户信息：';?>-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -229,7 +229,24 @@
             	     )
                        return false;
    			}) 
-   	     });
+//申请版权信息更新		
+   	$("#sendmessage").click(function(){
+   				var myDate = new Date();
+             	 var tmp1=myDate.getMonth()+1;
+             	 var tmp='\n'+myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds()+'\n';
+          	     document.getElementById("story_message").value+=tmp+document.getElementById("musician_name").innerHTML+":"+document.getElementById("send_message").value;
+	     	$.post("<?php echo base_url('ajax/copyright_message')?>", 
+			{
+			 message:document.getElementById("story_message").value,
+			 copyright_id:document.getElementById("copyright_id").innerHTML
+             },
+             function(data,status){
+             	 document.getElementById("send_message").value="";
+             	 alert("信息已发送！");
+			});
+   	     })			
+   				
+  });
 	$("#update-info").hide();
 	$("#viewinfo-button").click(function(){
 		$("#update-info").hide();
@@ -249,17 +266,17 @@
 				document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
 			}
 		});
-	});	
+	
 $(function(){
 	$(".li_play_1").hover(function(){
 		$(this).find(".li_play").show();
 	},function(){
 		$(this).find(".li_play").hide();
 	});
-});
+}); 
 </script>
 
-<!--上传文件-->
+<!--上传文件--><!--	
 <script type="text/javascript">
 	<?php $timestamp = time();?>
 	$(document).ready(function()
@@ -293,7 +310,7 @@ function callback(event, queueID, fileObj, response, data) {
             alert("文件上传出错!");
         }
 }
-</script>
+</script>-->
 <style type="text/css">
 	#music2_right_tags li A { font-size:12px; float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 30px; text-align:center; width:100%; text-decoration:none; background:url('<?php echo base_url()?>image/music2_10.jpg') no-repeat;}
 	#music2_right_tags li.music2_right_detail_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:30px; background:url('<?php echo base_url()?>image/music2_9.jpg') no-repeat;}
@@ -326,11 +343,38 @@ function music(source)
              	 document.getElementById("constellation").innerHTML="星座："+data;
 			});
    	  }
- function user_image(user_id)
-  {
+   function li_id(object)
+   	  {
+   	      alert(1);
+   	  	  var tmp=object.id;  	  				
+   	  	  	$.post("<?php echo base_url('ajax/copyright_click');?>", 
+			{
+			 copyright_id:<?php echo $copyrights[$_POST['click_id']]['copyright_id']; ?>,
+			 name_message:<?php echo $copyrights[$_POST['click_id']]['name']; ?>,
+			 phone_message:<?php echo $copyrights[$_POST['click_id']]['phone']; ?>	 
+			 email_message:<?php echo $copyrights[$_POST['click_id']]['email']; ?>
+			 company_message:<?php echo $copyrights[$_POST['click_id']]['company']; ?>,
+			 copyright_time:<?php echo $copyrights[$_POST['click_id']]['created']; ?>,
+			 copyright_info:申请名字为《<?php echo $copyrights[$_POST['click_id']]['music_name']; ?>》的音乐的版权，音乐编号为<?php echo $copyrights[$_POST['click_id']]['music_id']; ?>,
+			 copyright_content:<?php echo $copyrights[$_POST['click_id']]['content']; ?>,
+			 story_message:<?php echo $copyrights[$_POST['click_id']]['copyright_message']; ?>
+			 	 
+             },
+             function(data,status){
+             	 data = eval("(" + data + ")");
+             	document.getElementById("copyright_id").innerHTML=data.copyright_id;
+             	document.getElementById("name_message").innerHTML="姓名"+data.name_message;
+             	document.getElementById("phone_message").innerHTML="电话"+data.phone_message;
+             	document.getElementById("email_message").innerHTML="邮箱"+data.email_message;
+             	document.getElementById("company_message").innerHTML="公司"+data.company_message;
+             	document.getElementById("copyright_time").innerHTML="申请时间"+data.copyright_time;
+             	document.getElementById("copyright_info").innerHTML=data.copyright_info;
+             	document.getElementById("copyright_content").innerHTML=data.copyright_content;
+             	document.getElementById("story_message").innerHTML=data.story_message;
+			});
 
-	
-  }
+   	  	  
+   	  }   	
 </script>
 <audio id="video1">
   <source src="" type="audio/mp3" preload="meta">
@@ -340,12 +384,12 @@ function music(source)
 <!------------------>
 <div class="music_all">
 <!------------------------用户信息修改界面------------------------------->	
-<div id="information_Modal1" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
+	<div id="information_Modal1" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
     	<div id="personal_hover">
 		<div class="modal-header">
 		<h2>
 				<?php if($musician['name']!=""):?>
-		    <?php echo $musician['name'];?>
+		   <div id="musician_name"> <?php echo $musician['name'];?></div>
 				<?php else:?>
 			? ? ?
 				<?php endif;?>
@@ -501,8 +545,46 @@ function music(source)
     </div>	
 </div>
     </div>
+ <!-------版权申请信息----------------> 
+  <div id="message" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
+    	<div id="personal_hover">
+		<div class="modal-header">
+		<h2>	
+        <p>版权申请</p>		
+	   	</h2>
+		</div>
+		<div id="message_left">
+		 <div style="display:none;"><p id ="copyright_id"  name="copyright_id"/><?php echo $copyrights[0]['copyright_id']; ?> </p></div>
+		 <p name="name_message" id="name_message">姓名：<?php echo $copyrights[0]['name']; ?> </p> 
+		 <p name="phone_message" id="phone_message"/>电话：<?php echo $copyrights[0]['phone']; ?> </p> 
+		 <p name="email_message" id="email_message" /> 邮箱：<?php echo $copyrights[0]['email']; ?> </p>
+		 <p name="company_message" id="company_message"/> 公司：<?php echo $copyrights[0]['company']; ?> </p>
+    	 <p id ="copyright_time"  name="copyright_time"/>申请时间：<?php echo $copyrights[0]['created']; ?> </p>
+        申请信息：<br/><br/> 
+        <textarea  rows="3" id="copyright_info"/>申请名字为《<?php echo $copyrights[0]['music_name']; ?>》的音乐的版权，音乐编号为<?php echo $copyrights[0]['music_id']; ?></textarea>
+        <br/> 
+        申请说明：<br/><br/>
+        <textarea rows="5" id="copyright_content"/> <?php echo $copyrights[0]['content']; ?></textarea>
+ 
+       	</div>
+      <div id="information_right">
+	    历史消息：
+        <br/><br/> 
+       	<textarea rows=7 style="width:500px" name="story_message" id="story_message"  ><?php echo $copyrights[0]['copyright_message']; ?></textarea>
+        <br/><br/> <br/> <br/> 
+        发送消息：
+        <br/><br/> 
+       	<textarea rows=3 style="width:500px" name="send_message" id="send_message"  ></textarea>
+        <br/>  
+	    </div>
+    <div id="head_foot">
+     <input type="submit" id="sendmessage" class="btn" value="发送" />
+     <input type="submit" id="messagexit" data-dismiss="modal" aria-hidden="true"class="btn" value="退出" />
+    </div>	
+</div>
+    </div>
  <!-----------------------> 
-  <div class="music2_right">
+ 	 <div class="music2_right">
     <div class="music2_right_1">
     <form name="input" action="<?php echo site_url('home')?>" method="post">
 	<input type="submit" class="btn" value="返回首页"/>
@@ -553,7 +635,7 @@ function music(source)
 		<a  class="next" href="#"></a>
 		</div>
 		
-		<!--<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent1">
+	<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent1">
 		<ul class="li_play_0">
 		  <?php if (count($follows)>0){$num=(((int)((count($follows)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($follows as $follow):$i++; if ($i>$num) break;?>
 		  <li>
@@ -635,13 +717,13 @@ function music(source)
 		<?php endfor;?>
 		</ul>
 		<a  class="next" href="#"></a>
-		</div>-->
+		</div>
 <!-------------------------------------------------------->			
 		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent4">
          <ul class="li_play_0">
 		    <?php if (count($copyrights)>0){$num=(((int)((count($copyrights)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($copyrights as $copyright):$i++; if ($i>$num) break;?>
-		  <li>
-              <div class="li_play_1"><img src="<?php echo base_url().'image/public.jpg'?>" />
+		  <li id="<?php echo ($i-1)%count($copyrights)?>" onclick=li_id(this)>
+              <div class="li_play_1"><a href="#message" data-toggle="modal" id="user_image"><img src="<?php echo base_url().$copyright['user_image']?>" /></a>
                 <div class="li_play" style="display:none;">
                   <dl class="li_play_left">
                     <dt class="li_play_left_1"><?php echo $copyright['name'];?></dt>
