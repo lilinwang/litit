@@ -343,34 +343,28 @@ function music(source)
              	 document.getElementById("constellation").innerHTML="星座："+data;
 			});
    	  }
+ //点击版权申请图片时获取相关信息并更改html元素
    function li_id(object)
    	  {
-   	      alert(1);
+   	      
    	  	  var tmp=object.id;  	  				
    	  	  	$.post("<?php echo base_url('ajax/copyright_click');?>", 
 			{
-			 copyright_id:<?php echo $copyrights[$_POST['click_id']]['copyright_id']; ?>,
-			 name_message:<?php echo $copyrights[$_POST['click_id']]['name']; ?>,
-			 phone_message:<?php echo $copyrights[$_POST['click_id']]['phone']; ?>	 
-			 email_message:<?php echo $copyrights[$_POST['click_id']]['email']; ?>
-			 company_message:<?php echo $copyrights[$_POST['click_id']]['company']; ?>,
-			 copyright_time:<?php echo $copyrights[$_POST['click_id']]['created']; ?>,
-			 copyright_info:申请名字为《<?php echo $copyrights[$_POST['click_id']]['music_name']; ?>》的音乐的版权，音乐编号为<?php echo $copyrights[$_POST['click_id']]['music_id']; ?>,
-			 copyright_content:<?php echo $copyrights[$_POST['click_id']]['content']; ?>,
-			 story_message:<?php echo $copyrights[$_POST['click_id']]['copyright_message']; ?>
-			 	 
+			 click_id:tmp,
+			 musician_id:<?php echo $musician['musician_id'];?>
              },
              function(data,status){
+             	 
              	 data = eval("(" + data + ")");
              	document.getElementById("copyright_id").innerHTML=data.copyright_id;
-             	document.getElementById("name_message").innerHTML="姓名"+data.name_message;
-             	document.getElementById("phone_message").innerHTML="电话"+data.phone_message;
-             	document.getElementById("email_message").innerHTML="邮箱"+data.email_message;
-             	document.getElementById("company_message").innerHTML="公司"+data.company_message;
-             	document.getElementById("copyright_time").innerHTML="申请时间"+data.copyright_time;
+             	document.getElementById("name_message").innerHTML="姓名"+data.name;
+             	document.getElementById("phone_message").innerHTML="电话"+data.phone;
+             	document.getElementById("email_message").innerHTML="邮箱"+data.email;
+             	document.getElementById("company_message").innerHTML="公司"+data.company;
+             	document.getElementById("copyright_time").innerHTML="申请时间"+data.created;
              	document.getElementById("copyright_info").innerHTML=data.copyright_info;
-             	document.getElementById("copyright_content").innerHTML=data.copyright_content;
-             	document.getElementById("story_message").innerHTML=data.story_message;
+             	document.getElementById("copyright_content").innerHTML=data.content;
+             	document.getElementById("story_message").innerHTML=data.copyright_message;
 			});
 
    	  	  

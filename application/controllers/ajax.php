@@ -208,15 +208,11 @@ class Ajax extends CI_Controller {
     }
     function copyright_click()
     {
-    	$data['copyright_id']=$_POST['copyright_id'];
-    	$data['name_message']=$_POST['name_message'];
-    	$data['phone_message']=$_POST['phone_message'];
-    	$data['email_message']=$_POST['email_message'];
-    	$data['company_message']=$_POST['company_message'];
-    	$data['copyright_info']=$_POST['copyright_info'];
-    	$data['copyright_content']=$_POST['copyright_content'];
-    	$data['story_message']=$_POST['story_message'];
-    	echo json_encode($data);
+    	$this->load->model('copyright_model');
+    	$copyrights=$this->copyright_model->display($_POST['musician_id']);
+    	$data=$copyrights[$_POST['click_id']];
+        $data['copyright_info']="申请名字为《".$data['music_name']."》的音乐的版权，音乐编号为".$data['music_id'];
+        echo json_encode($data);
     }
     
 }
