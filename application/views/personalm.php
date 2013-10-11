@@ -235,7 +235,7 @@
              	 var tmp1=myDate.getMonth()+1;
              	 var tmp='\n'+myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds()+'\n';
           	     document.getElementById("story_message").value+=tmp+document.getElementById("musician_name").innerHTML+":"+document.getElementById("send_message").value;
-	     	$.post("<?php echo base_url('ajax/copyright_message')?>", 
+	     	$.post("<?php echo base_url('ajax/copyrightm_message')?>", 
 			{
 			 message:document.getElementById("story_message").value,
 			 copyright_id:document.getElementById("copyright_id").innerHTML
@@ -348,7 +348,7 @@ function music(source)
    	  {
    	      
    	  	  var tmp=object.id;  	  				
-   	  	  	$.post("<?php echo base_url('ajax/copyright_click');?>", 
+   	  	  	$.post("<?php echo base_url('ajax/copyrightm_click');?>", 
 			{
 			 click_id:tmp,
 			 musician_id:<?php echo $musician['musician_id'];?>
@@ -356,6 +356,7 @@ function music(source)
              function(data,status){
              	 
              	 data = eval("(" + data + ")");
+             	 alert(data.copyright_message);
              	document.getElementById("copyright_id").innerHTML=data.copyright_id;
              	document.getElementById("name_message").innerHTML="姓名"+data.name;
              	document.getElementById("phone_message").innerHTML="电话"+data.phone;
@@ -364,7 +365,7 @@ function music(source)
              	document.getElementById("copyright_time").innerHTML="申请时间"+data.created;
              	document.getElementById("copyright_info").innerHTML=data.copyright_info;
              	document.getElementById("copyright_content").innerHTML=data.content;
-             	document.getElementById("story_message").innerHTML=data.copyright_message;
+             	document.getElementById("story_message").value=data.copyright_message;
 			});
 
    	  	  

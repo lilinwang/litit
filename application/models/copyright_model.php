@@ -56,10 +56,10 @@ class copyright_model extends CI_Model{
   	  $query=$query->row();
   	  return $query->count;
   }
-  function display($musician_id)
+  function display($user_id)
   {
-  	  $sql='select * from copyright where musician_id=?';
-  	  $query=$this->db->query($sql,array($musician_id));
+  	  $sql='select * from copyright where user_id=?';
+  	  $query=$this->db->query($sql,array($user_id));
       return $query->result_array();
   }
   function update_by_id($map,$id)
