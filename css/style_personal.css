@@ -39,7 +39,7 @@ div#myModalLabel2{width:37%;height:7.5%;margin:-3.5% 0 0 59%;float:left;text-ali
 }
 
 #information_Modal2.modal.fade.in{
-	top: 0%;
+	top: 50px;
 }
 div#head_foot{width:100%;height:7%;margin:31.5% 0 0 0;text-align:right;}
 .information{display:none;}
@@ -126,7 +126,7 @@ button.demo {
 	border:0px;
 	float:left;
 	position:absolute;left:185px;top:535px;right:0;bottom:0;display:none;
-	z-index:99;
+	z-index:2;
     display:block;
 	width: 40px; 
 	height: 40px;

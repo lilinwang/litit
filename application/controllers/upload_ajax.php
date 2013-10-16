@@ -17,8 +17,8 @@ class Upload_ajax extends CI_Controller {
         	array(
         		'accept_file_types' => '/\.(gif|jpe?g|png)$/i',
         		'script_url' => base_url().'upload_ajax/do_upload_image', // equals to this class, this method
-        		'upload_url' => 'upload/image/', // both of upload_url, upload_dir equals to the upload destination
-        		'upload_dir' => 'upload/image/',
+        		'upload_url' => 'upload/tmp/', // both of upload_url, upload_dir equals to the upload destination
+        		'upload_dir' => 'upload/tmp/',
         		'max_file_size' => 1024*1024*2 // in byte
         	)
         );
@@ -29,8 +29,8 @@ class Upload_ajax extends CI_Controller {
         	array(
         		'accept_file_types' => '/\.(mp3|wav|wma|flac)$/i',
         		'script_url' => base_url().'upload_ajax/do_upload_music', // equals to this class, this method
-        		'upload_url' => 'upload/music/', // both of upload_url, upload_dir equals to the upload destination
-        		'upload_dir' => 'upload/music/',
+        		'upload_url' => 'upload/tmp/', // both of upload_url, upload_dir equals to the upload destination
+        		'upload_dir' => 'upload/tmp/',
         		'max_file_size' => 1024*1024*50 // in byte
         	)
         );
