@@ -111,7 +111,7 @@
              function(data,status){
              	 alert("提交成功，您的个人信息已修改！");
 			});
-   	     })
+   	})
    	//用户修改密码
    	$("#password_change").click(function(){
    			$.post("<?php echo base_url('ajax/password_change')?>", 
@@ -144,7 +144,99 @@
              	 alert("密码已修改！");
              	 }
 			});
-   	     });
+    })
+   	 	//个人照片上传
+   	   $("#button_upload").click(function(){
+                $.ajaxFileUpload
+                     (
+                       	{
+                            url:'<?php echo base_url('index.php/upload/upload_image')?>', //你处理上传文件的服务端
+                            secureuri:true,
+                            fileElementId:'userfile',
+                            dataType: 'json',
+                            data:
+                            {
+                            	id:<?php echo $musician['musician_id'];?>,
+			                    type:<?php echo $usertype;?>
+                            },
+                            success: function (data, status)
+							{   
+								if(typeof(data.error) != 'undefined')
+								{
+									if(data.error != '')
+								{
+									alert(data.error);
+								}else
+								{
+									alert(data.msg);
+								}
+							}
+						},
+						error: function (data, status, e)
+						{
+							alert(e);
+						}
+           	 		}
+            	     )
+                       return false;
+   			}) 
+   	//音乐和音乐照片上传
+   	 $("#uploadfile").click(function(){
+                $.ajaxFileUpload
+                     (
+                       	{
+                            url:'<?php echo base_url('index.php/upload/upload_music')?>', //你处理上传文件的服务端
+                            secureuri:true,
+                            fileElementId:['userfile1','userfile2'],
+                            dataType: 'json',
+                            data:
+                            {
+                            	musician_id:<?php echo $musician['musician_id'];?>,
+			                    song_writer:document.getElementById("songwriter").value,
+			                    musicby:document.getElementById("musicby").value,
+			                    arrangement:document.getElementById("arrangement").value,
+			                    disc_company:document.getElementById("disc_company").value,
+			                    perform_time:document.getElementById("perform_time").value,
+			                    style:document.getElementById("style").value,
+			                    story:document.getElementById("story").value
+                            },
+                            success: function (data, status)
+							{   
+								if(typeof(data.error) != 'undefined')
+								{
+									if(data.error != '')
+								{
+									alert(data.error);
+								}else
+								{
+									alert(data.msg);
+								}
+							}
+						},
+						error: function (data, status, e)
+						{
+							alert(e);
+						}
+           	 		}
+            	     )
+                       return false;
+   	}) 
+//申请版权信息更新		
+   	$("#sendmessage").click(function(){
+   				var myDate = new Date();
+             	 var tmp1=myDate.getMonth()+1;
+             	 var tmp='\n'+myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds()+'\n';
+          	     document.getElementById("story_message").value+=tmp+document.getElementById("musician_name").innerHTML+":"+document.getElementById("send_message").value;
+	     	$.post("<?php echo base_url('ajax/copyrightm_message')?>", 
+			{
+			 message:document.getElementById("story_message").value,
+			 copyright_id:document.getElementById("copyright_id").innerHTML
+             },
+             function(data,status){
+             	 document.getElementById("send_message").value="";
+             	 alert("信息已发送！");
+			});
+   	})			
 	$("#update-info").hide();
 	$("#viewinfo-button").click(function(){
 		$("#update-info").hide();
@@ -301,6 +393,33 @@ function music(source)
              	 document.getElementById("constellation").innerHTML="星座："+data;
 			});
    	  }
+ //点击版权申请图片时获取相关信息并更改html元素
+   function li_id(object)
+   	  {
+   	      
+   	  	  var tmp=object.id;  	  				
+   	  	  	$.post("<?php echo base_url('ajax/copyrightm_click');?>", 
+			{
+			 click_id:tmp,
+			 musician_id:<?php echo $musician['musician_id'];?>
+             },
+             function(data,status){
+             	 
+             	 data = eval("(" + data + ")");
+             	 alert(data.copyright_message);
+             	document.getElementById("copyright_id").innerHTML=data.copyright_id;
+             	document.getElementById("name_message").innerHTML="姓名"+data.name;
+             	document.getElementById("phone_message").innerHTML="电话"+data.phone;
+             	document.getElementById("email_message").innerHTML="邮箱"+data.email;
+             	document.getElementById("company_message").innerHTML="公司"+data.company;
+             	document.getElementById("copyright_time").innerHTML="申请时间"+data.created;
+             	document.getElementById("copyright_info").innerHTML=data.copyright_info;
+             	document.getElementById("copyright_content").innerHTML=data.content;
+             	document.getElementById("story_message").value=data.copyright_message;
+			});
+
+   	  	  
+   	  }   	
 </script>
 <audio id="video1">
   <source src="" type="audio/mp3" preload="meta">
@@ -315,7 +434,7 @@ function music(source)
 		<div class="modal-header">
 		<h2>
 				<?php if($musician['name']!=""):?>
-		    <?php echo $musician['name'];?>
+		   <div id="musician_name">  <?php echo $musician['name'];?></div>
 				<?php else:?>
 			? ? ?
 				<?php endif;?>
@@ -470,6 +589,45 @@ function music(source)
     </div>	
 </div>
     </div>
+ <!-------版权申请信息----------------> 
+  <div id="message" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
+    	<div id="personal_hover">
+		<div class="modal-header">
+		<h2>	
+        <p>版权申请</p>		
+	   	</h2>
+		</div>
+		<div id="message_left">
+		 <div style="display:none;"><p id ="copyright_id"  name="copyright_id"/><?php echo $copyrights[0]['copyright_id']; ?> </p></div>
+		 <p name="name_message" id="name_message">姓名：<?php echo $copyrights[0]['name']; ?> </p> 
+		 <p name="phone_message" id="phone_message"/>电话：<?php echo $copyrights[0]['phone']; ?> </p> 
+		 <p name="email_message" id="email_message" /> 邮箱：<?php echo $copyrights[0]['email']; ?> </p>
+		 <p name="company_message" id="company_message"/> 公司：<?php echo $copyrights[0]['company']; ?> </p>
+    	 <p id ="copyright_time"  name="copyright_time"/>申请时间：<?php echo $copyrights[0]['created']; ?> </p>
+        申请信息：<br/><br/> 
+        <textarea  rows="3" id="copyright_info"/>申请名字为《<?php echo $copyrights[0]['music_name']; ?>》的音乐的版权，音乐编号为<?php echo $copyrights[0]['music_id']; ?></textarea>
+        <br/> 
+        申请说明：<br/><br/>
+        <textarea rows="5" id="copyright_content"/> <?php echo $copyrights[0]['content']; ?></textarea>
+ 
+       	</div>
+      <div id="information_right">
+	    历史消息：
+        <br/><br/> 
+       	<textarea rows=7 style="width:500px" name="story_message" id="story_message"  ><?php echo $copyrights[0]['copyright_message']; ?></textarea>
+        <br/><br/> <br/> <br/> 
+        发送消息：
+        <br/><br/> 
+       	<textarea rows=3 style="width:500px" name="send_message" id="send_message"  ></textarea>
+        <br/>  
+	    </div>
+    <div id="head_foot">
+     <input type="submit" id="sendmessage" class="btn" value="发送" />
+     <input type="submit" id="messagexit" data-dismiss="modal" aria-hidden="true"class="btn" value="退出" />
+    
+    </div>	
+</div>
+    </div>
  <!-----------------------> 
   <div class="music2_right">
     <div class="music2_right_1">
@@ -488,6 +646,7 @@ function music(source)
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent1',this)" href="javascript:void(0)">关注的音乐人</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent2',this)" href="javascript:void(0)">下载的音乐</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent3',this)" href="javascript:void(0)">上传的歌曲</a> </li>
+	<li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent4',this)" href="javascript:void(0)">版权申请</a> </li>
     </ul>
     <div id="music2_right_tab">
 		
@@ -604,6 +763,35 @@ function music(source)
 		</ul>
 		<a  class="next" href="#"></a>
 		</div>
+<!-------------------------------------------------------->			
+		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent4">
+         <ul class="li_play_0">
+		    <?php if (count($copyrights)>0){$num=(((int)((count($copyrights)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($copyrights as $copyright):$i++; if ($i>$num) break;?>
+		  <li id="<?php echo ($i-1)%count($copyrights)?>" onclick=li_id(this)>
+              <div class="li_play_1"><a href="#message" data-toggle="modal" id="user_image"><img src="<?php echo base_url().$copyright['user_image']?>" /></a>
+                <div class="li_play" style="display:none;">
+                  <dl class="li_play_left">
+                    <dt class="li_play_left_1"><?php echo $copyright['name'];?></dt>
+                    <dt class="li_play_left_2"><?php echo $copyright['company'];?></dt>
+                  </dl>
+                  <dl class="li_play_right">
+                    <a href="#"><img src="<?php echo base_url()?>image/li_play.png"/></a>
+                  </dl>
+                </div>
+              </div>
+		  </li>
+		  <?php  endforeach;}}?>
+		</ul>
+		<a  class="prev" href="#"></a>
+		<ul id="page">
+		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
+		<?php for ($i=1;$i<(((int)((count($copyrights)-1)/24))+1);$i++):?>
+        <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
+		<?php endfor;?>
+		</ul>
+		<a  class="next" href="#"></a>
+		</div>
+<!--------------------------------------------------------->	
     </div>
   </div>
   <input id="pagenum" type="hidden" value=0>
