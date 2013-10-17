@@ -229,4 +229,100 @@ class Ajax extends CI_Controller {
         echo json_encode($data);
     }
     
+
+    /*
+        upload music
+
+        errno 1, parameter error
+        errno 2, files have been removed
+    */
+    function upload_music() {
+        $this->load->model('music_model');
+        $this->load->model('tag_model');
+        $this->load->model('genre_model');
+        $this->load->model('music_tag_model');
+        $this->load->model('music_genre_model');
+
+        // required parameters 
+        if ("" == trim($_POST['musician_id']) ||
+            "" == trim($_POST['music_name']) ||
+            "" == trim($_POST['music_url']))
+        {
+            echo '{"errno":1, "errmsg":"参数错误"}';
+            return;
+        }
+        $musician_id = trim($_POST['musician_id']);
+        $music_name= trim($_POST['music_name']);
+        $music_url= trim($_POST['music_url']);
+
+        // optional parameters
+        $image_url = trim($_POST['music_image_url']);
+        $album = trim($_POST['album']);
+        $lyrics_by = trim($_POST['lyrics_by']);
+        $composed_by = trim($_POST['composed_by']);
+        $arranged_by = trim($_POST['arranged_by']);
+        $disc_company = trim($_POST['disc_company']);
+        $perform_time = trim($_POST['perform_time']);
+        $genres = trim($_POST['genres']);
+        $tags = trim($_POST['tags']);
+        $story = trim($_POST['story']); 
+
+        // insert into db
+        $music_id = $this->music_model->insert_new_no_url(
+            $musician_id,
+            $music_name,
+            //$album, currently unavailable
+            $lyrics_by,
+            $composed_by,
+            $arranged_by,
+            $disc_company,
+            $perform_time,
+            $story
+        );
+
+        // move music file and image file
+        $new_music_url = 'upload/music/' . 'user_' . $musician_id . '/music_' . $music_id;
+        if (!is_dir(dirname($new_music_url))) {
+            mkdir(dirname($new_music_url), 0777, true);
+        }
+        $music_ok = @rename($music_url, $new_music_url);
+
+        $image_ok = true;
+        $new_image_url = null;
+        if (!empty($image_url)) {
+            $new_image_url = 'upload/image/' . 'user_' . $musician_id . '/image_' . $music_id;
+            if (!is_dir(dirname($new_image_url))) {
+                mkdir(dirname($new_image_url), 0777, true);
+            }
+            $image_ok = @rename($image_url, $new_image_url);
+        }
+
+        // check move ok, for they may be deleted in certain time
+        if (!$music_ok || !$image_ok) {
+            $errmsg = '您很长时间没有操作了，请重新上传';
+            if(!$music_ok) {
+                $errmsg .= '音乐';
+            }
+            if(!$image_ok && !empty($image_url)) {
+                if (!$music_ok) $errmsg .= '和';
+                $errmsg .= '图片';
+            }
+            $this->music_model->drop_music_by_id($music_id); // roll back insertion
+            echo '{"errno":2, "errmsg":"' . $errmsg . '"}';
+            return;
+        }
+        // update the url
+        $this->music_model->update_url($music_id, $new_music_url, $new_image_url);
+
+        // update tag and genre
+        $tag_id = $this->tag_model->get_id_by_name($tags);
+        if ($tag_id == null) $tag_id = $this->tag_model->add_by_name($tags);
+        $this->music_tag_model->add($tag_id, $music_id);
+
+        $genre_id = $this->genre_model->get_id_by_name($genres);
+        if ($genre_id == null) $genre_id = $this->genre_model->add_by_name($genres);
+        $this->music_genre_model->add($genre_id, $music_id);
+
+        echo '{"errno":0, "msg":"上传音乐 ' . $music_name . ' 成功！"}';
+    }
 }
