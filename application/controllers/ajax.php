@@ -104,7 +104,13 @@ class Ajax extends CI_Controller {
     function copyright_sign()
     {  
        $this->load->model('copyright_model'); 
-       $this->copyright_model->insert_new_copyright($_POST['musician_id'],$_POST['user_id'],$_POST['music_id'],$_POST['name'],$_POST['company'],$_POST['identity'],$_POST['phone'],$_POST['email'],$_POST['content']);
+       $this->load->model('user_model'); 
+       $this->load->model('music_model'); 
+       $tmp=$this->user_model->get_from_id($_POST['user_id']);
+       $user_image=$tmp['port_dir'];//添加照片信息，方便版权申请时的信息显示
+       $tmp=$this->user_model->get_by_id($_POST['music_id']);
+       $music_name=$tmp['name'];
+       $this->copyright_model->insert_new_copyright($_POST['musician_id'],$_POST['user_id'],$_POST['music_id'],$_POST['name'],$_POST['company'],$_POST['identity'],$_POST['phone'],$_POST['email'],$_POST['content'],$user_image,$music_name);
     }
     function no_copyright_sign()
     {   
@@ -193,6 +199,34 @@ class Ajax extends CI_Controller {
 	    }	
 	    }
    	echo $data;
+    }
+    function copyrightm_message()
+    {
+    	$this->load->model('copyrightm_model');
+    	$map['copyright_message']=$_POST['message'];
+        $this->copyrightm_model->update_by_id($map,$_POST['copyright_id']);	
+    }
+    function copyrightm_click()
+    {
+    	$this->load->model('copyrightm_model');
+    	$copyrights=$this->copyrightm_model->display($_POST['musician_id']);
+    	$data=$copyrights[$_POST['click_id']];
+        $data['copyright_info']="申请名字为《".$data['music_name']."》的音乐的版权，音乐编号为".$data['music_id'];
+        echo json_encode($data);
+    }
+    function copyright_message()
+    {
+    	$this->load->model('copyright_model');
+    	$map['copyright_message']=$_POST['message'];
+        $this->copyright_model->update_by_id($map,$_POST['copyright_id']);	
+    }
+    function copyright_click()
+    {
+    	$this->load->model('copyright_model');
+    	$copyrights=$this->copyright_model->display($_POST['user_id']);
+    	$data=$copyrights[$_POST['click_id']];
+        $data['copyright_info']="申请名字为《".$data['music_name']."》的音乐的版权，音乐编号为".$data['music_id'];
+        echo json_encode($data);
     }
     
 

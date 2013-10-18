@@ -15,11 +15,13 @@ h2{width:80%;margin-left:10%;}
 h2 p{text-align:center;color:yellow;}
 div#information_left p {text-align:center;}
 div#information_left img {margin:-15% 0 0 0;}
+div#select1{padding-left:30%;}
 div#information_left_1 p {text-align:right;}
 div#information_left_2 p {text-align:left;}
-div#select{height:25%;}
-div#upload{float:right;width:30%;height:70%;text-align:right;margin-top:0%; margin-left:0%;padding-right:20%;}
+div#select{height:10%;}
+div#upload{float:right;width:20%;height:70%;text-align:right;margin-top:-15%; margin-left:0%;margin-right:15%;}
 div#myModalLabel2{width:37%;height:7.5%;margin:-3.5% 0 0 59%;float:left;text-align:right;position:absolute;}
+div#message_left{float:left;width:25%;height:78%;margin-top:0px; margin-left:5%;font-size:16px; line-height:16px;color:black;font-family: "微软雅黑","Arial";font-weight: bold;}
 #information_Modal{
 	font-family: "微软雅黑","Arial";
 }

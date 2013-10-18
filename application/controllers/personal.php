@@ -22,20 +22,24 @@ class Personal extends CI_Controller {
 			$this->load->model('collect_model');
 			$this->load->model('follow_model');
 			$this->load->model('download_model');
+			$this->load->model('copyright_model');
 			$data['collects']=$this->collect_model->display($data['user_id']);
 			$data['follows']=$this->follow_model->display($data['user_id']);
 			$data['downloads']=$this->download_model->display($data['user_id']);
+			$data['copyrights']=$this->copyright_model->display($data['user_id']);
             $this->load->view('personal',$data);
 		}else{
 			$this->load->model('collectm_model');
 			$this->load->model('followm_model');
 			$this->load->model('upload_model');
 			$this->load->model('downloadm_model');
+			$this->load->model('copyrightm_model');
 			$data['musician_id']=$this->session->userdata('userid');
 			$data['musician']=$this->musician_model->get_from_id($data['musician_id']);
 			$data['constellation']=$this->musician_model->check_constellation($data['musician']['birthday']);
 			$data['check_photo']=$this->musician_model->check_photo($data['musician_id']);
 			$data['collects']=$this->collectm_model->display($data['musician_id']);
+			$data['copyrights']=$this->copyrightm_model->display($data['musician_id']);
 			$data['follows']=$this->followm_model->display($data['musician_id']);
 			$data['uploads']=$this->upload_model->display($data['musician_id']);
 			$data['downloads']=$this->downloadm_model->display($data['musician_id']);

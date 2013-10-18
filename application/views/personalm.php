@@ -4,8 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>个人中心</title>
-
-
     <!-- css -->
     <link href="<?php echo base_url()?>css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url()?>css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
@@ -58,6 +56,217 @@
             $("#music2_right_tab").animate({left: -1360*showNum},"slow");
         }
     </script>
+<script type="text/javascript">
+	$(document).ready(function(){
+	$("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360);?>);
+	$(".prev").click(function(){
+		 //y=$("#music2_right_tab").position();
+		// if (y.left<0) 		 		 
+		 pagenum=parseInt(document.getElementById("pagenum").value);
+         if (pagenum>0) {
+			pagenum=pagenum-1;
+			$("#music2_right_tab").animate({left: '+=1360px'},"slow");
+			tag = document.getElementById("page").getElementsByTagName("li");
+			taglength = tag.length;
+			for(i=0; i<taglength; i++){
+				tag[i].className = "";
+			}
+			document.getElementById(pagenum).className = "page_selectTag";
+			document.getElementById("pagenum").value=pagenum;
+		 }
+	});
+	$(".next").click(function(){
+		var pagenum=parseInt(document.getElementById("pagenum").value);
+        if ((pagenum+1)<document.getElementById("totalnum").value) {
+			pagenum=pagenum+1;
+			$("#music2_right_tab").animate({left: '-=1360px'},"slow");
+			tag = document.getElementById("page").getElementsByTagName("li");
+			taglength = tag.length;
+			for(i=0; i<taglength; i++){
+				tag[i].className = "";
+			}
+			//alert(pagenum);
+			document.getElementById(pagenum).className = "page_selectTag";
+			document.getElementById("pagenum").value=pagenum;
+		 }
+		 
+	});
+	 $("#personal_information").click(function(){
+	 	 if(document.getElementById("information_Modal2").style.display==block)
+	 	 {
+	 	 	 document.getElementById("information_Modal2").style.display==none;
+	 	 }
+	 });
+		//用户修改信息
+	 $("#save").click(function(){
+	     	$.post("<?php echo base_url('ajax/information_change')?>", 
+			{
+			 id:<?php echo $musician['musician_id'];?>,
+			 type:<?php echo $usertype;?>,
+             name:document.getElementById("name").value,
+             nickname:document.getElementById("nickname").value,
+             gender:document.getElementById("gender").value,
+             birthday:document.getElementById("birthday").value,
+             identity:document.getElementById("identity").value,
+             self_intro:document.getElementById("introduction").value
+             },
+             function(data,status){
+             	 alert("提交成功，您的个人信息已修改！");
+			});
+   	})
+   	//用户修改密码
+   	$("#password_change").click(function(){
+   			$.post("<?php echo base_url('ajax/password_change')?>", 
+			{
+			 id:<?php echo $musician['musician_id'];?>,
+			 type:<?php echo $usertype;?>,
+             password:document.getElementById("password").value,
+             password1:document.getElementById("password1").value,
+             password2:document.getElementById("password2").value
+             },
+             function(data,status){
+             	 document.getElementById("password1").value="";
+             	 document.getElementById("password2").value="";
+             	 if(data==1) 
+             	 {
+             	 document.getElementById("password").value="";
+             	 alert("密码错误，请重新输入！");
+             	 }
+             	 if(data==2) 
+             	 {    	 
+             	 alert("两次密码不一致！");
+             	 }
+             	  if(data==3) 
+             	 {    	 
+             	 alert("密码位数应大于等于8位");
+             	 }
+             	 if(data==4) 
+             	 {
+             	 document.getElementById("password").value="";
+             	 alert("密码已修改！");
+             	 }
+			});
+    })
+   	 	//个人照片上传
+   	   $("#button_upload").click(function(){
+                $.ajaxFileUpload
+                     (
+                       	{
+                            url:'<?php echo base_url('index.php/upload/upload_image')?>', //你处理上传文件的服务端
+                            secureuri:true,
+                            fileElementId:'userfile',
+                            dataType: 'json',
+                            data:
+                            {
+                            	id:<?php echo $musician['musician_id'];?>,
+			                    type:<?php echo $usertype;?>
+                            },
+                            success: function (data, status)
+							{   
+								if(typeof(data.error) != 'undefined')
+								{
+									if(data.error != '')
+								{
+									alert(data.error);
+								}else
+								{
+									alert(data.msg);
+								}
+							}
+						},
+						error: function (data, status, e)
+						{
+							alert(e);
+						}
+           	 		}
+            	     )
+                       return false;
+   			}) 
+   	//音乐和音乐照片上传
+   	 $("#uploadfile").click(function(){
+                $.ajaxFileUpload
+                     (
+                       	{
+                            url:'<?php echo base_url('index.php/upload/upload_music')?>', //你处理上传文件的服务端
+                            secureuri:true,
+                            fileElementId:['userfile1','userfile2'],
+                            dataType: 'json',
+                            data:
+                            {
+                            	musician_id:<?php echo $musician['musician_id'];?>,
+			                    song_writer:document.getElementById("songwriter").value,
+			                    musicby:document.getElementById("musicby").value,
+			                    arrangement:document.getElementById("arrangement").value,
+			                    disc_company:document.getElementById("disc_company").value,
+			                    perform_time:document.getElementById("perform_time").value,
+			                    style:document.getElementById("style").value,
+			                    story:document.getElementById("story").value
+                            },
+                            success: function (data, status)
+							{   
+								if(typeof(data.error) != 'undefined')
+								{
+									if(data.error != '')
+								{
+									alert(data.error);
+								}else
+								{
+									alert(data.msg);
+								}
+							}
+						},
+						error: function (data, status, e)
+						{
+							alert(e);
+						}
+           	 		}
+            	     )
+                       return false;
+   	}) 
+//申请版权信息更新		
+   	$("#sendmessage").click(function(){
+   				var myDate = new Date();
+             	 var tmp1=myDate.getMonth()+1;
+             	 var tmp='\n'+myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds()+'\n';
+          	     document.getElementById("story_message").value+=tmp+document.getElementById("musician_name").innerHTML+":"+document.getElementById("send_message").value;
+	     	$.post("<?php echo base_url('ajax/copyrightm_message')?>", 
+			{
+			 message:document.getElementById("story_message").value,
+			 copyright_id:document.getElementById("copyright_id").innerHTML
+             },
+             function(data,status){
+             	 document.getElementById("send_message").value="";
+             	 alert("信息已发送！");
+			});
+   	})			
+	$("#update-info").hide();
+	$("#viewinfo-button").click(function(){
+		$("#update-info").hide();
+		$("#view-info").show();
+	});
+	$("#updateinfo-button").click(function(){
+		$("#view-info").hide();
+		$("#update-info").show();
+	});
+	$(".demo").click(function(){
+			$("#home_hover").fadeToggle("quick");
+			if ($("#player").get(0).paused) 
+			{               
+				document.play_button.src="<?php echo base_url()?>image/Play_Button.png";         
+			}            
+			else {                
+				document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
+			}
+		});
+	});	
+$(function(){
+	$(".li_play_1").hover(function(){
+		$(this).find(".li_play").show();
+	},function(){
+		$(this).find(".li_play").hide();
+	});
+});
+</script>
 
     <!-- ____ javascript -->
     <script type="text/javascript">
@@ -345,49 +554,74 @@
              birthday:document.getElementById("birthday").value
              },
              function(data,status){
-                 document.getElementById("constellation").innerHTML="星座："+data;
-            });
-        }
-    </script>
-    <audio id="video1">
-      <source src="" type="audio/mp3" preload="meta">
-      Your browser does not support HTML5 audio.
-    </audio>
+             	 document.getElementById("constellation").innerHTML="星座："+data;
+			});
+   	  }
+ //点击版权申请图片时获取相关信息并更改html元素
+   function li_id(object)
+   	  {
+   	      
+   	  	  var tmp=object.id;  	  				
+   	  	  	$.post("<?php echo base_url('ajax/copyrightm_click');?>", 
+			{
+			 click_id:tmp,
+			 musician_id:<?php echo $musician['musician_id'];?>
+             },
+             function(data,status){
+             	 
+             	 data = eval("(" + data + ")");
+             	 alert(data.copyright_message);
+             	document.getElementById("copyright_id").innerHTML=data.copyright_id;
+             	document.getElementById("name_message").innerHTML="姓名"+data.name;
+             	document.getElementById("phone_message").innerHTML="电话"+data.phone;
+             	document.getElementById("email_message").innerHTML="邮箱"+data.email;
+             	document.getElementById("company_message").innerHTML="公司"+data.company;
+             	document.getElementById("copyright_time").innerHTML="申请时间"+data.created;
+             	document.getElementById("copyright_info").innerHTML=data.copyright_info;
+             	document.getElementById("copyright_content").innerHTML=data.content;
+             	document.getElementById("story_message").value=data.copyright_message;
+			});
 
-    <!-- -->
-    <div class="music_all">
-    <!-- 用户信息修改modal -->  
-    <div id="information_Modal1" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
-        <div id="personal_hover">
-        <div class="modal-header">
-            <h2>
-                <?php if($musician['name']!=""):?>
-                    <?php echo $musician['name'];?>
-                <?php else:?>
-                    ? ? ?
-                <?php endif;?>
-            
-            </h2>
-        </div>
-        <div id="information_left">
-            <div class="modal-body">
-                <div class="login_wrong" id="signMessage" ></div>
-            </div>
-                
-            <p> <img id="user-avatar" src="<?php echo $check_photo==0 ? base_url().'image/public.jpg':base_url().$musician['portaitdir'];?>" style="width:220px;height:200px;"/></p>
-            <div id="select">
-                <div id="upload">
-                    <input type="file" id="fileupload-avatar" />
-                </div>
-            <form>
-                <div id="queue1"></div> 
-            </form>
-        </div>
+   	  	  
+   	  }   	
+</script>
+<audio id="video1">
+  <source src="" type="audio/mp3" preload="meta">
+  Your browser does not support HTML5 audio.
+</audio>
+
+<!------------------>
+<div class="music_all">
+<!------------------------用户信息修改界面------------------------------->	
+<div id="information_Modal1" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
+    <div id="personal_hover">
+		<div class="modal-header">
+			<h2>
+				<?php if($musician['name']!=""):?>
+				<div id="musician_name">  <?php echo $musician['name'];?></div>
+				<?php else:?>
+					? ? ?
+				<?php endif;?>		
+			</h2>
+		</div>
+		<div id="information_left">
+			<div class="modal-body">
+				<div class="login_wrong" id="signMessage" ></div>
+			</div>
+				
+			<p>	<img id="musician-avatar" src="<?php echo $check_photo==0 ? base_url().'image/public.jpg':base_url().$musician['portaitdir'];?>" style="width:220px;height:200px;"/></p>
+			<div id="select">
+			<div id="upload">
+				<input type="file" id="fileupload-avatar" />
+			</div>                
+			<form>
+				<div id="queue1"></div> 
+			</form>
+			</div>
             <!-- -->
             <p> 修改密码<br/></p>
-            <div id="information_left_1">
-            
-            <p>
+            <div id="information_left_1">            
+				<p>
                 原密码：
                 <br/><br/>
                 新密码：
@@ -398,29 +632,29 @@
             </div>
             <div id="information_left_2">
             <p>
-            <input type="password" name="password" id="password" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="原密码" />
-            <input type="password" name="password1" id="password1" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="新密码" />
-            <input type="password" name="password2" id="password2" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="确认密码" />              
-            <br/>
-            <input type="submit" id="password_change" class="btn" value="确认" />
+				<input type="password" name="password" id="password" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="原密码" />
+				<input type="password" name="password1" id="password1" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="新密码" />
+				<input type="password" name="password2" id="password2" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="确认密码" />              
+				<br/>
+				<input type="submit" id="password_change" class="btn" value="确认" />
             </p>
-            </div>  
-      </div>
-      <div id="information_right">
-          <br/><br/>
+            </div> 
+		</div>
+		<div id="information_right">
+			<br/><br/>
             邮箱：<?php echo $musician['email'];?>
             <br/>
             <br/>
             <br/>
-        身份证号：<input type="text" name="identity" id="identity"  style="width:150px" value=<?php echo $musician['identity'];?> />
+			身份证号：<input type="text" name="identity" id="identity"  style="width:150px" value=<?php echo $musician['identity'];?> />
             <br/>
             <br/>
-        姓名：<input type="text" name="name" id="name"  style="width:100px" value=<?php echo $musician['name'];?> />
+			姓名：<input type="text" name="name" id="name"  style="width:100px" value=<?php echo $musician['name'];?> />
             &nbsp;&nbsp;&nbsp;&nbsp;
-        昵称：<input type="text" name="nickname" id="nickname"  style="width:100px" value=<?php echo $musician['nickname'];?> /> 
-          <br/><br/>
-         性别：<select style='width:100px' id="gender" name="gender" >  
-          <option value=<?php echo $musician['gender'];?>>
+			昵称：<input type="text" name="nickname" id="nickname"  style="width:100px" value=<?php echo $musician['nickname'];?> /> 
+			<br/><br/>
+			性别：<select style='width:100px' id="gender" name="gender" >  
+			<option value=<?php echo $musician['gender'];?>>
             <?php if($musician['gender']==1):?>
             男
             <?php elseif($musician['gender']==0):?>
@@ -428,65 +662,53 @@
             <?php else:?>
             保密
             <?php endif;?>
-            </option>  
-          <?php if($musician['gender']!=1):?>
-          <option value="1">男</option> 
-          <?php endif;?> 
-          <?php if($musician['gender']!=0):?>
-          <option value="0">女</option> 
-          <?php endif;?> 
-          <?php if($musician['gender']!=-1):?>
-          <option value="-1">保密</option> 
-          <?php endif;?>   
-          </select>  
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        破壳日：<input type="date" style="width:150px" id ="birthday" onblur=constellation() name="birthday" value=<?php echo $musician['birthday'];?> />
+			</option>  			
+			</select>  
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			破壳日：<input type="date" style="width:150px" id ="birthday" onblur=constellation() name="birthday" value=<?php echo $musician['birthday'];?> />
             <br/>
             <br/> 
-        <p id=constellation>星座：<?php echo $constellation;?><p>
-          <br/> 
+			<p id=constellation>星座：<?php echo $constellation;?></p>
+			<br/> 
            
-        自我介绍
+			自我介绍
             <br/> 
             <br/> 
-        <textarea rows=4 style="width:700px" name="introduction" id="introduction"  ><?php echo $musician['introduction'];?></textarea>
+			<textarea rows=4 style="width:700px" name="introduction" id="introduction"  ><?php echo $musician['introduction'];?></textarea>
             <br/>   
-     </div>
-     <div id="head_foot">
+	  </div>
+	  <div id="head_foot">
          <input type="submit" id="save" class="btn" value="保存" />
          <input type="submit" id="exit" data-dismiss="modal" aria-hidden="true"class="btn" value="退出" />
-     </div>  
-     </div>
-     </div>
-
-
-
-    
-
+      </div>  
+	</div>
+</div>
 
      <!-- 主页面 --> 
-      <div class="music2_right">
+     <div class="music2_right">
         <div class="music2_right_1">
-        <form name="input" action="<?php echo site_url('home')?>" method="post">
-        <input type="submit" class="btn" value="返回首页"/>
-        </form>
+			<form name="input" action="<?php echo site_url('home')?>" method="post">
+			<input type="submit" class="btn" value="返回首页"/>
+			</form>
         </div>
         <div class="music_right_1">
-        <a href="#information_Modal1" role="button" data-toggle="modal" class="btn" id="personal_information" >个人信息</a>
+			<a href="#information_Modal1" role="button" data-toggle="modal" class="btn" id="personal_information" >个人信息</a>
         </div>
         <div class="music_right1">
-        <a href="#information_Modal2" role="button" data-toggle="modal" class="btn" id="musicupload" >上传音乐</a>
+			<a href="#information_Modal2" role="button" data-toggle="modal" class="btn" id="musicupload" >上传音乐</a>
         </div>
         <ul id="music2_right_tags" >
             <li class="music2_right_detail_selectTag"><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent0',this)" href="javascript:void(0)">收藏的歌曲</a> </li>
             <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent1',this)" href="javascript:void(0)">关注的音乐人</a> </li>
             <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent2',this)" href="javascript:void(0)">下载的音乐</a> </li>
             <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent3',this)" href="javascript:void(0)">上传的歌曲</a> </li>
+			<li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent4',this)" href="javascript:void(0)">版权申请</a> </li>
         </ul>
-        <div id="music2_right_tab">
-            
-          <div class="music_clear"></div>
-          <div id="music2_right_detail_tagContent">
+		  							  				
+		
+      <div id="music2_right_tab">            
+        <div class="music_clear"></div>
+        <div id="music2_right_detail_tagContent">
             <div class="music2_right_detail_tagContent music2_right_detail_selectTag" id="music2_right_detail_tagContent0">
             <ul class="li_play_0">
               <?php if (count($collects)>0){$num=(((int)((count($collects)-1)/24))+1)*24;$i=0; while ($i<$num){foreach ($collects as $collect):$i++; if ($i>$num) break;?>
@@ -598,12 +820,82 @@
             </ul>
             <a  class="next" href="#"></a>
             </div>
+			
+			
+			<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent4">
+			<ul class="li_play_0">
+		    <?php if (count($copyrights)>0){$num=(((int)((count($copyrights)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($copyrights as $copyright):$i++; if ($i>$num) break;?>
+			<li id="<?php echo ($i-1)%count($copyrights)?>" onclick=li_id(this)>
+              <div class="li_play_1"><a href="#message" data-toggle="modal" id="user_image"><img src="<?php echo base_url().$copyright['user_image']?>" /></a>
+                <div class="li_play" style="display:none;">
+                  <dl class="li_play_left">
+                    <dt class="li_play_left_1"><?php echo $copyright['name'];?></dt>
+                    <dt class="li_play_left_2"><?php echo $copyright['company'];?></dt>
+                  </dl>
+                  <dl class="li_play_right">
+                    <a href="#"><img src="<?php echo base_url()?>image/li_play.png"/></a>
+                  </dl>
+                </div>
+              </div>
+			</li>
+			<?php  endforeach;}}?>
+			</ul>
+			<a  class="prev" href="#"></a>
+			<ul id="page">
+				<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
+				<?php for ($i=1;$i<(((int)((count($copyrights)-1)/24))+1);$i++):?>
+				<li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
+				<?php endfor;?>
+			</ul>
+			<a  class="next" href="#"></a>
+			</div>
         </div>
       </div>
       <input id="pagenum" type="hidden" value=0>
       <input id="totalnum" type="hidden" value=<?php echo(((int)((count($collects)-1)/24))+1);?>>
     </div>
-    </div>
+<!----主页面结束---->
+
+ <!-------版权申请信息开始----------------> 
+  <div id="message" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
+    <div id="personal_hover">
+		<div class="modal-header">
+		<h2>	
+        <p>版权申请</p>		
+	   	</h2>
+		</div>
+		<div id="message_left">
+		 <div style="display:none;"><p id ="copyright_id"  name="copyright_id"/><?php echo $copyrights[0]['copyright_id']; ?> </p></div>
+		 <p name="name_message" id="name_message">姓名：<?php echo $copyrights[0]['name']; ?> </p> 
+		 <p name="phone_message" id="phone_message"/>电话：<?php echo $copyrights[0]['phone']; ?> </p> 
+		 <p name="email_message" id="email_message" /> 邮箱：<?php echo $copyrights[0]['email']; ?> </p>
+		 <p name="company_message" id="company_message"/> 公司：<?php echo $copyrights[0]['company']; ?> </p>
+    	 <p id ="copyright_time"  name="copyright_time"/>申请时间：<?php echo $copyrights[0]['created']; ?> </p>
+        申请信息：<br/><br/> 
+        <textarea  rows="3" id="copyright_info"/>申请名字为《<?php echo $copyrights[0]['music_name']; ?>》的音乐的版权，音乐编号为<?php echo $copyrights[0]['music_id']; ?></textarea>
+        <br/> 
+        申请说明：<br/><br/>
+        <textarea rows="5" id="copyright_content"/> <?php echo $copyrights[0]['content']; ?></textarea>
+       	</div>
+		
+		<div id="information_right">
+	    历史消息：
+        <br/><br/> 
+       	<textarea rows=7 style="width:500px" name="story_message" id="story_message"  ><?php echo $copyrights[0]['copyright_message']; ?></textarea>
+        <br/><br/> <br/> <br/> 
+        发送消息：
+        <br/><br/> 
+       	<textarea rows=3 style="width:500px" name="send_message" id="send_message"  ></textarea>
+        <br/>  
+	    </div>
+		<div id="head_foot">
+			<input type="submit" id="sendmessage" class="btn" value="发送" />
+			<input type="submit" id="messagexit" data-dismiss="modal" aria-hidden="true"class="btn" value="退出" />  
+		</div>	
+	</div>
+</div>
+ <!-----------版权申请信息结束------------> 
+
 
 
     <!-- 上传音乐modal --> 
@@ -691,18 +983,16 @@
                         </div>
                     </div>
                     </div>
-
                 </div>
             </div>
-
             <!-- modal footer -->
             <div class="modal-footer">
                 <button id="music-upload-ok" class="btn">保存</button>
                 <button id="music-upload-cancel" class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
             </div>  
-
-    </div>
-
-
+	</div>
+<!-------------上传结束------------------------>					
+	
+</div>    
 </body>
 </html>

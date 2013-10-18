@@ -45,5 +45,25 @@ class copyrightm_model extends CI_Model{
   	  $query=$query->row();
   	  return $query->count;
   }
+  function display($musician_id)
+  {
+  	  $sql='select * from copyrightm where musician_id=?';
+  	  $query=$this->db->query($sql,array($musician_id));
+      return $query->result_array();
+  }
+  function update_by_id($map,$id)
+  {//更改某些项
+		/*例如：
+			$map['user_image']='path';
+			$map['misic_name']='hello';
+			$this->user_model->update_by_id($map,$id);
+		 * *
+		 */
+		foreach($map as $key=>$var){
+	    	$sql="UPDATE copyright SET ".$key."=? WHERE copyright_id=?";
+			$result=$this->db->query($sql,array($var,$id));
+
+		}
+	}
 }
 ?>
