@@ -597,7 +597,6 @@ $(function(){
              function(data,status){
              	 
              	 data = eval("(" + data + ")");
-             	 alert(data.copyright_message);
              	document.getElementById("copyright_id").innerHTML=data.copyright_id;
              	document.getElementById("name_message").innerHTML="姓名"+data.name;
              	document.getElementById("phone_message").innerHTML="电话"+data.phone;

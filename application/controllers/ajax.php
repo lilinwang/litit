@@ -108,14 +108,14 @@ class Ajax extends CI_Controller {
        $this->load->model('music_model'); 
        $tmp=$this->user_model->get_from_id($_POST['user_id']);
        $user_image=$tmp['port_dir'];//添加照片信息，方便版权申请时的信息显示
-       $tmp=$this->user_model->get_by_id($_POST['music_id']);
+       $tmp=$this->user_model->get_from_id($_POST['music_id']);
        $music_name=$tmp['name'];
        $this->copyright_model->insert_new_copyright($_POST['musician_id'],$_POST['user_id'],$_POST['music_id'],$_POST['name'],$_POST['company'],$_POST['identity'],$_POST['phone'],$_POST['email'],$_POST['content'],$user_image,$music_name);
     }
     function no_copyright_sign()
     {   
        $this->load->model('copyright_model'); 
-       $this->copyright_model->drop_copyright($_POST['user_id'],$_POST['music_id'],$_POST['name'],$_POST['company'],$_POST['identity'],$_POST['phone'],$_POST['email'],$_POST['content']);
+       $this->copyright_model->drop_copyright($_POST['user_id'],$_POST['music_id']);
     }
     function iscopyright_sign()
     {

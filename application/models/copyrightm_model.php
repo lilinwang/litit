@@ -47,7 +47,8 @@ class copyrightm_model extends CI_Model{
   }
   function display($musician_id)
   {
-  	  $sql='select * from copyrightm where musician_id=?';
+
+  	  $sql='select * from copyright where musician_id=?';
   	  $query=$this->db->query($sql,array($musician_id));
       return $query->result_array();
   }

@@ -1,8 +1,24 @@
 <?php
 class music_model extends CI_Model{
-    function __construct(){
+   function __construct(){
         parent::__construct();
     }
+	function insert_new_music($name,$story,$musician_id){    //上传成功后更新数据库
+
+	     $sql='INSERT INTO music(name,musician_id,story,download_cnt,share_cnt,collect_cnt,view_cnt,randable) values (?,?,?,?,?,?,?,?)';
+	     $this->db->query($sql,array($name,$musician_id,$story,0,0,0,0,0));
+	     $music_id_query=$this->getid($musician_id,$name);
+	     $music_id=$music_id_query['music_id'];
+	     $sql='update music SET dir=? WHERE musician_id=? AND name=?';
+	     $dir='upload/music/user_'.$musician_id.'/music_'.$music_id.'.mp3';
+		 $image_dir='upload/image/user_'.$musician_id.'/music_'.$music_id.'.jpg';
+		 $this->db->query($sql,array($dir,$musician_id,$name));
+		 $sql='UPDATE music SET image_dir=? where music_id=?';
+		 $this->db->query($sql,array($image_dir,$music_id));
+		 return $music_id;
+
+	}
+ 
     function get_by_id($id){                        //通过id获取音乐所有信息
         $sql='SELECT * FROM music WHERE music_id=?';
         $result=$this->db->query($sql,$id);
@@ -169,6 +185,19 @@ class music_model extends CI_Model{
         else $this->db->query('delete from collectm where (music_id,user_id)=(?,?)',array($id2,$id3));
         return; 
     }
-    
+    	function update_by_id($map,$id){//更改某些项
+		/*例如：
+			$map['image_dir']='path';
+			$map['name']='hello';
+			$this->user_model->update_by_id($map,$id);
+		 * *
+		 */
+		foreach($map as $key=>$var){
+	    	$sql="UPDATE music SET ".$key."=? WHERE music_id=?";
+			$result=$this->db->query($sql,array($var,$id));
+		}
+	}
+	
+
 }
 ?>
