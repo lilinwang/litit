@@ -98,7 +98,6 @@
 	 	 	 document.getElementById("information_Modal2").style.display==none;
 	 	 }
 	 });
-
 		//用户修改信息
 	 $("#save").click(function(){
 	     	$.post("<?php echo base_url('ajax/information_change')?>", 
