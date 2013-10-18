@@ -32,7 +32,8 @@ class copyright_model extends CI_Model{
 			return;
 		}
     }
-    function get_all_by_id($copyright_id)
+
+     function get_all_by_id($copyright_id)
     {
     	$sql='SELECT * FROM copyright WHERE copyright_id=?';
 		$result=$this->db->query($sql,$copyright_id);

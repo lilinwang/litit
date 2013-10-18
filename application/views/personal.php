@@ -9,12 +9,11 @@
 <link href="<?php echo base_url()?>css/style_personal.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/example2.min.css" rel="stylesheet" type="text/css">
 <link href="<?php echo base_url()?>css/uploadify.css" rel="stylesheet" type="text/css" >
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery-1.9.1.js" ></script>
-
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery.boutique_min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/jquery-migrate-1.1.1.js"></script>
-<script type="text/javascript" src="<?php echo base_url()?>js/ajaxfileupload.js"></script>		
 <script type="text/javascript" src="<?php echo base_url()?>js/noty/jquery.noty.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/noty/layouts/topCenter.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/noty/themes/default.js"></script>
@@ -134,8 +133,8 @@
              	 }
 			});
    	     });
- 		//上传文件
-   	   $("#button_upload").click(function(){
+                 //上传文件
+  /* 	   $("#button_upload").click(function(){
                 $.ajaxFileUpload
                      (
                        	{
@@ -169,7 +168,7 @@
            	 	}
                  )
                        return true;
-                 }) 
+                 }) */
     //申请版权信息更新		
    	$("#sendmessage").click(function(){
    		
@@ -216,7 +215,32 @@ $(function(){
 	});
 });
 </script>
-
+<!--上传文
+<script type="text/javascript">
+	<?php $timestamp = time();?>
+	$(document).ready(function()
+{
+		$('#file_upload').uploadify({
+			'formData'     : 
+			{
+				'timestamp' : '<?php echo $timestamp;?>',
+				'token'     : '<?php echo md5('unique_salt' . $timestamp);?>'
+			},
+			'swf'      : '<?php echo base_url()?>uploadify/uploadify.swf',
+			'uploader' : '<?php echo base_url()?>uploadify/uploadify.php/upload_image',
+			'onComplete': callback
+		});
+	});
+function callback(event, queueID, fileObj, response, data) {
+        if (response != "") {
+            alert(response + "成功上传!");
+        }
+        else {
+            alert("文件上传出错!");
+        }
+    }
+</script>
+--->
 <style type="text/css">
 	#music2_right_tags li A { font-size:12px; float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 30px; text-align:center; width:100%; text-decoration:none; background:url('<?php echo base_url()?>image/music2_10.jpg') no-repeat;}
 	#music2_right_tags li.music2_right_detail_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:30px; background:url('<?php echo base_url()?>image/music2_9.jpg') no-repeat;}
@@ -287,14 +311,14 @@ function music(source)
 		<div class="modal-header">
 		<h2>
 				<?php if($user['name']!=""):?>
-		    <div id="user_name"><?php echo $user['name'];?></div>
+		   <div id="user_name"><?php echo $user['name'];?></div>
 				<?php else:?>
 			? ? ?
 				<?php endif;?>
 		
 	   	</h2>
 	    <div id="myModalLabel2">
-	     <input type="submit" id="sign" class="btn" value="申请成为音乐人" />		
+	     <input type="submit" id="sign" class="btn_personal" value="申请成为音乐人" />		
 		    </div>
 		</div>
 		<div id="information_left">
@@ -440,9 +464,9 @@ function music(source)
         <li class="music2_right_detail_selectTag"><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent0',this)" href="javascript:void(0)">收藏的歌曲</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent1',this)" href="javascript:void(0)">关注的音乐人</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent2',this)" href="javascript:void(0)">下载的歌曲</a> </li>
-    	<li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent3',this)" href="javascript:void(0)">版权申请</a> </li>
+	<li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent3',this)" href="javascript:void(0)">版权申请</a> </li>
     </ul>
-	    </ul>
+    </ul>
     <div id="music2_right_tab">
 		
       <div class="music_clear"></div>

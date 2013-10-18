@@ -6,6 +6,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Litit</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<link href="<?php echo base_url()?>css/lititRightBar.css" rel="stylesheet" type="text/css">
 <link href="<?php echo base_url()?>css/style.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
@@ -19,7 +22,7 @@
 <script type="text/javascript" src="<?php echo base_url()?>js/noty/jquery.noty.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/noty/layouts/topCenter.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/noty/themes/default.js"></script>
-
+<script type="text/javascript" src="<?php echo base_url()?>js/lititRightBarPlugin.js"></script>
 <script type="text/javascript"> 
 var music_id_html=<?php echo $music_id;?>;
 var musician_id_html=<?php echo $musician_id;?>;
@@ -454,7 +457,8 @@ document.getElementById("copyright_sign").disabled=false;
 <body >
 <div class="music_all">
 <div class="all_hover">
-	<div id="home_hover">
+	<div id="home_hover">		
+		<div id="Rbar"></div>
 		<div id="play_button_background"></div>
 		<img class="motto" src="<?php echo base_url()?>image/motto.png">
 		<img class="play_button" name="play_button" src="<?php echo base_url()?>image/Play_Button.png">
@@ -655,4 +659,30 @@ document.getElementById("copyright_sign").disabled=false;
 </div>
 </div>
 </body>
+<script>
+var lititRbar = lititRightBarPlugin("#Rbar")
+	.setDefaultImg("<?php echo base_url()?>image/li_play.png")
+	.load([//载入数据
+		{"img":"<?php echo base_url()?>image/music2_15.jpg","text":"album1's intro","href":"/1"},
+		{"img":"<?php echo base_url()?>image/music2_16.jpg","text":"album2's intro","href":"/2"},
+		{"img":"<?php echo base_url()?>image/music2_17.jpg","text":"album3's introduction","href":"/3"},
+		{"img":"<?php echo base_url()?>image/music2_11.jpg","text":"album4's intro","href":"/4"},
+		{"text":"album5's intro","href":"/5"},
+		{"img":"<?php echo base_url()?>image/music2_15.jpg","text":"album1's intro","href":"/1"},
+		{"img":"<?php echo base_url()?>image/music2_16.jpg","text":"album2's intro","href":"/2"},
+		{"img":"<?php echo base_url()?>image/music2_17.jpg","text":"album3's intro","href":"/3"},
+		{"img":"<?php echo base_url()?>image/music2_11.jpg","text":"album4's intro","href":"/4"},
+		{"text":"album5's intro","href":"/5"}
+		])
+	.locate({"position":"absolute","right":0,"top":0,"bottom":0})//对rightBar重新定位
+	.itemClick(function(){
+				var href = $(this).attr("href");
+				if(href=="undefined")return;
+				if(this.hrefMode=="_blank")
+					window.open(href);
+				else
+					location.href=href;
+			})
+	.display("slideLeft");
+</script>
 </html>

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2013 年 09 月 26 日 16:08
+-- 生成日期: 2013 年 10 月 15 日 13:25
 -- 服务器版本: 5.6.12-log
 -- PHP 版本: 5.4.12
 
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `collect` (
   `music_id` int(11) NOT NULL,
   PRIMARY KEY (`collect_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=70 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=72 ;
 
 --
 -- 转存表中的数据 `collect`
@@ -123,7 +123,6 @@ INSERT INTO `collect` (`collect_id`, `user_id`, `music_id`) VALUES
 (43, 14, 3),
 (44, 14, 4),
 (45, 14, 5),
-(46, 14, 6),
 (47, 14, 7),
 (48, 14, 8),
 (49, 14, 9),
@@ -137,13 +136,14 @@ INSERT INTO `collect` (`collect_id`, `user_id`, `music_id`) VALUES
 (57, 14, 17),
 (59, 14, 19),
 (61, 14, 21),
-(62, 14, 22),
 (63, 14, 23),
 (65, 14, 29),
 (66, 14, 26),
 (67, 14, 27),
 (68, 14, 28),
-(69, 14, 30);
+(69, 14, 30),
+(70, 14, 22),
+(71, 14, 6);
 
 -- --------------------------------------------------------
 
@@ -197,7 +197,6 @@ INSERT INTO `collectm` (`collect_id`, `user_id`, `music_id`) VALUES
 (35, 12, 4),
 (36, 12, 5),
 (37, 12, 6),
-(38, 12, 7),
 (39, 12, 8),
 (40, 12, 9),
 (41, 12, 10),
@@ -225,10 +224,11 @@ INSERT INTO `collectm` (`collect_id`, `user_id`, `music_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `copyright` (
-  `id` int(50) NOT NULL AUTO_INCREMENT,
+  `copyright_id` int(50) NOT NULL AUTO_INCREMENT,
   `musician_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `music_id` int(11) NOT NULL,
+  `music_name` text,
   `name` varchar(255) NOT NULL,
   `company` varchar(255) DEFAULT NULL,
   `identity` int(18) NOT NULL,
@@ -236,15 +236,20 @@ CREATE TABLE IF NOT EXISTS `copyright` (
   `email` varchar(255) DEFAULT NULL,
   `content` text,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `user_image` text,
+  `musician_image` text,
+  `copyright_message` text,
+  PRIMARY KEY (`copyright_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- 转存表中的数据 `copyright`
 --
 
-INSERT INTO `copyright` (`id`, `musician_id`, `user_id`, `music_id`, `name`, `company`, `identity`, `phone`, `email`, `content`, `created`) VALUES
-(1, 1, 1, 8, '王莉淋', 'sjtu', 2147483647, '18888888888', 'lilin77hp@163.com', 'hello', '2013-08-14 14:07:27');
+INSERT INTO `copyright` (`copyright_id`, `musician_id`, `user_id`, `music_id`, `music_name`, `name`, `company`, `identity`, `phone`, `email`, `content`, `created`, `user_image`, `musician_image`, `copyright_message`) VALUES
+(1, 1, 1, 8, NULL, '王莉淋', 'sjtu', 2147483647, '18888888888', 'lilin77hp@163.com', 'hello', '2013-08-14 14:07:27', NULL, NULL, NULL),
+(2, 1, 14, 1, NULL, 'marry', 'litit', 2147483647, '18929280201', 'marry@sina.com', '广告和微电影', '2013-10-11 10:34:01', NULL, NULL, NULL),
+(3, 0, 14, 15, NULL, 'mm', 'mm', 2147483647, '18329485693', 'mm@sina.com', 'weidian', '2013-10-11 10:43:23', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -329,14 +334,15 @@ CREATE TABLE IF NOT EXISTS `follow` (
   `musician_id` int(11) NOT NULL,
   PRIMARY KEY (`follow_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- 转存表中的数据 `follow`
 --
 
 INSERT INTO `follow` (`follow_id`, `user_id`, `musician_id`) VALUES
-(3, 13, 1);
+(3, 13, 1),
+(5, 14, 0);
 
 -- --------------------------------------------------------
 
@@ -349,7 +355,7 @@ CREATE TABLE IF NOT EXISTS `followm` (
   `user_id` int(11) DEFAULT NULL,
   `musician_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`follow_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- 转存表中的数据 `followm`
@@ -392,7 +398,7 @@ INSERT INTO `music` (`music_id`, `name`, `dir`, `story`, `download_cnt`, `share_
 (4, 'Friend', 'upload/music/user_1/130402__Friend.mp3', 'friend by jyj', 0, 0, 0, 0, 1, 1, 'upload/image/user_1/music4.jpg', 'upload/image/user_1/music4.jpg'),
 (5, '最爱', 'upload/music/user_1/130404_TD_朴有天_-_最愛.mp3', '130404 TD 朴有天 - 最愛', 0, 0, 1, 0, 1, 1, 'upload/image/user_1/music5.jpg', 'upload/image/user_1/music5.jpg'),
 (6, '漫步春天', 'upload/music/user_1/20130404_JYJ東京ドームコンサート_yc_春天漫步.mp3', '20130404 JYJ東京ドームコンサート yc 春天漫步.mp3', 0, 0, 0, 0, 1, 1, 'upload/image/user_1/music6.jpg', 'upload/image/user_1/music6.jpg'),
-(7, 'family', 'upload/music/user_1/family.mp3', 'family', 0, 0, 1, 0, 1, 1, 'upload/image/user_1/music7.jpg', 'upload/image/user_1/music7.jpg'),
+(7, 'family', 'upload/music/user_1/family.mp3', 'family', 0, 0, 0, 0, 1, 1, 'upload/image/user_1/music7.jpg', 'upload/image/user_1/music7.jpg'),
 (8, '陈慧娴 - 千千阙歌', 'upload/music/user_1/陈慧娴_-_千千阙歌.mp3', '陈慧娴 - 千千阙歌', 0, 0, 0, 0, 1, 1, 'upload/image/user_1/music8.jpg', 'upload/image/user_1/music8.jpg'),
 (9, '实习医生格蕾 - Chasing Cars', 'upload/music/user_1/实习医生格蕾_-_Chasing_Cars.mp3', '实习医生格蕾 - Chasing Cars', 0, 0, 0, 0, 0, 1, 'upload/image/user_1/music9.jpg', 'upload/image/user_1/music9.jpg'),
 (10, '实习医生格蕾 - Falling or Flying', 'upload/music/user_1/实习医生格蕾_-_Falling_or_Flying.mp3', '实习医生格蕾 - Falling or Flying', 0, 0, 2, 0, 1, 1, 'upload/image/user_1/music10.jpg', 'upload/image/user_1/music10.jpg'),
@@ -443,14 +449,14 @@ CREATE TABLE IF NOT EXISTS `musician` (
 --
 
 INSERT INTO `musician` (`musician_id`, `email`, `password`, `nickname`, `name`, `gender`, `birthday`, `identity`, `introduction`, `attention`, `portaitdir`, `certificate`, `famousfor`, `reg_time`) VALUES
-(0, '000@163.com', '70352f41061eda4ff3c322094af068ba70c3b38b', '000', '000', NULL, '0000-00-00', '510999196502040064', 'Hi .艾薇儿•拉维尼（Avril Lavigne）是一名来自加拿大的著名唱作女歌手、摇滚小天后及演员，在全球多个国家享誉盛名，亦是21世纪以来全球销量最高的歌手之一。2002年以一首《Skater Boy》成名。其后的专辑《Let go》与《The Best Damn Thing》在数个国家的音乐排行榜上达到最前列。2006年入选《加拿大商业杂志》在好莱坞最有影响力的加拿大人（排行第17位）。2010年担任温哥华冬奥会闭幕式嘉宾，同年为迪士尼电影《爱丽丝梦游仙境》献唱主题曲《Alice》。Avril对音乐、时尚、个性以及性感的定义被年轻人所普遍接受和模仿，是乐坛的领军人物，其积极向上，充满乐观的精神一直被大家所支持的。', 0, 'upload/image/user_0/musician.jpg', 1, 12, '2013-09-26 15:27:00'),
-(1, '6002@6002.com', '60026002', '6002', '6002', 1, '1986-06-04', '123456789012345677', '艾薇儿•拉维尼（Avril Lavigne）是一名来自加拿大的著名唱作女歌手、摇滚小天后及演员，在全球多个国家享誉盛名，亦是21世纪以来全球销量最高的歌手之一。2002年以一首《Skater Boy》成名。其后的专辑《Let go》与《The Best Damn Thing》在数个国家的音乐排行榜上达到最前列。2006年入选《加拿大商业杂志》在好莱坞最有影响力的加拿大人（排行第17位）。2010年担任温哥华冬奥会闭幕式嘉宾，同年为迪士尼电影《爱丽丝梦游仙境》献唱主题曲《Alice》。Avril对音乐、时尚、个性以及性感的定义被年轻人所普遍接受和模仿，是乐坛的领军人物，其积极向上，充满乐观的精神一直被大家所支持的。\r\n', 135, 'upload/image/user_1/musician.jpg', 1, 3, '2013-09-24 13:27:45'),
+(0, '000@163.com', '70352f41061eda4ff3c322094af068ba70c3b38b', '000', '000', NULL, '0000-00-00', '510999196502040064', 'Hi .艾薇儿•拉维尼（Avril Lavigne）是一名来自加拿大的著名唱作女歌手、摇滚小天后及演员，在全球多个国家享誉盛名，亦是21世纪以来全球销量最高的歌手之一。2002年以一首《Skater Boy》成名。其后的专辑《Let go》与《The Best Damn Thing》在数个国家的音乐排行榜上达到最前列。2006年入选《加拿大商业杂志》在好莱坞最有影响力的加拿大人（排行第17位）。2010年担任温哥华冬奥会闭幕式嘉宾，同年为迪士尼电影《爱丽丝梦游仙境》献唱主题曲《Alice》。Avril对音乐、时尚、个性以及性感的定义被年轻人所普遍接受和模仿，是乐坛的领军人物，其积极向上，充满乐观的精神一直被大家所支持的。', 1, 'upload/image/user_0/musician.jpg', 1, 12, '2013-10-09 07:34:49'),
+(1, '6002@6002.com', '22bda971c53fb0c6d439d60f27a8cde82130480f', '6002', '6002', 1, '1986-06-04', '123456789012345677', '艾薇儿•拉维尼（Avril Lavigne）是一名来自加拿大的著名唱作女歌手、摇滚小天后及演员，在全球多个国家享誉盛名，亦是21世纪以来全球销量最高的歌手之一。2002年以一首《Skater Boy》成名。其后的专辑《Let go》与《The Best Damn Thing》在数个国家的音乐排行榜上达到最前列。2006年入选《加拿大商业杂志》在好莱坞最有影响力的加拿大人（排行第17位）。2010年担任温哥华冬奥会闭幕式嘉宾，同年为迪士尼电影《爱丽丝梦游仙境》献唱主题曲《Alice》。Avril对音乐、时尚、个性以及性感的定义被年轻人所普遍接受和模仿，是乐坛的领军人物，其积极向上，充满乐观的精神一直被大家所支持的。\r\n', 135, 'upload/image/user_1/musician.jpg', 1, 3, '2013-10-13 16:42:17'),
 (2, '123@123.com', '60026002', '60026002', '60026002', 1, '1986-06-04', '510921199208310043', 'KeepTheFaith', 0, '0', 0, 0, '2013-08-21 14:15:09'),
 (3, '6002@163.com', '22bda971c53fb0c6d439d60f27a8cde82130480f', 'ParkYuchun', 'ParkYuchun', 1, '0000-00-00', '510921198606046002', 'I''mMrPark', 0, '0', 0, 0, '2013-08-21 14:15:09'),
 (4, '6002@60.com', '22bda971c53fb0c6d439d60f27a8cde82130480f', '', '', 1, '0000-00-00', '', '', 0, '0', 0, 0, '2013-08-21 14:15:09'),
 (5, '6002@60022.com', '22bda971c53fb0c6d439d60f27a8cde82130480f', '', 'www', 0, '0000-00-00', '510921199208310042', 'asd', 0, '0', 0, 0, '2013-08-21 14:15:09'),
 (9, 'mi@mi.com', 'a2cf9340fde23f152a5b074fc47d95113470a4de', 'micky6', 'micky', 1, '2013-08-07', '510921198606046003', '艾薇儿•拉维尼（Avril Lavigne）是一名来自加拿大的著名唱作女歌手、摇滚小天后及演员，在全球多个国家享誉盛名，亦是21世纪以来全球销量最高的歌手之一。2002年以一首《Skater Boy》成名。其后的专辑《Let go》与《The Best Damn Thing》在数个国家的音乐排行榜上达到最前列。2006年入选《加拿大商业杂志》在好莱坞最有影响力的加拿大人（排行第17位）。2010年担任温哥华冬奥会闭幕式嘉宾，同年为迪士尼电影《爱丽丝梦游仙境》献唱主题曲《Alice》。Avril对音乐、时尚、个性以及性感的定义被年轻人所普遍接受和模仿，是乐坛的领军人物，其积极向上，充满乐观的精神一直被大家所支持的。', 0, '0', 0, 0, '2013-09-26 15:35:48'),
-(12, '6002@sina.com', 'd12d8132f9081ed5cbae4fde7f19255aeb403a4e', 'lilian', 'lilian', 0, '2013-09-26', '510921199209260042', '艾薇儿•拉维尼（Avril Lavigne）是一名来自加拿大的著名唱作女歌手、摇滚小天后及演员，在全球多个国家享誉盛名，亦是21世纪以来全球销量最高的歌手之一。2002年以一首《Skater Boy》成名。其后的专辑《Let go》与《The Best Damn Thing》在数个国家的音乐排行榜上达到最前列。2006年入选《加拿大商业杂志》在好莱坞最有影响力的加拿大人（排行第17位）。2010年担任温哥华冬奥会闭幕式嘉宾，同年为迪士尼电影《爱丽丝梦游仙境》献唱主题曲《Alice》。Avril对音乐、时尚、个性以及性感的定义被年轻人所普遍接受和模仿，是乐坛的领军人物，其积极向上，充满乐观的精神一直被大家所支持的。', 0, '0', 0, 0, '2013-09-26 07:32:33');
+(12, '6002@sina.com', 'd12d8132f9081ed5cbae4fde7f19255aeb403a4e', 'lilian', 'lilian', 0, '2009-09-26', '510921199209260042', '艾薇儿•拉维尼（Avril Lavigne）是一名来自加拿大的著名唱作女歌手、摇滚小天后及演员，在全球多个国家享誉盛名，亦是21世纪以来全球销量最高的歌手之一。2002年以一首《Skater Boy》成名。其后的专辑《Let go》与《The Best Damn Thing》在数个国家的音乐排行榜上达到最前列。2006年入选《加拿大商业杂志》在好莱坞最有影响力的加拿大人（排行第17位）。2010年担任温哥华冬奥会闭幕式嘉宾，同年为迪士尼电影《爱丽丝梦游仙境》献唱主题曲《Alice》。Avril对音乐、时尚、个性以及性感的定义被年轻人所普遍接受和模仿，是乐坛的领军人物，其积极向上，充满乐观的精神一直被大家所支持的。', 0, '0', 0, 0, '2013-10-15 13:22:05');
 
 -- --------------------------------------------------------
 
