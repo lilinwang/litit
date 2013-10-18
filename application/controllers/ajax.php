@@ -248,6 +248,7 @@ class Ajax extends CI_Controller {
 
         // move music file and image file
         $new_music_url = 'upload/music/' . 'user_' . $musician_id . '/music_' . $music_id;
+        $new_music_url .= '.' . pathinfo($music_url, PATHINFO_EXTENSION); 
         if (!is_dir(dirname($new_music_url))) {
             mkdir(dirname($new_music_url), 0777, true);
         }
@@ -257,6 +258,7 @@ class Ajax extends CI_Controller {
         $new_image_url = null;
         if (!empty($image_url)) {
             $new_image_url = 'upload/image/' . 'user_' . $musician_id . '/image_' . $music_id;
+            $new_image_url .= '.' . pathinfo($image_url, PATHINFO_EXTENSION); 
             if (!is_dir(dirname($new_image_url))) {
                 mkdir(dirname($new_image_url), 0777, true);
             }

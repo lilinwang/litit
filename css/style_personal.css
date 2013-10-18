@@ -34,9 +34,6 @@ div#myModalLabel2{width:37%;height:7.5%;margin:-3.5% 0 0 59%;float:left;text-ali
 #information_Modal1.modal.fade.in{
 	top: 0%;
 }
-#information_Modal2{
-	font-family: "微软雅黑","Arial";
-}
 
 #information_Modal2.modal.fade.in{
 	top: 50px;
@@ -160,3 +157,162 @@ button.demo {
                 -webkit-box-shadow:0 0 10px #ccc;
         }
 }
+
+
+
+
+
+
+@font-face {
+    font-family: contentFont;
+    src: url(../font/fzxyjt.ttf);
+}
+
+/* modal-alter global */
+.modal-alter {
+    width: 1000px;
+    margin-left: -500px;
+    top: 50px;
+    font-family: contentFont;
+    background-color: #fefefe;
+    border-radius: 0;
+    color: #000;
+}
+
+.modal-alter input, .modal-alter textarea {
+    color: #1f2020;
+    border: 1px solid #ddd;
+    background-color: rgba(0, 0, 0, 0);
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+.modal-alter input:focus, .modal-alter textarea:focus {
+    border: 1px solid #ddd;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+/* modal-alter modal-header */
+.modal-alter .modal-header {
+    background-color: #8cabd8;
+    border: 0;
+    text-align: center;
+}
+.modal-alter .modal-header h2{
+    padding-bottom: 5px;
+    color: #333;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+}
+#music_name {
+    text-align: center;
+    font-size: 25px;
+    height: 25px;
+    line-height: 25px;
+    border: 0px;
+}
+
+/* modal-alter modal-body*/
+.modal-alter .modal-body {
+    overflow-x: hidden;
+}
+
+#information_Modal2.modal.fade.in{
+    top: 50px;
+}
+.span-fixed {
+    position: fixed;
+}
+#avatar-wrapper {
+    *float: left;
+}
+.control-line:before, .control-line:after {
+    float: none;
+    clear: both;
+    display: table;
+    line-height: 0;
+    content: "";
+}
+.control-line {
+    margin-bottom: 20px;
+}
+.control-label {
+    float:left;
+    width: 100px;
+    text-align: right;
+    margin-right: 10px;
+    position: relative;
+    top: 4px;
+}
+.controls {
+    float:left;
+}
+
+#upload-music-button { 
+    color: #ffffff;
+    background-color: #f1c40f;
+    border-color: #eea236;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    width: 100px;
+}
+#upload-music-button.hover { 
+    border-color: #eea236;
+}
+#music-image-wrapper {
+    position: relative;
+}
+#upload-music-image-button {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    text-align: center;
+    vertical-align: center;
+}
+#upload-music-image-button:hover {
+    opacity: .75;
+}
+.button {
+    border: none;
+    display: inline-block;
+    font-size: 15px;
+    font-weight: normal;
+    line-height: 1.4;
+    border-radius: 4px;
+    padding: 10px 15px;
+    -webkit-font-smoothing: subpixel-antialiased;
+    -webkit-transition: 0.25s linear;
+    transition: 0.25s linear;
+}
+.inline-block {
+    display: inline-block;
+}
+
+#upload-music-progress .progress-bar {
+    background-color: green;
+    width: 1px;
+    height: 10px;
+}
+
+.hide-child {
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
+}
+
+/* modal-alter modal-footer */
+.modal-alter .modal-footer {
+    background-color: #8cabd8;
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+}
+
+
+#music2_right_tags li A { font-size:12px; float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 30px; text-align:center; width:100%; text-decoration:none; background:url('<?php echo base_url()?>image/music2_10.jpg') no-repeat;}
+#music2_right_tags li.music2_right_detail_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:30px; background:url('<?php echo base_url()?>image/music2_9.jpg') no-repeat;}
+#page li A { float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 10px; text-align:center; width:10px; text-decoration:none; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -2px -32px;}
+#page li.page_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:10px; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -12px -32px;}
