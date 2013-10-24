@@ -62,9 +62,9 @@ var musician_id_html=<?php echo $musician_id;?>;
 		        $("#name b").html(data.name);
 		        $("#story").html(data.story);
                 $("#musicianintro").html(data.musician.introduction);
-                $("#musicianpt").attr("src", "<?php echo base_url();?>"+data.musician.portaitdir);
+                $("#musicianpt img").attr("src", "<?php echo base_url();?>"+data.musician.portaitdir);
                 $("#musiciannick span").html(data.musician.nickname);
-                $("#musicianatt span").html(data.musician.attention);
+                $("#attention_2 b").html(data.musician.attention);
 			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
 			    music_id_html=data.music_id;
 			    musician_id_html=data.musician_id;
@@ -213,7 +213,7 @@ var musician_id_html=<?php echo $musician_id;?>;
 					$.post("<?php echo base_url('ajax/get_message_push')?>", 
 						{
 							user_id:<?php echo $userid;?>,
-							musician_id:<?php echo $musician_id;?>,
+							musician_id:musician_id_html,
 							user_type:<?php echo $usertype;?>
 						},
 						function(data, status){
@@ -610,18 +610,18 @@ document.getElementById("copyright_sign").disabled=false;
       <div class="music_right_2_left" id="left_2">
         <div class="music_right_2_left_1"><b>音乐人介绍</b></div>
           <div class="music_right_2_left_2">
-            <div style="text-indent:20px"><?php echo $musician['introduction']?>  </div>
+            <div id="musicianintro" style="text-indent:20px"><?php echo $musician['introduction']?>  </div>
             <div class="music_clear"></div>
           </div>
         <div class="music_clear"></div>
       </div>
       <div class="music_right_2_right" id="right_2">
-        <div class="music_right_2_right_1">
+        <div class="music_right_2_right_1" id="musicianpt">
 			<img src="<?php echo base_url().$musician['portaitdir']?>" />
-			<div class="music_right_2_right_1_yyr">
+			<div class="music_right_2_right_1_yyr" id="musiciannick" >
 				<p class=musician_attention id=musician_attention>+1</p>
 			    <p class=no_musician_attention id=no_musician_attention>-1</p>
-				<b>音乐人：</b><?php echo $musician['nickname']?>
+				<b>音乐人：</b><span><?php echo $musician['nickname']?></span>
 				</div>
 		</div>
         <div class="music_clear"></div>
@@ -635,7 +635,7 @@ document.getElementById("copyright_sign").disabled=false;
           			<a href="#">私信TA</a>
           			</div>
           <div class="music_clear"></div>
-          <div class="music_right_2_right_4" id=attention_2>人气：<b ><?php echo $musician['attention']?></b></div>
+          <div class="music_right_2_right_4" id="attention_2">人气：<b ><?php echo $musician['attention']?></b></div>
           <div class="music_clear"></div>
         </div>
       </div>
