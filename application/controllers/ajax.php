@@ -242,6 +242,8 @@ class Ajax extends CI_Controller {
         $this->load->model('genre_model');
         $this->load->model('music_tag_model');
         $this->load->model('music_genre_model');
+        $this->load->model('music_musician_model');
+        $this->load->model('upload_model');
 
         // required parameters 
         if ("" == trim($_POST['musician_id']) ||
@@ -316,6 +318,10 @@ class Ajax extends CI_Controller {
         // update the url
         $this->music_model->update_url($music_id, $new_music_url, $new_image_url);
 
+        // insert into upload table and music_musician table
+        $this->upload_model->addupload($musician_id, $music_id);
+        $this->music_musician_model->add($musician_id, $music_id);
+
         // update tag and genre
         $tag_id = $this->tag_model->get_id_by_name($tags);
         if ($tag_id == null) $tag_id = $this->tag_model->add_by_name($tags);
@@ -325,6 +331,44 @@ class Ajax extends CI_Controller {
         if ($genre_id == null) $genre_id = $this->genre_model->add_by_name($genres);
         $this->music_genre_model->add($genre_id, $music_id);
 
+        // return success json
         echo '{"errno":0, "msg":"上传音乐 ' . $music_name . ' 成功！"}';
+    }
+
+
+    /*
+     muscian change avatar
+    */
+    function change_avatar() {
+        $this->load->model("musician_model");
+        
+        $musician_id = $_POST['musician_id'];
+        $url = $_POST['url'];
+
+        if("" == trim($musician_id) || "" == trim($musician_id) ) {
+            echo '{"errno": 1, "errmsg", "参数错误"}';
+            return 1;
+        }
+
+        date_default_timezone_set("PRC");
+        $date = new DateTime();
+        $ts = $date->getTimestamp();
+        
+        $new_avatar_url = 'upload/avatar/' . 'user_' . $musician_id . '/avatar_' . $ts;
+        $new_avatar_url .= '.' . pathinfo($url, PATHINFO_EXTENSION);
+        if (!is_dir(dirname($new_avatar_url))) {
+            mkdir(dirname($new_avatar_url), 0777, true);
+        }
+        $avatar_ok = @rename($url, $new_avatar_url);
+
+        if (!$avatar_ok) {
+            echo '{"errno": 2, "errmsg": "头像上传失败"}';
+            return 2;
+        }
+        else {
+            $this->musician_model->update_avatar($musician_id, $new_avatar_url);
+            echo '{"errno": 0, "msg": "头像上传成功", "url":"' . $new_avatar_url . '"}';
+            return 0;
+        }
     }
 }

@@ -24,7 +24,7 @@ class musician_model extends CI_Model{
 		$sql="SELECT portaitdir FROM musician WHERE musician_id=?";
 		$query=$this->db->query($sql,array($id));
   	    $query=$query->row();
-  	    return $query->portaitdir;
+  	    return $query->portaitdir == "";
 	}
 	function check_user($email){
 		$sql="SELECT * FROM musician WHERE email=?";
@@ -128,5 +128,9 @@ class musician_model extends CI_Model{
     	else $constellation="摩羯座";    	
         return $constellation;
     }
+
+    function update_avatar($musician_id, $url) {
+        $sql = 'update musician set portaitdir = ? where musician_id = ?';
+        $this->db->query($sql, array($url, $musician_id));
+    }
 }
-?>

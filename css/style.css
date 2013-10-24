@@ -79,7 +79,7 @@ audio{ width:100%; background:#ffcd0a;}
 .music_right_2_right_4 b{ font-size:20px;}
 
 .music_right_3{ margin-top:10px; *margin-top:270px; overflow:hidden; width:100%;}
-.music_right_3 img{}
+.music_right_3 img{border-radius: 50%;}
 
 
 div.music_right_1_hover{width:400px; height:30px; line-height:30px; float:right;}
