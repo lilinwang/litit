@@ -9,11 +9,32 @@ class Ajax extends CI_Controller {
     
     function get_message_push()
     {
-        $this->load->model('follow_model');
-        $data['musician_name'] = "GAGA";
-        $data['url'] = "http://example.com";
-        $data['brief'] = "Aha!";
-        $data['status'] = "success";
+	$this->load->model('follow_model');
+        $this->load->model('musician_model');
+        $this->load->model('music_model');
+        
+        // notification
+        $result_musician_top   = $this->musician_model->musician_attention_top_10();
+        $result_music_top      = $this->music_model->music_collect_top_10();
+        $data['musician_name'] = $result_musician_top[0]['name'];
+        $data['music_name']    = $result_music_top[0]['name'];
+        $data['url']           = "http://example.com";
+        $data['status']        = "success";
+        
+        switch (rand(0, 1)) {
+            case 0:
+                $data['label'] = "收藏最多音乐";
+                $data['brief'] = $data['music_name'];
+                break;
+            case 1:
+                $data['label'] = "关注最多艺人";
+                $data['brief'] = $data['musician_name'];
+                break;
+            default:
+                # code...
+                break;
+        }
+
         if ($_POST['user_type'] == 1)
         {
 
