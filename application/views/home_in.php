@@ -225,7 +225,7 @@ var musician_id_html=<?php echo $musician_id;?>;
 								return;
 							}
 							var n = noty({
-								text: data.musician_name + ' 发表了新状态: <a href="' + data.url + '">' + data.brief + '</a>',
+								text: data.label + ' : <a href="' + data.url + '">' + data.brief + '</a>',
 								type: 'alert',
 								dismissQueue: true,
 								layout: layout,
