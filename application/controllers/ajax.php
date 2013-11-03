@@ -82,6 +82,14 @@ class Ajax extends CI_Controller {
         $this->load->model('musician_model');
 		$data=$this->music_model->rand();
         $data['musician'] = $this->musician_model->check_id($data['musician_id']);
+
+        //=====这些信息不宜返回=====
+        unset($data['musician']['email']);
+        unset($data['musician']['password']);
+        unset($data['musician']['reg_time']);
+        unset($data['musician']['identity']);
+        //========================
+
 		$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 		$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
 		echo json_encode($data);
@@ -111,13 +119,18 @@ class Ajax extends CI_Controller {
     }
     function islike_follow()
     {
-    	$this->load->model('collect_model');
-        $this->load->model('follow_model');
 		if ($_POST['user_type']==1)
-       	{	$data['follow']=$this->follow_model->is_follow($_POST['user_id'],$_POST['musician_id']);
+       	{	
+            $this->load->model('collect_model');
+            $this->load->model('follow_model');
+            $data['follow']=$this->follow_model->is_follow($_POST['user_id'],$_POST['musician_id']);
 			$data['collect']=$this->collect_model->is_collect($_POST['user_id'],$_POST['music_id']);
-		}else
-		{	$data['follow']=$this->followm_model->is_follow($_POST['user_id'],$_POST['musician_id']);
+		}
+        else
+        {	
+            $this->load->model('collectm_model');
+            $this->load->model('followm_model');
+            $data['follow']=$this->followm_model->is_follow($_POST['user_id'],$_POST['musician_id']);
 			$data['collect']=$this->collectm_model->is_collect($_POST['user_id'],$_POST['music_id']);
 		}
         echo json_encode($data);
