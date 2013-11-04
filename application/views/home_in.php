@@ -52,6 +52,7 @@ var musician_id_html=<?php echo $musician_id;?>;
 				$("#player").get(0).pause();    
 			}
 		});
+	
 	function next_song(){
 	        $.get("<?php echo base_url('ajax/getmusic')?>", 
              function(data, $status){
@@ -97,6 +98,11 @@ var musician_id_html=<?php echo $musician_id;?>;
 			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
 			    music_id_html=data.music_id;
 			    musician_id_html=data.musician_id;
+			    $.get("<?php echo base_url('ajax/play_song')?>", 
+						{
+							user_id:<?php echo $userid;?>,
+							music_id:music_id_html 	 	 
+						});
 			    $.post("<?php echo base_url('ajax/islike_follow')?>", 
 		     	{
 			    user_id:<?php echo $userid;?>,
@@ -138,7 +144,16 @@ var musician_id_html=<?php echo $musician_id;?>;
 		    	});
 	       });
 		};	
-		$(".next_song").click(next_song);
+		function skip_song()
+		{
+			$.get("<?php echo base_url('ajax/skip_song')?>", 
+					{
+						user_id:<?php echo $userid;?>,
+						music_id:music_id_html 	 	 
+					});
+			next_song();
+		};
+		$(".next_song").click(skip_song);
 		$("#player").bind("ended", next_song);
 	/********************************************************/		
 	  	     $("#no_copyright_sign").click(function(){
@@ -327,14 +342,23 @@ var musician_id_html=<?php echo $musician_id;?>;
 			});
 		});
 	});
-</script>
-<script>
+
 function changemusic(num){
 	document.getElementById("name").innerHTML=music_list[num].name;			
 	document.getElementById("story").innerHTML=music_list[num].story;
 	document.getElementById("player").src=music_list[num].dir;
+	$.get("<?php echo base_url('ajax/skip_song')?>", 
+			{
+				user_id:<?php echo $userid;?>,
+				music_id:music_id_html 	 	 
+			});
 	music_id_html=music_list[num].music_id;
 	musician_id_html=music_list[num].musician_id;	
+	$.get("<?php echo base_url('ajax/play_song')?>", 
+			{
+				user_id:<?php echo $userid;?>,
+				music_id:music_id_html 	 	 
+			});
 	$.post("<?php echo base_url('ajax/islike_follow')?>", 
 		{
 			user_id:<?php echo $userid;?>,
