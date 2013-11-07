@@ -96,6 +96,30 @@ a.btn-signin{width:36px;height:22px;margin:3px 0 3px 1px;padding:0 0 0 0;backgro
 textarea{resize:none;}
 div#logo_hover{width:459px;height:152px;float:left;margin-top:513px;margin-left:5px;}
 img.litit_motto{float:left;margin-top:300px;margin-left:500px;z-index:100}
+
+       
+#home_nav {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1050;
+}
+
+#home_nav i{
+    padding: 5px;
+    cursor: pointer;
+}
+
+#home_search {
+    display: inline-block;
+}
+#home_search_input {
+    width: 0;
+    display: none;
+}
+
+
+
 btn.share{width:25px;height:20px;background-image:url('<?php echo base_url()?>image/music_pic_6.jpg')}
 btn.btn-group{width:25px;height:20px;}
 div.btn-group{margin-left:15px;}

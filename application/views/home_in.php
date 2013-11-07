@@ -431,11 +431,59 @@ document.getElementById("copyright_sign").disabled=false;
 }
 <!------------------>
 </script>
+<script>
+$(function() {
+    lititRbar = lititRightBarPlugin("#Rbar")
+        .setDefaultImg("<?php echo base_url()?>image/li_play.png")
+        .load([//载入数据
+            {"img":"<?php echo base_url()?>image/music2_15.jpg","text":"album1's intro","href":"/1"},
+            {"img":"<?php echo base_url()?>image/music2_16.jpg","text":"album2's intro","href":"/2"},
+            {"img":"<?php echo base_url()?>image/music2_17.jpg","text":"album3's introduction","href":"/3"},
+            {"img":"<?php echo base_url()?>image/music2_11.jpg","text":"album4's intro","href":"/4"},
+            {"text":"album5's intro","href":"/5"},
+            {"img":"<?php echo base_url()?>image/music2_15.jpg","text":"album1's intro","href":"/1"},
+            {"img":"<?php echo base_url()?>image/music2_16.jpg","text":"album2's intro","href":"/2"},
+            {"img":"<?php echo base_url()?>image/music2_17.jpg","text":"album3's intro","href":"/3"},
+            {"img":"<?php echo base_url()?>image/music2_11.jpg","text":"album4's intro","href":"/4"},
+            {"text":"album5's intro","href":"/5"}
+            ])
+        .locate({"position":"absolute","right":0,"top":0,"bottom":0})//对rightBar重新定位
+        .itemClick(function(){
+                    var href = $(this).attr("href");
+                    if(href=="undefined")return;
+                    if(this.hrefMode=="_blank")
+                        window.open(href);
+                    else
+                        location.href=href;
+                });
+        //.display("slideLeft");
+
+
+    $('#home_search_input').blur(function() {
+        $('#home_search_input').animate({"width":0},300, "linear", function(){
+            $(this).hide();
+        });
+    });
+});
+function show_home_search() {
+    $('#home_search_input').show().animate({"width":400},300);
+    $("#home_search_input").focus();
+}
+</script>
 </head>
 <body >
 <div class="music_all">
 <div class="all_hover">
 	<div id="home_hover">		
+        <div id="home_nav">
+            <a href="<?php echo base_url('personal'); ?>"><i class="icon-home icon-white"></i></a>
+            <a href="#" onclick="lititRbar.display('slideLeft');"><i class="icon-heart icon-white"></i></a>
+            <a href="#" onclick=""><i class="icon-signal icon-white"></i></a>
+            <a href="#" onclick="show_home_search();"><i class="icon-search icon-white"></i></a>
+            <div id="home_search">
+                <input id="home_search_input" type="text">
+            </div>
+        </div>
 		<div id="Rbar"></div>
 		<div id="play_button_background"></div>
 		<img class="motto" src="<?php echo base_url()?>image/motto.png">
@@ -637,30 +685,5 @@ document.getElementById("copyright_sign").disabled=false;
 </div>
 </div>
 </body>
-<script>
-var lititRbar = lititRightBarPlugin("#Rbar")
-	.setDefaultImg("<?php echo base_url()?>image/li_play.png")
-	.load([//载入数据
-		{"img":"<?php echo base_url()?>image/music2_15.jpg","text":"album1's intro","href":"/1"},
-		{"img":"<?php echo base_url()?>image/music2_16.jpg","text":"album2's intro","href":"/2"},
-		{"img":"<?php echo base_url()?>image/music2_17.jpg","text":"album3's introduction","href":"/3"},
-		{"img":"<?php echo base_url()?>image/music2_11.jpg","text":"album4's intro","href":"/4"},
-		{"text":"album5's intro","href":"/5"},
-		{"img":"<?php echo base_url()?>image/music2_15.jpg","text":"album1's intro","href":"/1"},
-		{"img":"<?php echo base_url()?>image/music2_16.jpg","text":"album2's intro","href":"/2"},
-		{"img":"<?php echo base_url()?>image/music2_17.jpg","text":"album3's intro","href":"/3"},
-		{"img":"<?php echo base_url()?>image/music2_11.jpg","text":"album4's intro","href":"/4"},
-		{"text":"album5's intro","href":"/5"}
-		])
-	.locate({"position":"absolute","right":0,"top":0,"bottom":0})//对rightBar重新定位
-	.itemClick(function(){
-				var href = $(this).attr("href");
-				if(href=="undefined")return;
-				if(this.hrefMode=="_blank")
-					window.open(href);
-				else
-					location.href=href;
-			})
-	.display("slideLeft");
-</script>
+
 </html>
