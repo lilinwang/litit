@@ -76,6 +76,32 @@ class Ajax extends CI_Controller {
 		$data = $this->music_model->randmore();
 		echo json_encode($data);
 	}
+
+    /*
+     * added by 徐佳琛
+     * 和$this->getmusic 返回数据的格式一样
+     * 不过getmusic是随机返回一个音乐
+     * 这是返回一个指定id的音乐
+     */
+    function get_music_by_id()
+    {
+		$this->load->model('music_model');
+        $this->load->model('musician_model');
+        $music_id = $this->input->post('music_id');
+		$data = $this->music_model->get_by_id($music_id);
+        $data['musician'] = $this->musician_model->check_id($data['musician_id']);
+
+        //=====这些信息不宜返回=====
+        unset($data['musician']['email']);
+        unset($data['musician']['password']);
+        unset($data['musician']['reg_time']);
+        unset($data['musician']['identity']);
+        //========================
+
+		$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
+		$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
+		echo json_encode($data);
+    }
     function getmusic()
     {
 		$this->load->model('music_model');
