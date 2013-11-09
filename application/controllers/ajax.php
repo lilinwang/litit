@@ -45,6 +45,25 @@ class Ajax extends CI_Controller {
         }
         echo json_encode($data);
     }
+
+    function skip_song()
+    {
+        $user_id = $this->input->get('user_id');
+        $music_id = $this->input->get('music_id');
+        $this->load->model('skip_song_model');
+        $this->skip_song_model->addRecord($user_id, $music_id);
+        echo json_encode("success");
+    }
+
+    function play_song()
+    {
+        $user_id = $this->input->get('user_id');
+        $music_id = $this->input->get('music_id');
+        $this->load->model('play_song_model');
+        $this->play_song_model->addRecord($user_id, $music_id);
+        echo json_encode("success");
+    }
+
 	/*
 	 * 用get方法传入user_id, sid, type, h, filter参数，返回一个播放列表(json)
 	 * 
