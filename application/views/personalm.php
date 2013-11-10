@@ -9,43 +9,10 @@
     <link href="<?php echo base_url()?>css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url()?>css/style_personal.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url()?>css/example2.min.css" rel="stylesheet" type="text/css">
-    <style type="text/css">
-        .modal-alter {
-            width: 1000px;
-            margin-left: -500px;
-            top: 50px;
-        }
-        .modal-alter .modal-body {
-            overflow-x: hidden;
-            height: 300px;
-        }
-        
-        #information_Modal2.modal.fade.in{
-            top: 0;
-        }
-        .span-fixed {
-            position: fixed;
-        }
-        #avatar-wrapper {
-            float: left;
-        }
-        .controls {
-            text-align: left;
-        }
-        #upload-music-progress .progress-bar {
-            background-color: green;
-            width: 1px;
-            height: 10px;
-        }
-        #music2_right_tags li A { font-size:12px; float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 30px; text-align:center; width:100%; text-decoration:none; background:url('<?php echo base_url()?>image/music2_10.jpg') no-repeat;}
-        #music2_right_tags li.music2_right_detail_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:30px; background:url('<?php echo base_url()?>image/music2_9.jpg') no-repeat;}
-        #page li A { float: left; padding-bottom: 0px; color: #fff; line-height: 30px; padding-top: 0px; height: 10px; text-align:center; width:10px; text-decoration:none; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -2px -32px;}
-        #page li.page_selectTag A { background-position: right top; color:#fff; line-height: 30px; height:10px; background:transparent url('<?php echo base_url()?>image/carousel_control.png') no-repeat -12px -32px;}
-    </style> 
 
 
     <!-- javascript global dependencies -->
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
+    <script type="text/javascript" src="<?php echo base_url()?>js/jquery.min.js" ></script>
     <script type="text/javascript" src="<?php echo base_url()?>js/jquery.boutique_min.js"></script>
     <script type="text/javascript" src="<?php echo base_url()?>js/bootstrap.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url()?>js/jquery-migrate-1.1.1.js"></script>
@@ -89,7 +56,7 @@
             $("#music2_right_tab").animate({left: -1360*showNum},"slow");
         }
     </script>
-<script type="text/javascript">
+    <script type="text/javascript">
 	$(document).ready(function(){
 	$("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360);?>);
 	$(".prev").click(function(){
@@ -124,12 +91,6 @@
 		 }
 		 
 	});
-	 $("#personal_information").click(function(){
-	 	 if(document.getElementById("information_Modal2").style.display==block)
-	 	 {
-	 	 	 document.getElementById("information_Modal2").style.display==none;
-	 	 }
-	 });
 		//用户修改信息
 	 $("#save").click(function(){
 	     	$.post("<?php echo base_url('ajax/information_change')?>", 
@@ -180,82 +141,6 @@
              	 }
 			});
     })
-   	 	//个人照片上传
-   	   $("#button_upload").click(function(){
-                $.ajaxFileUpload
-                     (
-                       	{
-                            url:'<?php echo base_url('index.php/upload/upload_image')?>', //你处理上传文件的服务端
-                            secureuri:true,
-                            fileElementId:'userfile',
-                            dataType: 'json',
-                            data:
-                            {
-                            	id:<?php echo $musician['musician_id'];?>,
-			                    type:<?php echo $usertype;?>
-                            },
-                            success: function (data, status)
-							{   
-								if(typeof(data.error) != 'undefined')
-								{
-									if(data.error != '')
-								{
-									alert(data.error);
-								}else
-								{
-									alert(data.msg);
-								}
-							}
-						},
-						error: function (data, status, e)
-						{
-							alert(e);
-						}
-           	 		}
-            	     )
-                       return false;
-   			}) 
-   	//音乐和音乐照片上传
-   	 $("#uploadfile").click(function(){
-                $.ajaxFileUpload
-                     (
-                       	{
-                            url:'<?php echo base_url('index.php/upload/upload_music')?>', //你处理上传文件的服务端
-                            secureuri:true,
-                            fileElementId:['userfile1','userfile2'],
-                            dataType: 'json',
-                            data:
-                            {
-                            	musician_id:<?php echo $musician['musician_id'];?>,
-			                    song_writer:document.getElementById("songwriter").value,
-			                    musicby:document.getElementById("musicby").value,
-			                    arrangement:document.getElementById("arrangement").value,
-			                    disc_company:document.getElementById("disc_company").value,
-			                    perform_time:document.getElementById("perform_time").value,
-			                    style:document.getElementById("style").value,
-			                    story:document.getElementById("story").value
-                            },
-                            success: function (data, status)
-							{   
-								if(typeof(data.error) != 'undefined')
-								{
-									if(data.error != '')
-								{
-									alert(data.error);
-								}else
-								{
-									alert(data.msg);
-								}
-							}
-						},
-						error: function (data, status, e)
-						{
-							alert(e);
-						}
-           	 		}
-            	     )
-                       return false;
-   	}) 
 //申请版权信息更新		
    	$("#sendmessage").click(function(){
    				var myDate = new Date();
@@ -342,12 +227,6 @@ $(function(){
              }
              
         });
-         $("#personal_information").click(function(){
-             if(document.getElementById("information_Modal2").style.display==block)
-             {
-                 document.getElementById("information_Modal2").style.display==none;
-             }
-         });
             //用户修改信息
          $("#save").click(function(){
                 $.post("<?php echo base_url('ajax/information_change')?>", 
@@ -437,7 +316,16 @@ $(function(){
     <script type="text/javascript">
         $(function() {
             'use strict';
-            
+            $("#upload-music-button").click(function(){
+                $("#fileupload-music").trigger("click");
+            });
+            $("#upload-music-image-button").click(function(){
+                $("#fileupload-music-image").trigger("click");
+            });
+            $("#upload-avatar-button").click(function(){
+                $("#fileupload-avatar").trigger("click");
+            });
+
             // fileupload for user avatar 
             $("#fileupload-avatar").fileupload({
                 url: "<?php echo base_url(); ?>index.php/upload_ajax/do_upload_image",
@@ -445,20 +333,27 @@ $(function(){
                 done: function(e ,data) {
                     $.each(data.result.files, function (index, file) {
                         if ('error' in file){
-                            console.log(file);
+                            //console.log(file);
                         }
                         else {
-                            $("#user-avatar").attr('src', '<?php echo base_url(); ?>' + file.url);
-                            window.avatar_url = file.url;
+                            $.post(
+                                "<?php echo base_url('ajax/change_avatar') ?>",
+                                {
+                                    musician_id: <?php echo $musician['musician_id']; ?>,
+                                    url: file.url
+                                },
+                                function(data, success){
+                                    if (data.errno == 0) {
+                                        $("#user-avatar").attr('src', '<?php echo base_url(); ?>' + data.url);
+                                    }
+                                    else {
+                                        alert(data.errmsg);
+                                    }
+                                },
+                                "json"
+                            );
                         }
                     });
-                },
-                progressall: function(e, data) {
-                    var progress = parseInt(data.loaded / data.total * 100, 10);
-                    $('#upload-image .progress .progress-bar').css(
-                        'width',
-                        progress + '%'
-                    );
                 }
             }).prop('disabled', !$.support.fileInput)
                 .parent().addClass($.support.fileInput ? undefined : 'disabled');
@@ -470,20 +365,13 @@ $(function(){
                 done: function(e ,data) {
                     $.each(data.result.files, function (index, file) {
                         if ('error' in file){
-                            console.log(file);
+                            //console.log(file.error);
                         }
                         else {
                             $("#music-image").attr('src', '<?php echo base_url(); ?>' + file.url);
                             window.music_image_url = file.url;
                         }
                     });
-                },
-                progressall: function(e, data) {
-                    var progress = parseInt(data.loaded / data.total * 100, 10);
-                    $('#upload-image .progress .progress-bar').css(
-                        'width',
-                        progress + '%'
-                    );
                 }
             }).prop('disabled', !$.support.fileInput)
                 .parent().addClass($.support.fileInput ? undefined : 'disabled');
@@ -492,14 +380,27 @@ $(function(){
             $("#fileupload-music").fileupload({
                 url: "<?php echo base_url(); ?>index.php/upload_ajax/do_upload_music",
                 dataType: 'json',
+                add: function(e, data) {
+                    $("#upload-music-status").html("");
+                    $("#upload-music-status").show();
+                    $("#upload-music-progress .progress-bar").css("width", 0);
+                    $("#upload-music-progress").show();
+                    data.submit();
+                },
                 done: function(e ,data) {
                     $.each(data.result.files, function (index, file) {
                         if ('error' in file){
                             $("#upload-music-status").html(file.error);
                         }
                         else {
-                            $("#upload-music-status").html("上传成功啦！撒花！" + file.name);
+                            $("#upload-music-status").html("上传音乐成功！" + file.name);
                             window.music_url = file.url;
+                            setTimeout(function(){
+                                    //$("#upload-music-status").hide();
+                                    $("#upload-music-progress").fadeOut();
+                                },
+                                2000
+                            );
                         }
                     });
                 },
@@ -536,13 +437,14 @@ $(function(){
                     story: $("#story").val(),
                 },
                 function(data,status){
-                    console.log(data);
+                    //console.log(data);
                     if (data.errno == 0) {
                         alert(data.msg);
                         $("#music_name").val("");
                         $("#music-image").attr("src", "<?php echo base_url('image/public.jpg');?>");
                         $("#upload-music-status").html("");
                         $('#upload-music-progress .progress-bar').css('width',0);
+                        $("#album").val("");
                         $("#lyrics_by").val("");
                         $("#composed_by").val("");
                         $("#arranged_by").val("");
@@ -629,7 +531,7 @@ $(function(){
   Your browser does not support HTML5 audio.
 </audio>
 
-<!------------------>
+<!----------------->
 <div class="music_all">
 	<?php if (count($copyrights)>0){$i=0;$num_message=0;while ($i<count($copyrights)) {foreach ($copyrights as $copyright):$i++; if ($i>count($copyrights)) break;?>
 	<?php $copyright_message_time1=explode(" ", $copyright['created']);?>
@@ -640,7 +542,7 @@ $(function(){
 	<?php $copyright_message_time2=$copyright_message_time2[0]*10000+$copyright_message_time2[1]*100+$copyright_message_time2[2];?>
 	<?php if(($copyright['last_read_time']<$copyright['created'])&&($copyright_message_time1-$copyright_message_time2>5)){$num_message++;}?>
 	<?php  endforeach;}}?>
-<!------------------------用户信息修改界面------------------------------->	
+<!------------------------用户信息修改界面----------------------------
 <div id="information_Modal1" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
     <div id="personal_hover">
 		<div class="modal-header">
@@ -666,7 +568,6 @@ $(function(){
 				<div id="queue1"></div> 
 			</form>
 			</div>
-            <!-- -->
             <p> 修改密码<br/></p>
             <div id="information_left_1">            
 				<p>
@@ -732,6 +633,7 @@ $(function(){
 	</div>
 </div>
 
+--->	
      <!-- 主页面 --> 
      <div class="music2_right">
         <div class="music2_right_1">
@@ -933,7 +835,7 @@ $(function(){
     </div>
 <!----主页面结束---->
 
- <!-------版权申请信息开始----------------> 
+ <!-------版权申请信息开始---------------> 
   <div id="message" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
     <div id="personal_hover">
 		<div class="modal-header">
@@ -976,113 +878,198 @@ $(function(){
 		</div>	
 	</div>
 </div>
- <!-----------版权申请信息结束------------> 
+ <!-----------版权申请信息结束-----------> 
+ </div>
 
+    <!-- 用户信息修改modal -->	
+    <div id="information_Modal1" class="modal hide fade modal-alter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
+        <!-- modal header -->
+        <div class="modal-header">
+            <h2>个人信息修改</h2>
+        </div>
 
-
-<!-- 上传音乐modal --> 
-    <div id="information_Modal2" class="modal hide fade modal-alter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
-            <!-- modal header -->
-            <div class="modal-header">
-                <h2>    
-                    <p>*专曲名：<input type="text" name="music_name" id="music_name" style="width:150px；hight:15px"  /></p>        
-                </h2>
-            </div>
-
-            <!-- modal body -->
-            <div class="modal-body">
-                <div class="row-fluid">
-                    
-                    <div class="span3 span-fixed">
-                        <!-- TODO whats this -->
-                        <div class="login_wrong" id="signMessage" ></div>
-                        <div id="avatar-wrapper" class="well">
-                            <img id="music-image"src="<?php echo $check_photo==0 ? base_url().'image/public.jpg':base_url().$musician['portaitdir'];?>"style="width:220px;height:200px;"/>
-                        </div>
-                        <div id="select">
-                            <div id="upload">
-                                <input type="file" id="fileupload-music-image" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="span9 offset3 form-horizontal">
+        <!-- modal body -->
+        <div class="modal-body">
+            <div class="row-fluid">
+                <div class="span4">
                     <div class="row-fluid">
-                        <div class="control-group">
-                            <label class="control-label">所属专辑</label>
-                            <div class="controls">
-                                <input type="text" name="album" id="album"  style="width:120px;height:15px;"  />
-                            </div>
+                        <div class="image-uploader">
+                            <img id="user-avatar" src="<?php echo $check_photo ? base_url().'image/public.jpg':base_url().$musician['portaitdir'];?>" style="width:220px;height:200px;"/>
+                            <div id="upload-avatar-button" class="image-upload-button"></div>
+                            <div class="hide-child">
+                                <input type="file" id="fileupload-avatar" />
+                            </div>                
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">词作者</label>
-                            <div class="controls">
-                                <input type="text" name="lyrics_by" id="lyrics_by"  style="width:120px;height:15px;"  /> 
-                            </div>
+                    </div>                
+                    <div id="password-change-wrapper" class="row-fluid">
+                        <div class="row-fluid">
+                            <label class="password-title">修改密码</label>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">曲作者</label>
-                            <div class="controls">
-                                <input type="text" name="composed_by" id="composed_by"  style="width:120px;height:15px;"  /> 
-                            </div>
+                        <div class="row-fluid">
+                            <input type="password" name="password" id="password" onfocus="sign_enable()" placeholder="原密码" />
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">编曲</label>
-                            <div class="controls">
-                                <input type="text" name="arranged_by" id="arranged_by"  style="width:120px;height:15px;"  /> 
-                            </div>
+                        <div class="row-fluid">
+                            <input type="password" name="password1" id="password1" onfocus="sign_enable()" placeholder="新密码" />
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">唱片公司</label>
-                            <div class="controls">
-                                 <input type="text" name="disc_company" id="disc_company"  style="width:120px;height:15px;"  /> 
-                            </div>
+                        <div class="row-fluid">
+                            <input type="password" name="password2" id="password2" onfocus="sign_enable()" placeholder="确认新密码" />              
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">*演唱时间</label>
-                            <div class="controls">
-                                <input type="date" style="width:150px;height:15px;" id ="perform_time"  name="perform_time"  />
-                            </div>
+                        <div class="row-fluid">
+                            <input type="submit" id="password_change" class="btn" value="确认" />
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">*音乐风格</label>
-                            <div class="controls">
-                                <input type="text" name="genre" id="genre"  style="width:120px;height:15px;"  /> 
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">*自定义标签</label>
-                            <div class="controls">
-                                <input type="text" name="custom_tag1" id="custom_tag1"  style="width:100px;height:15px;"  />    
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">*上传音乐</label>
-                            <div class="controls">
-                                <input type="file" id="fileupload-music"  style="width:250px;height:15px;"  /> 
-                                <br><br>
-                                <div id="upload-music-status"></div>
-                                <div id="upload-music-progress"><div class="progress-bar"></div></div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">歌曲背后的故事</label>
-                            <div class="controls">
-                                <textarea rows=3 style="width:500px" name="story" id="story"  ></textarea>
-                            </div>
+                    </div> 
+                </div>
+                <div class="span8">
+                    <div class="control-line"> 
+                        <label class="control-label">邮箱</label>
+                        <div class="controls"><?php echo $musician['email'];?></div>
+                        <label class="control-label">昵称</label>
+                        <div class="controls">
+                            <input type="text" name="nickname" id="nickname" value=<?php echo $musician['nickname'];?> /> 
                         </div>
                     </div>
+                    <div class="control-line">
+                        <label class="control-label">身份证号</label>
+                        <div class="controls">
+                            <input type="text" name="identity" id="identity"  value=<?php echo $musician['identity'];?> />
+                        </div>
+                        <label class="control-label">姓名</label>
+                        <div class="controls">
+                            <input type="text" name="name" id="name" value=<?php echo $musician['name'];?> />
+                        </div>
+                    </div>
+                    <div class="control-line">
+                        <label class="control-label">性别</label>
+                        <div class="controls">
+                            <select id="gender" name="gender" >  
+                                <option value=<?php echo $musician['gender'];?>>
+                                    <?php if($musician['gender']==1):?>
+                                    男
+                                    <?php elseif($musician['gender']==0):?>
+                                    女
+                                    <?php else:?>
+                                    保密
+                                    <?php endif;?>
+                                </option>  			
+                            </select>  
+                        </div>
+                        <label class="control-label">破壳日</label>
+                        <div class="controls">
+                            <input type="date" id="birthday" onblur=constellation() name="birthday" value=<?php echo $musician['birthday'];?> />
+                        </div>
+                        <p id=constellation>星座：<?php echo $constellation;?></p>
+                    </div>
+                    <div class="control-line">
+                        <div class="control-label">自我介绍</div>
+                        <div class="controls">
+                            <textarea rows=10 name="introduction" id="introduction"  ><?php echo $musician['introduction'];?></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- modal footer -->
-            <div class="modal-footer">
-                <button id="music-upload-ok" class="btn">保存</button>
-                <button id="music-upload-cancel" class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
-            </div>  
+        </div>
+
+        <!-- modal footer -->
+	    <div class="modal-footer">
+           <input type="submit" id="save" class="btn" value="保存" />
+           <input type="submit" id="exit" data-dismiss="modal" aria-hidden="true"class="btn" value="退出" />
+        </div>  
 	</div>
-<!-------------上传结束------------------------>					
+
+
+
+    <!-- 上传音乐modal --> 
+    <div id="information_Modal2" class="modal hide fade modal-alter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
+        <!-- modal header -->
+        <div class="modal-header">
+            <h2>上传音乐</h2>
+            <input type="text" name="music_name" id="music_name" placeholder=" 请输入音乐名称" />
+        </div>
+
+        <!-- modal body -->
+        <div class="modal-body">
+            <div class="row-fluid">
+
+                <div class="span4">
+                    <div class="">
+                        <div id="upload-music-button" class="button">上传音乐文件</div>
+                        <div id="upload-music-status"></div>
+                        <div id="upload-music-progress"><div class="progress-bar"></div></div>
+                        <div class="hide-child">
+                            <input type="file" id="fileupload-music" /> 
+                        </div>
+                    </div>
+                    <div id="music-image-wrapper" class="image-uploader">
+                        <img id="music-image" class="img-rounded" 
+                        src="<?php echo $check_photo ? base_url().'image/public.jpg':base_url().$musician['portaitdir'];?>"/>
+                        <div id="upload-music-image-button" class="image-upload-button"></div>
+                        <div class="hide-child">
+                            <input type="file" id="fileupload-music-image" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="span8">
+                <div class="row-fluid">
+                    <div class="control-line">
+                        <label class="control-label">作曲</label>
+                        <div class="controls">
+                            <input type="text" name="composed_by" id="composed_by" /> 
+                        </div>
+                        <label class="control-label">作词</label>
+                        <div class="controls">
+                            <input type="text" name="lyrics_by" id="lyrics_by" /> 
+                        </div>
+                    </div>
+                    <div class="control-line">
+                        <label class="control-label">编曲</label>
+                        <div class="controls">
+                            <input type="text" name="arranged_by" id="arranged_by" /> 
+                        </div>
+                        <label class="control-label">所属专辑</label>
+                        <div class="controls">
+                            <input type="text" name="album" id="album" />
+                        </div>
+                    </div>
+                    <div class="control-line">
+                        <label class="control-label">唱片公司</label>
+                        <div class="controls">
+                             <input type="text" name="disc_company" id="disc_company" /> 
+                        </div>
+                        <label class="control-label">*演唱时间</label>
+                        <div class="controls">
+                            <input type="date" style="width:150px;height:15px;" id ="perform_time"  name="perform_time"  />
+                        </div>
+                    </div>
+                    <div class="control-line">
+                        <label class="control-label">*音乐风格</label>
+                        <div class="controls">
+                            <input type="text" name="genre" id="genre" /> 
+                        </div>
+                    </div>
+                    <div class="control-line">
+                        <label class="control-label">*自定义标签</label>
+                        <div class="controls">
+                            <input type="text" name="custom_tag1" id="custom_tag1" />    
+                        </div>
+                    </div>
+                    <div class="control-line">
+                        <label class="control-label">歌曲背后的故事</label>
+                        <div class="controls">
+                            <textarea rows=3 name="story" id="story"  ></textarea>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal footer -->
+        <div class="modal-footer">
+            <button id="music-upload-ok" class="btn">保存</button>
+            <button id="music-upload-cancel" class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+        </div>  
+	</div>
 	
-</div>    
 </body>
 </html>

@@ -9,11 +9,32 @@ class Ajax extends CI_Controller {
     
     function get_message_push()
     {
-        $this->load->model('follow_model');
-        $data['musician_name'] = "GAGA";
-        $data['url'] = "http://example.com";
-        $data['brief'] = "Aha!";
-        $data['status'] = "success";
+	$this->load->model('follow_model');
+        $this->load->model('musician_model');
+        $this->load->model('music_model');
+        
+        // notification
+        $result_musician_top   = $this->musician_model->musician_attention_top_10();
+        $result_music_top      = $this->music_model->music_collect_top_10();
+        $data['musician_name'] = $result_musician_top[0]['name'];
+        $data['music_name']    = $result_music_top[0]['name'];
+        $data['url']           = "http://example.com";
+        $data['status']        = "success";
+        
+        switch (rand(0, 1)) {
+            case 0:
+                $data['label'] = "收藏最多音乐";
+                $data['brief'] = $data['music_name'];
+                break;
+            case 1:
+                $data['label'] = "关注最多艺人";
+                $data['brief'] = $data['musician_name'];
+                break;
+            default:
+                # code...
+                break;
+        }
+
         if ($_POST['user_type'] == 1)
         {
 
@@ -24,6 +45,25 @@ class Ajax extends CI_Controller {
         }
         echo json_encode($data);
     }
+
+    function skip_song()
+    {
+        $user_id = $this->input->get('user_id');
+        $music_id = $this->input->get('music_id');
+        $this->load->model('skip_song_model');
+        $this->skip_song_model->addRecord($user_id, $music_id);
+        echo json_encode("success");
+    }
+
+    function play_song()
+    {
+        $user_id = $this->input->get('user_id');
+        $music_id = $this->input->get('music_id');
+        $this->load->model('play_song_model');
+        $this->play_song_model->addRecord($user_id, $music_id);
+        echo json_encode("success");
+    }
+
 	/*
 	 * 用get方法传入user_id, sid, type, h, filter参数，返回一个播放列表(json)
 	 * 
@@ -61,6 +101,14 @@ class Ajax extends CI_Controller {
         $this->load->model('musician_model');
 		$data=$this->music_model->rand();
         $data['musician'] = $this->musician_model->check_id($data['musician_id']);
+
+        //=====这些信息不宜返回=====
+        unset($data['musician']['email']);
+        unset($data['musician']['password']);
+        unset($data['musician']['reg_time']);
+        unset($data['musician']['identity']);
+        //========================
+
 		$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 		$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
 		echo json_encode($data);
@@ -90,13 +138,18 @@ class Ajax extends CI_Controller {
     }
     function islike_follow()
     {
-    	$this->load->model('collect_model');
-        $this->load->model('follow_model');
 		if ($_POST['user_type']==1)
-       	{	$data['follow']=$this->follow_model->is_follow($_POST['user_id'],$_POST['musician_id']);
+       	{	
+            $this->load->model('collect_model');
+            $this->load->model('follow_model');
+            $data['follow']=$this->follow_model->is_follow($_POST['user_id'],$_POST['musician_id']);
 			$data['collect']=$this->collect_model->is_collect($_POST['user_id'],$_POST['music_id']);
-		}else
-		{	$data['follow']=$this->followm_model->is_follow($_POST['user_id'],$_POST['musician_id']);
+		}
+        else
+        {	
+            $this->load->model('collectm_model');
+            $this->load->model('followm_model');
+            $data['follow']=$this->followm_model->is_follow($_POST['user_id'],$_POST['musician_id']);
 			$data['collect']=$this->collectm_model->is_collect($_POST['user_id'],$_POST['music_id']);
 		}
         echo json_encode($data);
@@ -298,6 +351,8 @@ class Ajax extends CI_Controller {
         $this->load->model('genre_model');
         $this->load->model('music_tag_model');
         $this->load->model('music_genre_model');
+        $this->load->model('music_musician_model');
+        $this->load->model('upload_model');
 
         // required parameters 
         if ("" == trim($_POST['musician_id']) ||
@@ -338,6 +393,7 @@ class Ajax extends CI_Controller {
 
         // move music file and image file
         $new_music_url = 'upload/music/' . 'user_' . $musician_id . '/music_' . $music_id;
+        $new_music_url .= '.' . pathinfo($music_url, PATHINFO_EXTENSION); 
         if (!is_dir(dirname($new_music_url))) {
             mkdir(dirname($new_music_url), 0777, true);
         }
@@ -347,6 +403,7 @@ class Ajax extends CI_Controller {
         $new_image_url = null;
         if (!empty($image_url)) {
             $new_image_url = 'upload/image/' . 'user_' . $musician_id . '/image_' . $music_id;
+            $new_image_url .= '.' . pathinfo($image_url, PATHINFO_EXTENSION); 
             if (!is_dir(dirname($new_image_url))) {
                 mkdir(dirname($new_image_url), 0777, true);
             }
@@ -370,6 +427,10 @@ class Ajax extends CI_Controller {
         // update the url
         $this->music_model->update_url($music_id, $new_music_url, $new_image_url);
 
+        // insert into upload table and music_musician table
+        $this->upload_model->addupload($musician_id, $music_id);
+        $this->music_musician_model->add($musician_id, $music_id);
+
         // update tag and genre
         $tag_id = $this->tag_model->get_id_by_name($tags);
         if ($tag_id == null) $tag_id = $this->tag_model->add_by_name($tags);
@@ -379,6 +440,44 @@ class Ajax extends CI_Controller {
         if ($genre_id == null) $genre_id = $this->genre_model->add_by_name($genres);
         $this->music_genre_model->add($genre_id, $music_id);
 
+        // return success json
         echo '{"errno":0, "msg":"上传音乐 ' . $music_name . ' 成功！"}';
+    }
+
+
+    /*
+     muscian change avatar
+    */
+    function change_avatar() {
+        $this->load->model("musician_model");
+        
+        $musician_id = $_POST['musician_id'];
+        $url = $_POST['url'];
+
+        if("" == trim($musician_id) || "" == trim($musician_id) ) {
+            echo '{"errno": 1, "errmsg", "参数错误"}';
+            return 1;
+        }
+
+        date_default_timezone_set("PRC");
+        $date = new DateTime();
+        $ts = $date->getTimestamp();
+        
+        $new_avatar_url = 'upload/avatar/' . 'user_' . $musician_id . '/avatar_' . $ts;
+        $new_avatar_url .= '.' . pathinfo($url, PATHINFO_EXTENSION);
+        if (!is_dir(dirname($new_avatar_url))) {
+            mkdir(dirname($new_avatar_url), 0777, true);
+        }
+        $avatar_ok = @rename($url, $new_avatar_url);
+
+        if (!$avatar_ok) {
+            echo '{"errno": 2, "errmsg": "头像上传失败"}';
+            return 2;
+        }
+        else {
+            $this->musician_model->update_avatar($musician_id, $new_avatar_url);
+            echo '{"errno": 0, "msg": "头像上传成功", "url":"' . $new_avatar_url . '"}';
+            return 0;
+        }
     }
 }

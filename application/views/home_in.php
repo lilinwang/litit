@@ -25,6 +25,7 @@
 <script type="text/javascript" src="<?php echo base_url()?>js/lititRightBarPlugin.js"></script>
 <script type="text/javascript"> 
 var music_id_html=<?php echo $music_id;?>;
+var music_list = "hahahahaha";
 var musician_id_html=<?php echo $musician_id;?>;
 	$(document).ready(function(){
  		$("#musician-option").hide();
@@ -51,10 +52,39 @@ var musician_id_html=<?php echo $musician_id;?>;
 				$("#player").get(0).pause();    
 			}
 		});
+	
 	function next_song(){
 	        $.get("<?php echo base_url('ajax/getmusic')?>", 
              function(data, $status){
 	            data = eval("(" + data + ")");
+	            var innerHTML = "";
+	            console.log(data);
+	            music_list = data.list;
+	            for(var i = 0; i < data.list.length; i++)
+	            {
+	            	innerHTML += "<li><img class=\"play\" onclick=\"changemusic(" + i + ")\" style=\"cursor:pointer;\" src=<?php echo base_url()?>" + data.list[i].album_dir + " /><span class=\"title\">Try Another One</span></li>\n";
+	            }
+	            document.getElementById("example2").innerHTML = innerHTML;
+	            $('#example2').boutique({
+					starter:			1,
+					speed:				800,
+					hoverspeed:			300,
+					hovergrowth:		0.15,
+					container_width:	655,
+					front_img_width:	260,
+					front_img_height:	260,
+					behind_opac:		1,
+					back_opac:			1,
+					behind_size:		0.6,
+					back_size:			0.4,
+					autoplay:			false,
+					autointerval:		4000,
+					freescroll:			true,
+					easing:				'easeOutQuart',
+					move_twice_easein:	'easeInQuart',
+					move_twice_easeout:	'easeOutQuart',
+					text_front_only:	true,
+				});
 		        $("#player source").attr("src","<?php echo base_url()?>"+data.dir);
 		        $("#player").get(0).load();
 		        $("#player").get(0).play();
@@ -68,6 +98,11 @@ var musician_id_html=<?php echo $musician_id;?>;
 			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
 			    music_id_html=data.music_id;
 			    musician_id_html=data.musician_id;
+			    $.get("<?php echo base_url('ajax/play_song')?>", 
+						{
+							user_id:<?php echo $userid;?>,
+							music_id:music_id_html 	 	 
+						});
 			    $.post("<?php echo base_url('ajax/islike_follow')?>", 
 		     	{
 			    user_id:<?php echo $userid;?>,
@@ -109,7 +144,16 @@ var musician_id_html=<?php echo $musician_id;?>;
 		    	});
 	       });
 		};	
-		$(".next_song").click(next_song);
+		function skip_song()
+		{
+			$.get("<?php echo base_url('ajax/skip_song')?>", 
+					{
+						user_id:<?php echo $userid;?>,
+						music_id:music_id_html 	 	 
+					});
+			next_song();
+		};
+		$(".next_song").click(skip_song);
 		$("#player").bind("ended", next_song);
 	/********************************************************/		
 	  	     $("#no_copyright_sign").click(function(){
@@ -225,7 +269,7 @@ var musician_id_html=<?php echo $musician_id;?>;
 								return;
 							}
 							var n = noty({
-								text: data.musician_name + ' 发表了新状态: <a href="' + data.url + '">' + data.brief + '</a>',
+								text: data.label + ' : <a href="' + data.url + '">' + data.brief + '</a>',
 								type: 'alert',
 								dismissQueue: true,
 								layout: layout,
@@ -298,102 +342,60 @@ var musician_id_html=<?php echo $musician_id;?>;
 			});
 		});
 	});
-</script>
-<script>
+
 function changemusic(num){
-	switch (num){
-		case 0:
-			document.getElementById("name").innerHTML="<?php echo $list[0]['name']?>";			
-			document.getElementById("story").innerHTML="<?php echo $list[0]['story']?>";
-			document.getElementById("player").src="<?php echo base_url().$list[0]['dir']?>";
-	        music_id_html=<?php echo $list[0]['music_id']?>;
-			musician_id_html=<?php echo $list[0]['musician_id']?>;	
-				$.post("<?php echo base_url('ajax/islike_follow')?>", 
-		     	{
-			    user_id:<?php echo $userid;?>,
-                musician_id:<?php echo $list[0]['musician_id']?>,
-                music_id:<?php echo $list[0]['music_id']?>,
-                user_type:<?php echo $usertype;?>
-                },
-                function(data,status){
-             	 data = eval("(" + data + ")");
-             	 if(data.follow==0){	
-             	 document.getElementById("attention_1").innerHTML="关注";
-             	 }
-             	 else{
-             	 document.getElementById("attention_1").innerHTML="取消关注";
-             	 }        	  
-             	 if(data.collect==0){
-             	 document.like.src="<?php echo base_url()?>image/like_button1.png";
-             	 }
-             	 else{
-             	 document.like.src="<?php echo base_url()?>image/like_button2.png";	 
-             	 } 
-	       	     });
-	       	     	$.post("<?php echo base_url('ajax/iscopyright_sign')?>", 
-			   {
-			    user_id:<?php echo $userid;?>,
-                music_id:<?php echo $list[0]['music_id']?> 	 	 
-                 },
-                function(data,status){
-                	if(data==0)
-                	{
-             	     document.getElementById("copyright").innerHTML="版权申请";
-             	     document.getElementById("copyright").href="#myModal";
-             	    }
-             	    else
-             	    {
-             	   	document.getElementById("copyright").innerHTML="取消申请";
-             	    document.getElementById("copyright").href="#myModal_1";
-             	    }
-		    	});
-			break;
-		case 1:
-			document.getElementById("name").innerHTML="<?php echo $list[1]['name']?>";			
-			document.getElementById("story").innerHTML="<?php echo $list[1]['story']?>";			
-			document.getElementById("player").src="<?php echo base_url().$list[1]['dir']?>";
-			music_id_html=<?php echo $list[1]['music_id']?>;
-			musician_id_html=<?php echo $list[1]['musician_id']?>;
-			   	$.post("<?php echo base_url('ajax/islike_follow')?>", 
-		     	{
-			    user_id:<?php echo $userid;?>,
-                musician_id:<?php echo $list[1]['musician_id']?>,
-                music_id:<?php echo $list[1]['music_id']?>,
-               	user_type:<?php echo $usertype;?>
-                },
-                function(data,status){
-             	 data = eval("(" + data + ")");
-             	 if(data.follow==0){	
-             	 document.getElementById("attention_1").innerHTML="关注";
-             	 }
-             	 else{
-             	 document.getElementById("attention_1").innerHTML="取消关注";
-             	 }        	  
-             	 if(data.collect==0){
-             	 document.like.src="<?php echo base_url()?>image/like_button1.png";
-             	 }
-             	 else{
-             	 document.like.src="<?php echo base_url()?>image/like_button2.png";	 
-             	 } 
-	       	     });
-	       	     	$.post("<?php echo base_url('ajax/iscopyright_sign')?>", 
-			   {
-			    user_id:<?php echo $userid;?>,
-                music_id:<?php echo $list[1]['music_id']?> 	 	 
-                 },
-                function(data,status){
-                	if(data==0)
-                	{
-             	     document.getElementById("copyright").innerHTML="版权申请";
-             	     document.getElementById("copyright").href="#myModal";
-             	    }
-             	    else
-             	    {
-             	   	document.getElementById("copyright").innerHTML="取消申请";
-             	    document.getElementById("copyright").href="#myModal_1";
-             	    }
-		    	});		
-	}
+	document.getElementById("name").innerHTML=music_list[num].name;			
+	document.getElementById("story").innerHTML=music_list[num].story;
+	document.getElementById("player").src=music_list[num].dir;
+	$.get("<?php echo base_url('ajax/skip_song')?>", 
+			{
+				user_id:<?php echo $userid;?>,
+				music_id:music_id_html 	 	 
+			});
+	music_id_html=music_list[num].music_id;
+	musician_id_html=music_list[num].musician_id;	
+	$.get("<?php echo base_url('ajax/play_song')?>", 
+			{
+				user_id:<?php echo $userid;?>,
+				music_id:music_id_html 	 	 
+			});
+	$.post("<?php echo base_url('ajax/islike_follow')?>", 
+		{
+			user_id:<?php echo $userid;?>,
+			musician_id:music_list[num].musician_id,
+			music_id:music_list[num].music_id,
+			user_type:<?php echo $usertype;?>
+		},
+		function(data,status){
+			data = eval("(" + data + ")");
+			if(data.follow==0){	
+				document.getElementById("attention_1").innerHTML="关注";
+			}
+			else{
+				document.getElementById("attention_1").innerHTML="取消关注";
+			}        	  
+			if(data.collect==0){
+				document.like.src="<?php echo base_url()?>image/like_button1.png";
+			}
+			else{
+				document.like.src="<?php echo base_url()?>image/like_button2.png";	 
+			} 
+		});
+	$.post("<?php echo base_url('ajax/iscopyright_sign')?>", 
+		{
+			user_id:<?php echo $userid;?>,
+			music_id:music_list[num].music_id 	 	 
+		},
+		function(data,status){
+			if(data==0){
+				document.getElementById("copyright").innerHTML="版权申请";
+				document.getElementById("copyright").href="#myModal";
+			}
+			else{
+				document.getElementById("copyright").innerHTML="取消申请";
+				document.getElementById("copyright").href="#myModal_1";
+			}
+		});
 	document.getElementById("player").load();
 	document.getElementById("player").play();
 } 

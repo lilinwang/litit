@@ -14,8 +14,9 @@ class Sign_up extends CI_Controller {
         $this->load->model('user_model');
         $this->load->model('musician_model');
         $this->load->model('music_model');
+        date_default_timezone_set("PRC");
         $time_stamp = date("Y-m-d H:i:s");
-        if($this->input->post('usertype')=="1"){                       
+        if($this->input->post('usertype')=="1"){ // 用户类型是听众
             $result=$this->user_model->check($this->input->post('email'));            
             if(!$result){ 
                         $data['nickname'] = $this->input->post('name');
