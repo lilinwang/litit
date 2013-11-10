@@ -175,12 +175,17 @@
    				var myDate = new Date();
              	 var tmp1=myDate.getMonth()+1;
              	 var tmp='\n'+myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds()+'\n';
+             	 var tmp_time=myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds();
           	    document.getElementById("story_message").value+=tmp+document.getElementById("user_name").innerHTML+":"+document.getElementById("send_message").value;
           	     
 	     	$.post("<?php echo base_url('ajax/copyright_message')?>", 
 			{
 			 message:document.getElementById("story_message").value,
-			 copyright_id:document.getElementById("copyright_id").innerHTML
+			 copyright_id:document.getElementById("copyright_id").innerHTML,
+			 copyright_music_id:document.getElementById("copyright_music_id").innerHTML,
+			 copyright_musician_id:document.getElementById("copyright_musician_id").innerHTML,
+			 copyright_user_id:document.getElementById("copyright_user_id").innerHTML,
+			 new_time:tmp_time
              },
              function(data,status){
              	 document.getElementById("send_message").value="";
@@ -276,17 +281,23 @@ function music(source)
   //点击版权申请图片时获取相关信息并更改html元素
  function li_id(object)
    	  {
-   	      
-   	  	  var tmp=object.id;  	  				
+   	  	  var tmp=object.id; 
+   	  	  var myDate = new Date();
+          var tmp1=myDate.getMonth()+1;
+          var tmp_time=myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds(); 	  				
    	  	  	$.post("<?php echo base_url('ajax/copyright_click');?>", 
 			{
 			 click_id:tmp,
-			 user_id:<?php echo $user['user_id'];?>
+			 user_id:<?php echo $user['user_id'];?>,
+			 new_time:tmp_time
              },
              function(data,status){
              	 
              	 data = eval("(" + data + ")");
              	document.getElementById("copyright_id").innerHTML=data.copyright_id;
+             	document.getElementById("copyright_user_id").innerHTML=data.user_id;
+             	document.getElementById("copyright_musician_id").innerHTML=data.musician_id;
+             	document.getElementById("copyright_music_id").innerHTML=data.music_id;
              	document.getElementById("name_message").innerHTML="姓名"+data.name;
              	document.getElementById("phone_message").innerHTML="电话"+data.phone;
              	document.getElementById("email_message").innerHTML="邮箱"+data.email;
@@ -295,6 +306,7 @@ function music(source)
              	document.getElementById("copyright_info").innerHTML=data.copyright_info;
              	document.getElementById("copyright_content").innerHTML=data.content;
              	document.getElementById("story_message").value=data.copyright_message;
+             	if(data.remind==1) document.getElementById("num_message").innerHTML=document.getElementById("num_message").innerHTML-1;
 			}); 
    	  }   	
 </script>	
@@ -305,6 +317,15 @@ function music(source)
 
 <!------------------>
 <div class="music_all">
+	<?php if (count($copyrights)>0){$i=0;$num_message=0;while ($i<count($copyrights)) {foreach ($copyrights as $copyright):$i++; if ($i>count($copyrights)) break;?>
+	<?php $copyright_message_time1=explode(" ", $copyright['created']);?>
+	<?php $copyright_message_time1=explode(":", $copyright_message_time1[1]);?>
+	<?php $copyright_message_time1=$copyright_message_time1[0]*10000+$copyright_message_time1[1]*100+$copyright_message_time1[2];?>
+	<?php $copyright_message_time2=explode(" ", $copyright['last_read_time']);?>
+	<?php $copyright_message_time2=explode(":", $copyright_message_time2[1]);?>
+	<?php $copyright_message_time2=$copyright_message_time2[0]*10000+$copyright_message_time2[1]*100+$copyright_message_time2[2];?>
+	<?php if(($copyright['last_read_time']<$copyright['created'])&&($copyright_message_time1-$copyright_message_time2>5)){$num_message++;}?>	
+	<?php  endforeach;}}?>
 <!------------------------用户信息修改界面------------------------------->	
 <div id="information_Modal" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" data-keyboard="true" data-show="true">
     	<div id="personal_hover">
@@ -421,7 +442,12 @@ function music(source)
 	   	</h2>
 		</div>
 		<div id="message_left">
-		 <div style="display:none;"><p id ="copyright_id"  name="copyright_id"/><?php echo $copyrights[0]['copyright_id']; ?> </p></div>
+		 <div style="display:none;">
+		    <p id ="copyright_id"  name="copyright_id"/><?php echo $copyrights[0]['copyright_id']; ?> </p>
+		    <p id ="copyright_music_id"  name="copyright_music_id"/><?php echo $copyrights[0]['music_id']; ?> </p>
+		    <p id ="copyright_user_id"  name="copyright_user_id"/><?php echo $copyrights[0]['user_id']; ?> </p>
+		    <p id ="copyright_musician_id"  name="copyright_musician_id"/><?php echo $copyrights[0]['musician_id']; ?> </p>
+		    </div>
 		 <p name="name_message" id="name_message">姓名：<?php echo $copyrights[0]['name']; ?> </p> 
 		 <p name="phone_message" id="phone_message"/>电话：<?php echo $copyrights[0]['phone']; ?> </p> 
 		 <p name="email_message" id="email_message" /> 邮箱：<?php echo $copyrights[0]['email']; ?> </p>
@@ -458,18 +484,26 @@ function music(source)
     </form>
     </div>
     <div class="music_right_1">
+    	
     <a href="#information_Modal" role="button" data-toggle="modal" class="btn" id="copyright" >个人信息</a>
-    </div>	
+    </div>
 	<ul id="music2_right_tags" >
         <li class="music2_right_detail_selectTag"><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent0',this)" href="javascript:void(0)">收藏的歌曲</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent1',this)" href="javascript:void(0)">关注的音乐人</a> </li>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent2',this)" href="javascript:void(0)">下载的歌曲</a> </li>
-	<li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent3',this)" href="javascript:void(0)">版权申请</a> </li>
-    </ul>
-    </ul>
+		<li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent3',this)" href="javascript:void(0)">版权申请</a> </li>
+    	<div id="num_message">
+    		<?php if($num_message!=0):?>
+    		<?php echo $num_message;?>
+			<?php endif;?>
+    	</div>
+    	<li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent4',this)" href="javascript:void(0)">私信</a> </li>
+    	</ul>
+    </ul>	
     <div id="music2_right_tab">
-		
+	
       <div class="music_clear"></div>
+      	  
       <div id="music2_right_detail_tagContent">
         <div class="music2_right_detail_tagContent music2_right_detail_selectTag" id="music2_right_detail_tagContent0">
 		<ul class="li_play_0">
@@ -554,19 +588,41 @@ function music(source)
 		</ul>
 		<a  class="next" href="#"></a>
 		</div>
-<!-------------------------------------------------------->			
+<!----------------------版权申请------------------------------->			
 		<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent3">
          <ul class="li_play_0">
 		    <?php if (count($copyrights)>0){$num=(((int)((count($copyrights)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($copyrights as $copyright):$i++; if ($i>$num) break;?>
 		  <li id="<?php echo ($i-1)%count($copyrights)?>" onclick=li_id(this)>
               <div class="li_play_1"><a href="#message" data-toggle="modal" id="user_image"><img src="<?php echo base_url().$copyright['musician_image']?>" /></a>
-                <div class="li_play" style="display:none;">
+	        <div class="li_play" style="display:none;">
                   <dl class="li_play_left">
-                    <dt class="li_play_left_1"><?php echo $copyright['music_name'];?></dt>
+                   <dt class="li_play_left_1"><?php echo $copyright['music_name'];?></dt>
                     <dt class="li_play_left_2"><?php echo $copyright['created'];?></dt>
                   </dl>
-                  <dl class="li_play_right">
-                    <a href="#"><img src="<?php echo base_url()?>image/li_play.png"/></a>
+                </div>
+              </div>
+		  </li>
+		  <?php  endforeach;}}?>
+		</ul>
+		<a  class="prev" href="#"></a>
+		<ul id="page">
+		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
+		<?php for ($i=1;$i<(((int)((count($copyrights)-1)/24))+1);$i++):?>
+        <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
+		<?php endfor;?>
+		</ul>
+		<a  class="next" href="#"></a>
+		</div>
+<!-------------------私信------------------------------->
+	<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent4">
+         <ul class="li_play_0">
+		    <?php if (count($copyrights)>0){$num=(((int)((count($copyrights)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($copyrights as $copyright):$i++; if ($i>$num) break;?>
+		  <li id="<?php echo ($i-1)%count($copyrights)?>" onclick=li_id(this)>
+              <div class="li_play_1"><a href="#message" data-toggle="modal" id="user_image"><img src="<?php echo base_url().$copyright['musician_image']?>" /></a>
+	        <div class="li_play" style="display:none;">
+                  <dl class="li_play_left">
+                   <dt class="li_play_left_1"><?php echo $copyright['music_name'];?></dt>
+                    <dt class="li_play_left_2"><?php echo $copyright['created'];?></dt>
                   </dl>
                 </div>
               </div>

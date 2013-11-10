@@ -451,7 +451,30 @@ function copyright_sign_check()
 function copyright_sign_enable(){
 document.getElementById("copyright_sign").disabled=false;
 }
-<!------------------>
+//******************************************************************/
+function private_letter_sign()
+{
+		$.post("<?php echo base_url('ajax/private_letter_sign')?>", 
+			{
+			 user_id:<?php echo $userid;?>,
+             musician_id:<?php echo $musician['musician_id'];?>,
+             content:document.getElementById("copyright_sign_content").value 	 	 
+             },
+             function(data,status){
+             	 alert("发送成功！");
+			});	
+};
+function private_letter_check()
+{
+	var	dataString;
+	dataString=document.getElementById("private_letter_content").value;
+	if (dataString=="") {document.getElementById("private_letter_Message").innerHTML="<?php echo "私信内容不能为空";?>";document.getElementById("copyright_sign").disabled=true;return;}
+	document.getElementById("private_letter_sign").disabled=false;
+	private_letter_sign();return;
+}
+function copyright_sign_enable(){
+document.getElementById("private_letter_sign").disabled=false;
+}
 </script>
 </head>
 <body >
@@ -572,6 +595,24 @@ document.getElementById("copyright_sign").disabled=false;
      <input type="submit" id="no_copyright_sign" data-dismiss="modal" class="btn btn-primary" value="确定取消" />
    </div>
 </div>
+<!--------------------------------------------------------------------------------->			
+	<div id="private_letter" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
+        <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="close">×</button>
+			<h3 id="myModalLabel">私信TA</h3>
+		</div>
+		<div class="modal-body">
+			<div class="login_wrong" id="private_letter_Message" ></div> 		
+			私信<br/>
+		 <textarea rows=3 style="width:500px"  id="private_letter_content" onfocus="private_letter_enable()"  /></textarea>
+			<br/>
+    </div>
+    <div class="modal-footer">
+   	<input type="button" data-dismiss="modal" class="btn btn-primary" aria-hidden="true" value="取消"/>
+     <input type="submit" onclick="private_letter_check()" id="private_letter_sign" data-dismiss="modal" class="btn btn-primary" value="发送" />
+   </div>
+</div>
+<!------------------------------------------------------------------------------------>
         <div class="music_clear"></div>
       </div>
       <div class="music_clear"></div>
@@ -632,7 +673,7 @@ document.getElementById("copyright_sign").disabled=false;
           	        <?php else:?>
           	        <a class=attention id=attention_1 href="#">取消关注</a>
           	        <?php endif;?>
-          			<a href="#">私信TA</a>
+          			<a href="#private_letter" role="button" data-toggle="modal" class="private_letter" id="private_letter" >私信TA</a>		
           			</div>
           <div class="music_clear"></div>
           <div class="music_right_2_right_4" id="attention_2">人气：<b ><?php echo $musician['attention']?></b></div>
