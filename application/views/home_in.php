@@ -353,7 +353,7 @@ function demo_click() {
 		});
 	});
 </script>
-<script>
+<script type="text/javascript">
 function changemusic(num){
 	document.getElementById("name").innerHTML=music_list[num].name;			
 	document.getElementById("story").innerHTML=music_list[num].story;
@@ -489,7 +489,7 @@ function copyright_sign_enable(){
 document.getElementById("private_letter_sign").disabled=false;
 }
 </script>
-<script>
+<script type="text/javascript">
 /*
  * Rbar 插件
  */
@@ -654,7 +654,7 @@ function show_home_search() {
 <div class="all_hover">
 	<div id="home_hover">		
 		<div id="home_nav">
-            <a href="<?php echo base_url('personal'); ?>"><i class="icon-home icon-white"></i></a>
+            <a href="<?php echo base_url('personal '); ?>"><i class="icon-home icon-white"></i></a>
             <a href="#" onclick="lititRbar.display('slideLeft');"><i class="icon-heart icon-white"></i></a>
             <a href="#" onclick=""><i class="icon-signal icon-white"></i></a>
             <a href="#" onclick="show_home_search();"><i class="icon-search icon-white"></i></a>
