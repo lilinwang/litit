@@ -353,18 +353,88 @@ class Ajax extends CI_Controller {
         $this->copyright_model->update_by_messageid($map2,$_POST['copyright_user_id'],$_POST['copyright_musician_id'],$_POST['copyright_music_id']);
         $this->copyrightm_model->update_by_messageid($map1,$_POST['copyright_user_id'],$_POST['copyright_musician_id'],$_POST['copyright_music_id']);	
     }
+    //send private letter
 	function private_letter_sign()
 	{
-		$this->load->model('private_letter_model'); 
+	   $this->load->model('private_letter_model'); 
        $this->load->model('privatem_letter_model'); 
        $this->load->model('user_model'); 
        $this->load->model('musician_model'); 
        $tmp=$this->user_model->get_from_id($_POST['user_id']);
+       $name=$tmp['nickname'];
+       $musician_tmp=$this->musician_model->get_from_id($_POST['musician_id']);
+       $musician_name=$musician_tmp['nickname'];
        $user_image=$tmp['port_dir'];//添加照片信息，方便版权申请时的信息显示
-       $musician_image=$this->musician_model->check_photo($_POST['musician_id']);
-       $this->private_letter_model->insert_new_letter($_POST['musician_id'],$_POST['user_id'],$_POST['content'],$user_image,$musician_image);
-       $this->privatem_letter_model->insert_new_letter($_POST['musician_id'],$_POST['user_id'],$_POST['content'],$user_image,$musician_image);
+       $musician_image=$musician_tmp['portaitdir'];
+       $this->private_letter_model->insert_new_letter($_POST['musician_id'],$_POST['user_id'],$_POST['content'],$user_image,$musician_image,$name,$musician_name);
+       $this->privatem_letter_model->insert_new_letter($_POST['musician_id'],$_POST['user_id'],$_POST['content'],$user_image,$musician_image,$name,$musician_name);
 	}
+	 function private_letter_click()
+    {
+    	$this->load->model('private_letter_model');
+    	$letters=$this->private_letter_model->display($_POST['user_id']);
+    	$map['last_read_time']=$_POST['new_time'];
+    	$data=$letters[$_POST['click_id']];
+    	$letter_message_time1=explode(" ", $data['created']);
+		$letter_message_time1=explode(":", $letter_message_time1[1]);
+		$letter_message_time1=$letter_message_time1[0]*10000+$letter_message_time1[1]*100+$letter_message_time1[2];
+		$letter_message_time2=explode(" ", $data['last_read_time']);
+    	$letter_message_time2=explode(":", $letter_message_time2[1]);
+	    $letter_message_time2=$letter_message_time2[0]*10000+$letter_message_time2[1]*100+$letter_message_time2[2];
+	    if(($data['last_read_time']<$data['created'])&&($letter_message_time1-$letter_message_time2>5))
+	    {
+	    	$data['remind']=1;
+	    }
+	    else
+	    {
+	    	$data['remind']=0;
+	    }
+    	$this->private_letter_model->update_by_id($map,$data['letter_id']);
+        echo json_encode($data);
+    }
+    function privatem_letter_click()
+    {
+    	$this->load->model('privatem_letter_model');
+    	$letters=$this->privatem_letter_model->display($_POST['musician_id']);
+    	$map['last_read_time']=$_POST['new_time'];
+    	$data=$letters[$_POST['click_id']];
+    	$letter_message_time1=explode(" ", $data['created']);
+		$letter_message_time1=explode(":", $letter_message_time1[1]);
+		$letter_message_time1=$letter_message_time1[0]*10000+$letter_message_time1[1]*100+$letter_message_time1[2];
+		$letter_message_time2=explode(" ", $data['last_read_time']);
+    	$letter_message_time2=explode(":", $letter_message_time2[1]);
+	    $letter_message_time2=$letter_message_time2[0]*10000+$letter_message_time2[1]*100+$letter_message_time2[2];
+	    if(($data['last_read_time']<$data['created'])&&($letter_message_time1-$letter_message_time2>5))
+	    {
+	    	$data['remind']=1;
+	    }
+	    else
+	    {
+	    	$data['remind']=0;
+	    }
+    	$this->privatem_letter_model->update_by_id($map,$data['letter_id']);
+        echo json_encode($data);
+    }
+    function private_letter()
+    {
+    	$this->load->model('private_letter_model');
+    	$this->load->model('privatem_letter_model');
+    	$map1['letter']=$_POST['letter'];
+    	$map2['letter']=$_POST['letter'];
+    	$map1['last_read_time']=$_POST['new_time'];
+        $this->private_letter_model->update_by_messageid($map1,$_POST['letter_user_id'],$_POST['letter_musician_id']);
+        $this->privatem_letter_model->update_by_messageid($map2,$_POST['letter_user_id'],$_POST['letter_musician_id']);	
+    }
+    function privatem_letter()
+    {
+    	$this->load->model('private_letter_model');
+    	$this->load->model('privatem_letter_model');
+    	$map1['letter']=$_POST['letter'];
+    	$map2['letter']=$_POST['letter'];
+    	$map1['last_read_time']=$_POST['new_time'];
+        $this->private_letter_model->update_by_messageid($map2,$_POST['letter_user_id'],$_POST['letter_musician_id']);
+        $this->privatem_letter_model->update_by_messageid($map1,$_POST['letter_user_id'],$_POST['letter_musician_id']);	
+    }
     /*
         upload music
 

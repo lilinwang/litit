@@ -467,11 +467,15 @@ document.getElementById("copyright_sign").disabled=false;
 //******************************************************************/
 function private_letter_sign()
 {
+				var myDate = new Date();
+             	 var tmp1=myDate.getMonth()+1;
+             	 var tmp='\n'+myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds()+'\n';
+          	    var tmp_content=tmp+document.getElementById("usernickname").innerHTML+":"+document.getElementById("private_letter_content").value;
 		$.post("<?php echo base_url('ajax/private_letter_sign')?>", 
 			{
 			 user_id:<?php echo $userid;?>,
              musician_id:<?php echo $musician['musician_id'];?>,
-             content:document.getElementById("copyright_sign_content").value 	 	 
+             content:tmp_content	 	 
              },
              function(data,status){
              	 alert("发送成功！");
@@ -481,11 +485,11 @@ function private_letter_check()
 {
 	var	dataString;
 	dataString=document.getElementById("private_letter_content").value;
-	if (dataString=="") {document.getElementById("private_letter_Message").innerHTML="<?php echo "私信内容不能为空";?>";document.getElementById("copyright_sign").disabled=true;return;}
+	if (dataString=="") {document.getElementById("private_letter_Message").innerHTML="<?php echo "私信内容不能为空";?>";document.getElementById("private_letter_sign").disabled=true;return;}
 	document.getElementById("private_letter_sign").disabled=false;
 	private_letter_sign();return;
 }
-function copyright_sign_enable(){
+function private_letter_enable(){
 document.getElementById("private_letter_sign").disabled=false;
 }
 </script>
@@ -776,15 +780,19 @@ function show_home_search() {
      <input type="submit" id="no_copyright_sign" data-dismiss="modal" class="btn btn-primary" value="确定取消" />
    </div>
 </div>
-<!--------------------------------------------------------------------------------->			
+<!----------------------------------私信
+---------------------------------------->			
 	<div id="private_letter" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
+        <div style="display:none;">
+        <p id ="usernickname" /><?php echo $username; ?> </p>
+        </div>
         <div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="close">×</button>
 			<h3 id="myModalLabel">私信TA</h3>
 		</div>
 		<div class="modal-body">
 			<div class="login_wrong" id="private_letter_Message" ></div> 		
-			私信<br/>
+			<br/>
 		 <textarea rows=3 style="width:500px"  id="private_letter_content" onfocus="private_letter_enable()"  /></textarea>
 			<br/>
     </div>

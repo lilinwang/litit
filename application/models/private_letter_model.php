@@ -1,14 +1,14 @@
 <?php
-class privateletter_model extends CI_Model{
+class private_letter_model extends CI_Model{
     function __construct(){
        parent::__construct();
     
     }
     //插入新数据
-    function insert_new_letter($musician_id,$user_id,$content,$user_image,$musician_image)
+    function insert_new_letter($musician_id,$user_id,$content,$user_image,$musician_image,$name,$musician_name)
     {
-    	$sql='INSERT INTO private_letter (musician_id,user_id,letter,user_image,musician_image) values (?,?,?,?,?,?)';
-	     $this->db->query($sql,array($musician_id,$user_id,$content,$user_image,$musician_image));
+    	$sql='INSERT INTO private_letter (musician_id,user_id,letter,user_image,musician_image,name,musician_name) values (?,?,?,?,?,?,?)';
+	     $this->db->query($sql,array($musician_id,$user_id,$content,$user_image,$musician_image,$name,$musician_name));
     }
     function get_all_by_musician_id($musician_id)
     {

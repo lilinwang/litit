@@ -33,7 +33,7 @@ class Home extends CI_Controller {
 				$this->load->model('copyright_model');
 				$data['follow'] =$this->follow_model->is_follow($name[0]['user_id'],$data['musician_id']);
 				$data['collect'] =$this->collect_model->is_collect($name[0]['user_id'],$data['music_id']);
- $data['collections'] = $this->collect_model->display($name[0]['user_id']);  // by jchnxu, return user's music collection
+ 				$data['collections'] = $this->collect_model->display($name[0]['user_id']);  // by jchnxu, return user's music collection
 				$data['copyright'] =$this->copyright_model->is_copyright_sign($name[0]['user_id'],$data['music_id']);
 				$data['userid'] =$name[0]['user_id'];
 				
@@ -45,7 +45,7 @@ class Home extends CI_Controller {
 				$this->load->model('copyrightm_model');
 				$data['follow'] =$this->followm_model->is_follow($name[0]['musician_id'],$data['musician_id']);
 				$data['collect'] =$this->collectm_model->is_collect($name[0]['musician_id'],$data['music_id']);
-$data['collections'] = $this->collectm_model->display($name[0]['user_id']); // by jchnxu, return musician's music collection
+				$data['collections'] = $this->collectm_model->display($name[0]['musician_id']); // by jchnxu, return musician's music collection
 				$data['copyright'] =$this->copyrightm_model->is_copyright_sign($name[0]['musician_id'],$data['music_id']);
 				$data['userid'] =$name[0]['musician_id'];
             }
