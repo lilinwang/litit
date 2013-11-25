@@ -45,6 +45,25 @@ class Ajax extends CI_Controller {
         }
         echo json_encode($data);
     }
+
+    function skip_song()
+    {
+        $user_id = $this->input->get('user_id');
+        $music_id = $this->input->get('music_id');
+        $this->load->model('skip_song_model');
+        $this->skip_song_model->addRecord($user_id, $music_id);
+        echo json_encode("success");
+    }
+
+    function play_song()
+    {
+        $user_id = $this->input->get('user_id');
+        $music_id = $this->input->get('music_id');
+        $this->load->model('play_song_model');
+        $this->play_song_model->addRecord($user_id, $music_id);
+        echo json_encode("success");
+    }
+
 	/*
 	 * 用get方法传入user_id, sid, type, h, filter参数，返回一个播放列表(json)
 	 * 
@@ -101,7 +120,7 @@ class Ajax extends CI_Controller {
 		$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 		$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
 		echo json_encode($data);
-    }
+	}
     function getmusic()
     {
 		$this->load->model('music_model');
@@ -164,18 +183,24 @@ class Ajax extends CI_Controller {
     function copyright_sign()
     {  
        $this->load->model('copyright_model'); 
+       $this->load->model('copyrightm_model'); 
        $this->load->model('user_model'); 
        $this->load->model('music_model'); 
+       $this->load->model('musician_model'); 
        $tmp=$this->user_model->get_from_id($_POST['user_id']);
        $user_image=$tmp['port_dir'];//添加照片信息，方便版权申请时的信息显示
+       $musician_image=$this->musician_model->check_photo($_POST['musician_id']);
        $tmp=$this->user_model->get_from_id($_POST['music_id']);
        $music_name=$tmp['name'];
-       $this->copyright_model->insert_new_copyright($_POST['musician_id'],$_POST['user_id'],$_POST['music_id'],$_POST['name'],$_POST['company'],$_POST['identity'],$_POST['phone'],$_POST['email'],$_POST['content'],$user_image,$music_name);
+       $this->copyright_model->insert_new_copyright($_POST['musician_id'],$_POST['user_id'],$_POST['music_id'],$_POST['name'],$_POST['company'],$_POST['identity'],$_POST['phone'],$_POST['email'],$_POST['content'],$user_image,$music_name,$musician_image);
+       $this->copyrightm_model->insert_new_copyright($_POST['musician_id'],$_POST['user_id'],$_POST['music_id'],$_POST['name'],$_POST['company'],$_POST['identity'],$_POST['phone'],$_POST['email'],$_POST['content'],$user_image,$music_name,$musician_image);
     }
     function no_copyright_sign()
     {   
        $this->load->model('copyright_model'); 
+       $this->load->model('copyrightm_model'); 
        $this->copyright_model->drop_copyright($_POST['user_id'],$_POST['music_id']);
+       $this->copyrightm_model->drop_copyright($_POST['user_id'],$_POST['music_id']);
     }
     function iscopyright_sign()
     {
@@ -260,36 +285,156 @@ class Ajax extends CI_Controller {
 	    }
    	echo $data;
     }
-    function copyrightm_message()
-    {
-    	$this->load->model('copyrightm_model');
-    	$map['copyright_message']=$_POST['message'];
-        $this->copyrightm_model->update_by_id($map,$_POST['copyright_id']);	
-    }
     function copyrightm_click()
     {
     	$this->load->model('copyrightm_model');
     	$copyrights=$this->copyrightm_model->display($_POST['musician_id']);
+    	$map['last_read_time']=$_POST['new_time'];
     	$data=$copyrights[$_POST['click_id']];
+  		$copyright_message_time1=explode(" ", $data['created']);
+		$copyright_message_time1=explode(":", $copyright_message_time1[1]);
+		$copyright_message_time1=$copyright_message_time1[0]*10000+$copyright_message_time1[1]*100+$copyright_message_time1[2];
+		$copyright_message_time2=explode(" ", $data['last_read_time']);
+    	$copyright_message_time2=explode(":", $copyright_message_time2[1]);
+	    $copyright_message_time2=$copyright_message_time2[0]*10000+$copyright_message_time2[1]*100+$copyright_message_time2[2];
+	    if(($data['last_read_time']<$data['created'])&&($copyright_message_time1-$copyright_message_time2>5))
+	    {
+	    	$data['remind']=1;
+	    }
+	    else
+	    {
+	    	$data['remind']=0;
+	    }
+    	$this->copyrightm_model->update_by_id($map,$data['copyrightm_id']);
         $data['copyright_info']="申请名字为《".$data['music_name']."》的音乐的版权，音乐编号为".$data['music_id'];
         echo json_encode($data);
     }
     function copyright_message()
     {
     	$this->load->model('copyright_model');
-    	$map['copyright_message']=$_POST['message'];
-        $this->copyright_model->update_by_id($map,$_POST['copyright_id']);	
+    	$this->load->model('copyrightm_model');
+    	$map1['copyright_message']=$_POST['message'];
+    	$map2['copyright_message']=$_POST['message'];
+    	$map1['last_read_time']=$_POST['new_time'];
+        $this->copyright_model->update_by_messageid($map1,$_POST['copyright_user_id'],$_POST['copyright_musician_id'],$_POST['copyright_music_id']);
+        $this->copyrightm_model->update_by_messageid($map2,$_POST['copyright_user_id'],$_POST['copyright_musician_id'],$_POST['copyright_music_id']);	
     }
     function copyright_click()
     {
     	$this->load->model('copyright_model');
     	$copyrights=$this->copyright_model->display($_POST['user_id']);
+    	$map['last_read_time']=$_POST['new_time'];
     	$data=$copyrights[$_POST['click_id']];
+    	$copyright_message_time1=explode(" ", $data['created']);
+		$copyright_message_time1=explode(":", $copyright_message_time1[1]);
+		$copyright_message_time1=$copyright_message_time1[0]*10000+$copyright_message_time1[1]*100+$copyright_message_time1[2];
+		$copyright_message_time2=explode(" ", $data['last_read_time']);
+    	$copyright_message_time2=explode(":", $copyright_message_time2[1]);
+	    $copyright_message_time2=$copyright_message_time2[0]*10000+$copyright_message_time2[1]*100+$copyright_message_time2[2];
+	    if(($data['last_read_time']<$data['created'])&&($copyright_message_time1-$copyright_message_time2>5))
+	    {
+	    	$data['remind']=1;
+	    }
+	    else
+	    {
+	    	$data['remind']=0;
+	    }
+    	$this->copyright_model->update_by_id($map,$data['copyright_id']);
         $data['copyright_info']="申请名字为《".$data['music_name']."》的音乐的版权，音乐编号为".$data['music_id'];
         echo json_encode($data);
     }
-    
-
+    function copyrightm_message()
+    {
+    	$this->load->model('copyright_model');
+    	$this->load->model('copyrightm_model');
+    	$map1['copyright_message']=$_POST['message'];
+    	$map2['copyright_message']=$_POST['message'];
+    	$map1['last_read_time']=$_POST['new_time'];
+        $this->copyright_model->update_by_messageid($map2,$_POST['copyright_user_id'],$_POST['copyright_musician_id'],$_POST['copyright_music_id']);
+        $this->copyrightm_model->update_by_messageid($map1,$_POST['copyright_user_id'],$_POST['copyright_musician_id'],$_POST['copyright_music_id']);	
+    }
+    //send private letter
+	function private_letter_sign()
+	{
+	   $this->load->model('private_letter_model'); 
+       $this->load->model('privatem_letter_model'); 
+       $this->load->model('user_model'); 
+       $this->load->model('musician_model'); 
+       $tmp=$this->user_model->get_from_id($_POST['user_id']);
+       $name=$tmp['nickname'];
+       $musician_tmp=$this->musician_model->get_from_id($_POST['musician_id']);
+       $musician_name=$musician_tmp['nickname'];
+       $user_image=$tmp['port_dir'];//添加照片信息，方便版权申请时的信息显示
+       $musician_image=$musician_tmp['portaitdir'];
+       $this->private_letter_model->insert_new_letter($_POST['musician_id'],$_POST['user_id'],$_POST['content'],$user_image,$musician_image,$name,$musician_name);
+       $this->privatem_letter_model->insert_new_letter($_POST['musician_id'],$_POST['user_id'],$_POST['content'],$user_image,$musician_image,$name,$musician_name);
+	}
+	 function private_letter_click()
+    {
+    	$this->load->model('private_letter_model');
+    	$letters=$this->private_letter_model->display($_POST['user_id']);
+    	$map['last_read_time']=$_POST['new_time'];
+    	$data=$letters[$_POST['click_id']];
+    	$letter_message_time1=explode(" ", $data['created']);
+		$letter_message_time1=explode(":", $letter_message_time1[1]);
+		$letter_message_time1=$letter_message_time1[0]*10000+$letter_message_time1[1]*100+$letter_message_time1[2];
+		$letter_message_time2=explode(" ", $data['last_read_time']);
+    	$letter_message_time2=explode(":", $letter_message_time2[1]);
+	    $letter_message_time2=$letter_message_time2[0]*10000+$letter_message_time2[1]*100+$letter_message_time2[2];
+	    if(($data['last_read_time']<$data['created'])&&($letter_message_time1-$letter_message_time2>5))
+	    {
+	    	$data['remind']=1;
+	    }
+	    else
+	    {
+	    	$data['remind']=0;
+	    }
+    	$this->private_letter_model->update_by_id($map,$data['letter_id']);
+        echo json_encode($data);
+    }
+    function privatem_letter_click()
+    {
+    	$this->load->model('privatem_letter_model');
+    	$letters=$this->privatem_letter_model->display($_POST['musician_id']);
+    	$map['last_read_time']=$_POST['new_time'];
+    	$data=$letters[$_POST['click_id']];
+    	$letter_message_time1=explode(" ", $data['created']);
+		$letter_message_time1=explode(":", $letter_message_time1[1]);
+		$letter_message_time1=$letter_message_time1[0]*10000+$letter_message_time1[1]*100+$letter_message_time1[2];
+		$letter_message_time2=explode(" ", $data['last_read_time']);
+    	$letter_message_time2=explode(":", $letter_message_time2[1]);
+	    $letter_message_time2=$letter_message_time2[0]*10000+$letter_message_time2[1]*100+$letter_message_time2[2];
+	    if(($data['last_read_time']<$data['created'])&&($letter_message_time1-$letter_message_time2>5))
+	    {
+	    	$data['remind']=1;
+	    }
+	    else
+	    {
+	    	$data['remind']=0;
+	    }
+    	$this->privatem_letter_model->update_by_id($map,$data['letter_id']);
+        echo json_encode($data);
+    }
+    function private_letter()
+    {
+    	$this->load->model('private_letter_model');
+    	$this->load->model('privatem_letter_model');
+    	$map1['letter']=$_POST['letter'];
+    	$map2['letter']=$_POST['letter'];
+    	$map1['last_read_time']=$_POST['new_time'];
+        $this->private_letter_model->update_by_messageid($map1,$_POST['letter_user_id'],$_POST['letter_musician_id']);
+        $this->privatem_letter_model->update_by_messageid($map2,$_POST['letter_user_id'],$_POST['letter_musician_id']);	
+    }
+    function privatem_letter()
+    {
+    	$this->load->model('private_letter_model');
+    	$this->load->model('privatem_letter_model');
+    	$map1['letter']=$_POST['letter'];
+    	$map2['letter']=$_POST['letter'];
+    	$map1['last_read_time']=$_POST['new_time'];
+        $this->private_letter_model->update_by_messageid($map2,$_POST['letter_user_id'],$_POST['letter_musician_id']);
+        $this->privatem_letter_model->update_by_messageid($map1,$_POST['letter_user_id'],$_POST['letter_musician_id']);	
+    }
     /*
         upload music
 

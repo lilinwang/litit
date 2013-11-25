@@ -5,10 +5,10 @@ class copyright_model extends CI_Model{
     
     }
     //插入新数据
-    function insert_new_copyright($musician_id,$user_id,$music_id,$name,$company,$identity,$phone,$email,$content,$user_image,$music_name)
+    function insert_new_copyright($musician_id,$user_id,$music_id,$name,$company,$identity,$phone,$email,$content,$user_image,$music_name,$musician_image)
     {
-    	$sql='INSERT INTO copyright (musician_id,user_id,music_id,name,company,identity,phone,email,content,user_image,music_name) values (?,?,?,?,?,?,?,?,?,?,?)';
-	     $this->db->query($sql,array($musician_id,$user_id,$music_id,$name,$company,$identity,$phone,$email,$content,$user_image,$music_name));
+    	$sql='INSERT INTO copyright (musician_id,user_id,music_id,name,company,identity,phone,email,content,user_image,music_name,musician_image) values (?,?,?,?,?,?,?,?,?,?,?,?)';
+	     $this->db->query($sql,array($musician_id,$user_id,$music_id,$name,$company,$identity,$phone,$email,$content,$user_image,$music_name,$musician_image));
     }
     function get_all_by_musician_id($musician_id)
     {
@@ -71,9 +71,22 @@ class copyright_model extends CI_Model{
 			$this->user_model->update_by_id($map,$id);
 		 * *
 		 */
-		foreach($map as $key=>$var){
+			foreach($map as $key=>$var){
 	    	$sql="UPDATE copyright SET ".$key."=? WHERE copyright_id=?";
 			$result=$this->db->query($sql,array($var,$id));
+		}
+	}
+	 function update_by_messageid($map,$user_id,$musician_id,$music_id)
+  {//更改某些项
+		/*例如：
+			$map['user_image']='path';
+			$map['misic_name']='hello';
+			$this->user_model->update_by_id($map,$id);
+		 * *
+		 */
+		foreach($map as $key=>$var){
+	    	$sql="UPDATE copyright SET ".$key."=? WHERE (user_id,musician_id,music_id)=(?,?,?)";
+			$result=$this->db->query($sql,array($var,$user_id,$musician_id,$music_id));
 
 		}
 	}

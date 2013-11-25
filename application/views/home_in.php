@@ -52,6 +52,70 @@ var musician_id_html=<?php echo $musician_id;?>;
 				$("#player").get(0).pause();    
 			}
 		});
+	/* 
+ * 去掉面纱
+ * by 徐佳琛
+ * 
+ * 1.$('.demo').click 直接注册到这个函数
+ * 2.点击RBar中的音乐后会调用这个函数
+ *
+ */
+function demo_click() {
+			function generate(layout) {
+				var push_interva = 10000;
+				if(!$("#home_hover").is(":visible")) {
+					$.post("<?php echo base_url('ajax/get_message_push')?>", 
+						{
+							user_id:<?php echo $userid;?>,
+							musician_id:musician_id_html,
+							user_type:<?php echo $usertype;?>
+						},
+						function(data, status){
+							if(! status == 'success' ){
+								return;
+							}
+							data = eval("(" + data + ")");
+							if(! data.status == 'success' ){
+								return;
+							}
+							var n = noty({
+								text: data.label + ' : <a href="' + data.url + '">' + data.brief + '</a>',
+								type: 'alert',
+								dismissQueue: true,
+								layout: layout,
+								theme: 'defaultTheme'
+							});
+							// Close after 'duration' ms.
+							var duration = 5000;
+							setTimeout(function() {
+								$.noty.close(n.options.id);
+							}, duration);
+						}
+					);
+				}else{
+					push_interva = 5000;
+				}
+				// Pop up after 'interval' ms.
+				setTimeout(function() {
+					generate('topCenter');
+				}, push_interva);
+			}
+			if(!$("#home_hover").is(":visible")) { 			// The hover is not visible when the click is triggered.										
+				$.noty.closeAll();							// Thus all visible notys should be closed.
+			}
+			if(typeof noty.alreadySet === "undefined"){		// Avoid repetition of noty alert.
+				noty.alreadySet = 1;
+				generate('topCenter');
+			}
+			$("#home_hover").fadeToggle("quick");
+			if ($("#player").get(0).paused) 
+			{               
+				document.play_button.src="<?php echo base_url()?>image/Play_Button.png";         
+			}            
+			else {                
+				document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
+			}
+		}//);
 	function next_song(){
 	        $.get("<?php echo base_url('ajax/getmusic')?>", 
              function(data, $status){
@@ -97,6 +161,11 @@ var musician_id_html=<?php echo $musician_id;?>;
 			    document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
 			    music_id_html=data.music_id;
 			    musician_id_html=data.musician_id;
+			    $.get("<?php echo base_url('ajax/play_song')?>", 
+						{
+							user_id:<?php echo $userid;?>,
+							music_id:music_id_html 	 	 
+						});
 			    $.post("<?php echo base_url('ajax/islike_follow')?>", 
 		     	{
 			    user_id:<?php echo $userid;?>,
@@ -138,7 +207,16 @@ var musician_id_html=<?php echo $musician_id;?>;
 		    	});
 	       });
 		};	
-		$(".next_song").click(next_song);
+		function skip_song()
+		{
+			$.get("<?php echo base_url('ajax/skip_song')?>", 
+					{
+						user_id:<?php echo $userid;?>,
+						music_id:music_id_html 	 	 
+					});
+			next_song();
+		};
+		$(".next_song").click(skip_song);
 		$("#player").bind("ended", next_song);
 	/********************************************************/		
 	  	     $("#no_copyright_sign").click(function(){
@@ -183,7 +261,7 @@ var musician_id_html=<?php echo $musician_id;?>;
 			 user_type:<?php echo $usertype;?>
              },
              function(data,status){
-                 console.log(data);
+                 console.log(data);//wll merge
              	 document.getElementById("no_likemusic").style.left=$('.like').css('left');
              	 document.getElementById("no_likemusic").style.top="-33px";
              	 document.getElementById("no_likemusic").style.display="block";
@@ -235,9 +313,10 @@ var musician_id_html=<?php echo $musician_id;?>;
 			$("#player").get(0).load();
 			$("#player").get(0).play();
 		});
-
+		
 		$(".demo").bind('click', demo_click);
-        $(document).ready(function(){
+	
+		$(document).ready(function(){
 			$("#home_hover").fadeIn("quick");
 		});
 		$(".play_button").mouseover(function(){
@@ -279,8 +358,18 @@ function changemusic(num){
 	document.getElementById("name").innerHTML=music_list[num].name;			
 	document.getElementById("story").innerHTML=music_list[num].story;
 	document.getElementById("player").src=music_list[num].dir;
+	$.get("<?php echo base_url('ajax/skip_song')?>", 
+			{
+				user_id:<?php echo $userid;?>,
+				music_id:music_id_html 	 	 
+			});
 	music_id_html=music_list[num].music_id;
 	musician_id_html=music_list[num].musician_id;	
+	$.get("<?php echo base_url('ajax/play_song')?>", 
+			{
+				user_id:<?php echo $userid;?>,
+				music_id:music_id_html 	 	 
+			});
 	$.post("<?php echo base_url('ajax/islike_follow')?>", 
 		{
 			user_id:<?php echo $userid;?>,
@@ -375,7 +464,193 @@ function copyright_sign_check()
 function copyright_sign_enable(){
 document.getElementById("copyright_sign").disabled=false;
 }
-<!------------------>
+//******************************************************************/
+function private_letter_sign()
+{
+				var myDate = new Date();
+             	 var tmp1=myDate.getMonth()+1;
+             	 var tmp='\n'+myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds()+'\n';
+          	    var tmp_content=tmp+document.getElementById("usernickname").innerHTML+":"+document.getElementById("private_letter_content").value;
+		$.post("<?php echo base_url('ajax/private_letter_sign')?>", 
+			{
+			 user_id:<?php echo $userid;?>,
+             musician_id:<?php echo $musician['musician_id'];?>,
+             content:tmp_content	 	 
+             },
+             function(data,status){
+             	 alert("发送成功！");
+			});	
+};
+function private_letter_check()
+{
+	var	dataString;
+	dataString=document.getElementById("private_letter_content").value;
+	if (dataString=="") {document.getElementById("private_letter_Message").innerHTML="<?php echo "私信内容不能为空";?>";document.getElementById("private_letter_sign").disabled=true;return;}
+	document.getElementById("private_letter_sign").disabled=false;
+	private_letter_sign();return;
+}
+function private_letter_enable(){
+document.getElementById("private_letter_sign").disabled=false;
+}
+</script>
+<script>
+/*
+ * Rbar 插件
+ */
+$(function() {
+    lititRbar = lititRightBarPlugin("#Rbar")
+        .setDefaultImg("<?php echo base_url()?>image/li_play.png")
+        .load(
+                <?php
+                $collect_array = array();
+                foreach ($collections as $music) {
+                    $item['img'] = $music['image_dir'];
+                    $item['text'] = $music['name'];
+                    $item['href'] = 'javascript:play_collection(' . $music['music_id'] . ');';
+                    array_push($collect_array, $item);
+                }
+                echo json_encode($collect_array);
+                ?>
+            )
+        .locate({"position":"absolute","right":0,"top":0,"bottom":0})//对rightBar重新定位
+        .itemClick(function(){
+                    var href = $(this).attr("href");
+                    if(href=="undefined")return;
+                    if(this.hrefMode=="_blank")
+                        window.open(href);
+                    else
+                        location.href=href;
+                });
+  
+});
+
+/*
+ * 播放收藏的音乐
+ * by 徐佳琛
+ *
+ * 直接copy的next_song中的代码，做了三件事
+ * 1.改变杂志页的信息
+ * 2.播放音乐
+ * 3.去掉面纱
+ *
+ * 在Rbar中点击音乐的时候调用
+ *
+ */
+function play_collection(music_id) {
+    // change magazine page, and play the music
+    $.post(
+        "<?php echo base_url('ajax/get_music_by_id')?>", 
+        {
+            music_id: music_id
+        },
+        function(data, $status){
+            data = eval("(" + data + ")");
+            var innerHTML = "";
+            console.log(data);
+            music_list = data.list;
+            for(var i = 0; i < data.list.length; i++)
+            {
+                innerHTML += "<li><img class=\"play\" onclick=\"changemusic(" + i + ")\" style=\"cursor:pointer;\" src=<?php echo base_url()?>" + data.list[i].album_dir + " /><span class=\"title\">Try Another One</span></li>\n";
+            }
+            document.getElementById("example2").innerHTML = innerHTML;
+            $('#example2').boutique({
+                starter:			1,
+                speed:				800,
+                hoverspeed:			300,
+                hovergrowth:		0.15,
+                container_width:	655,
+                front_img_width:	260,
+                front_img_height:	260,
+                behind_opac:		1,
+                back_opac:			1,
+                behind_size:		0.6,
+                back_size:			0.4,
+                autoplay:			false,
+                autointerval:		4000,
+                freescroll:			true,
+                easing:				'easeOutQuart',
+                move_twice_easein:	'easeInQuart',
+                move_twice_easeout:	'easeOutQuart',
+                text_front_only:	true,
+            });
+            $("#player source").attr("src","<?php echo base_url()?>"+data.dir);
+            $("#player").get(0).load();
+            $("#player").get(0).play();
+            $("#left_1 img").attr("src","<?php echo base_url()?>"+data.image_dir);
+            $("#name b").html(data.name);
+            $("#story").html(data.story);
+            $("#musicianintro").html(data.musician.introduction);
+            $("#musicianpt img").attr("src", "<?php echo base_url();?>"+data.musician.portaitdir);
+            $("#musiciannick span").html(data.musician.nickname);
+            $("#attention_2 b").html(data.musician.attention);
+            document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
+            music_id_html=data.music_id;
+            musician_id_html=data.musician_id;
+            $.post("<?php echo base_url('ajax/islike_follow')?>", 
+            {
+            user_id:<?php echo $userid;?>,
+            musician_id:data.musician_id,
+            music_id:data.music_id ,
+            user_type:<?php echo $usertype;?>
+            },
+            function(data,status){
+             data = eval("(" + data + ")");        	  
+             if(data.follow==0){	
+             document.getElementById("attention_1").innerHTML="关注";
+             }
+             else{
+             document.getElementById("attention_1").innerHTML="取消关注";
+             }
+             if(data.collect==0){
+             document.like.src="<?php echo base_url()?>image/like_button1.png";
+             }
+             else{
+             document.like.src="<?php echo base_url()?>image/like_button2.png";	 
+             } 
+             });
+            $.post("<?php echo base_url('ajax/iscopyright_sign')?>", 
+           {
+            user_id:<?php echo $userid;?>,
+             music_id:data.music_id 	 	 
+             },
+            function(data,status){
+                if(data==0)
+                {
+                 document.getElementById("copyright").innerHTML="版权申请";
+                 document.getElementById("copyright").href="#myModal";
+                }
+                else
+                {
+                document.getElementById("copyright").innerHTML="取消申请";
+                document.getElementById("copyright").href="#myModal_1";
+                }
+            });
+    });	
+
+    // 去掉面纱
+    demo_click();
+}
+/*
+ * toggle首页的搜索框
+ ＊by 徐佳琛
+ *
+ * 1.注册搜索框的blur事件，搜索框失去焦点之后隐藏
+ * 2.定义show_home_search函数，点击收藏中的音乐时直接调用
+ *
+ */
+$(function(){
+    $('#home_search_input').blur(function() {
+        $('#home_search_input').animate({"width":0},300, "linear", function(){
+            $(this).hide();
+        });
+    });   
+
+});
+
+function show_home_search() {
+    $('#home_search_input').show().animate({"width":400},300);
+    $("#home_search_input").focus();
+}
 </script>
 <script>
 /*
@@ -732,6 +1007,28 @@ function demo_click() {
      <input type="submit" id="no_copyright_sign" data-dismiss="modal" class="btn btn-primary" value="确定取消" />
    </div>
 </div>
+<!----------------------------------私信
+---------------------------------------->			
+	<div id="private_letter" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
+        <div style="display:none;">
+        <p id ="usernickname" /><?php echo $username; ?> </p>
+        </div>
+        <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="close">×</button>
+			<h3 id="myModalLabel">私信TA</h3>
+		</div>
+		<div class="modal-body">
+			<div class="login_wrong" id="private_letter_Message" ></div> 		
+			<br/>
+		 <textarea rows=3 style="width:500px"  id="private_letter_content" onfocus="private_letter_enable()"  /></textarea>
+			<br/>
+    </div>
+    <div class="modal-footer">
+   	<input type="button" data-dismiss="modal" class="btn btn-primary" aria-hidden="true" value="取消"/>
+     <input type="submit" onclick="private_letter_check()" id="private_letter_sign" data-dismiss="modal" class="btn btn-primary" value="发送" />
+   </div>
+</div>
+<!------------------------------------------------------------------------------------>
         <div class="music_clear"></div>
       </div>
       <div class="music_clear"></div>
@@ -792,7 +1089,7 @@ function demo_click() {
           	        <?php else:?>
           	        <a class=attention id=attention_1 href="#">取消关注</a>
           	        <?php endif;?>
-          			<a href="#">私信TA</a>
+          			<a href="#private_letter" role="button" data-toggle="modal" class="private_letter" id="private_letter" >私信TA</a>		
           			</div>
           <div class="music_clear"></div>
           <div class="music_right_2_right_4" id="attention_2">人气：<b ><?php echo $musician['attention']?></b></div>
@@ -819,5 +1116,4 @@ function demo_click() {
 </div>
 </div>
 </body>
-
 </html>

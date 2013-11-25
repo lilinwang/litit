@@ -55,7 +55,7 @@ class Login extends CI_Controller {
 				
 				$data['useremail'] = $this->session->userdata('email');
 				$data['usertype'] = $this->session->userdata('usertype');
-                $data['username'] = $username[0]['name'];
+                $data['username'] = $username[0]['nickname'];
 				$data['musician'] = $this->musician_model->check_id($data['musician_id']);
 				$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 				$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
