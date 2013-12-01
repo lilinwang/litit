@@ -506,7 +506,7 @@ $(function() {
                 foreach ($collections as $music) {
                     $item['img'] = $music['image_dir'];
                     $item['text'] = $music['name'];
-                    $item['href'] = 'javascript:play_collection(' . $music['music_id'] . ');';
+                    $item['href'] = 'javascript:play_music(' . $music['music_id'] . ', true);';
                     array_push($collect_array, $item);
                 }
                 echo json_encode($collect_array);
@@ -525,7 +525,7 @@ $(function() {
 });
 
 /*
- * 播放收藏的音乐
+ * 播放音乐
  * by 徐佳琛
  *
  * 直接copy的next_song中的代码，做了三件事
@@ -533,10 +533,11 @@ $(function() {
  * 2.播放音乐
  * 3.去掉面纱
  *
- * 在Rbar中点击音乐的时候调用
+ * 1.在Rbar中点击音乐的时候调用
+ * 2.搜索音乐的时候调用
  *
  */
-function play_collection(music_id) {
+function play_music(music_id, is_lit) {
     // change magazine page, and play the music
     $.post(
         "<?php echo base_url('ajax/get_music_by_id')?>", 
@@ -546,7 +547,7 @@ function play_collection(music_id) {
         function(data, $status){
             data = eval("(" + data + ")");
             var innerHTML = "";
-            console.log(data);
+            //console.log(data);
             music_list = data.list;
             for(var i = 0; i < data.list.length; i++)
             {
@@ -628,188 +629,7 @@ function play_collection(music_id) {
     });	
 
     // 去掉面纱
-    demo_click();
-}
-/*
- * toggle首页的搜索框
- ＊by 徐佳琛
- *
- * 1.注册搜索框的blur事件，搜索框失去焦点之后隐藏
- * 2.定义show_home_search函数，点击收藏中的音乐时直接调用
- *
- */
-$(function(){
-    $('#home_search_input').blur(function() {
-        $('#home_search_input').animate({"width":0},300, "linear", function(){
-            $(this).hide();
-        });
-    });   
-
-});
-
-function show_home_search() {
-    $('#home_search_input').show().animate({"width":400},300);
-    $("#home_search_input").focus();
-}
-</script>
-<script>
-/*
- * Rbar 插件
- */
-$(function() {
-    lititRbar = lititRightBarPlugin("#Rbar")
-        .setDefaultImg("<?php echo base_url()?>image/li_play.png")
-        .load(
-                <?php
-                $collect_array = array();
-                foreach ($collections as $music) {
-                    $item['img'] = $music['image_dir'];
-                    $item['text'] = $music['name'];
-                    $item['href'] = 'javascript:play_collection(' . $music['music_id'] . ');';
-                    array_push($collect_array, $item);
-                }
-                echo json_encode($collect_array);
-                ?>
-            )
-        .locate({"position":"absolute","right":0,"top":0,"bottom":0})//对rightBar重新定位
-        .itemClick(function(){
-                    var href = $(this).attr("href");
-                    if(href=="undefined")return;
-                    if(this.hrefMode=="_blank")
-                        window.open(href);
-                    else
-                        location.href=href;
-                });
-  
-});
-
-/*
- * 播放收藏的音乐
- * by 徐佳琛
- *
- * 直接copy的next_song中的代码，做了三件事
- * 1.改变杂志页的信息
- * 2.播放音乐
- * 3.去掉面纱
- *
- * 在Rbar中点击音乐的时候调用
- *
- */
-function play_collection(music_id) {
-    // change magazine page, and play the music
-    $.post(
-        "<?php echo base_url('ajax/get_music_by_id')?>", 
-        {
-            music_id: music_id
-        },
-        function(data, $status){
-            data = eval("(" + data + ")");
-            var innerHTML = "";
-            console.log(data);
-            music_list = data.list;
-            for(var i = 0; i < data.list.length; i++)
-            {
-                innerHTML += "<li><img class=\"play\" onclick=\"changemusic(" + i + ")\" style=\"cursor:pointer;\" src=<?php echo base_url()?>" + data.list[i].album_dir + " /><span class=\"title\">Try Another One</span></li>\n";
-            }
-            document.getElementById("example2").innerHTML = innerHTML;
-            $('#example2').boutique({
-                starter:			1,
-                speed:				800,
-                hoverspeed:			300,
-                hovergrowth:		0.15,
-                container_width:	655,
-                front_img_width:	260,
-                front_img_height:	260,
-                behind_opac:		1,
-                back_opac:			1,
-                behind_size:		0.6,
-                back_size:			0.4,
-                autoplay:			false,
-                autointerval:		4000,
-                freescroll:			true,
-                easing:				'easeOutQuart',
-                move_twice_easein:	'easeInQuart',
-                move_twice_easeout:	'easeOutQuart',
-                text_front_only:	true,
-            });
-            $("#player source").attr("src","<?php echo base_url()?>"+data.dir);
-            $("#player").get(0).load();
-            $("#player").get(0).play();
-            $("#left_1 img").attr("src","<?php echo base_url()?>"+data.image_dir);
-            $("#name b").html(data.name);
-            $("#story").html(data.story);
-            $("#musicianintro").html(data.musician.introduction);
-            $("#musicianpt img").attr("src", "<?php echo base_url();?>"+data.musician.portaitdir);
-            $("#musiciannick span").html(data.musician.nickname);
-            $("#attention_2 b").html(data.musician.attention);
-            document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
-            music_id_html=data.music_id;
-            musician_id_html=data.musician_id;
-            $.post("<?php echo base_url('ajax/islike_follow')?>", 
-            {
-            user_id:<?php echo $userid;?>,
-            musician_id:data.musician_id,
-            music_id:data.music_id ,
-            user_type:<?php echo $usertype;?>
-            },
-            function(data,status){
-             data = eval("(" + data + ")");        	  
-             if(data.follow==0){	
-             document.getElementById("attention_1").innerHTML="关注";
-             }
-             else{
-             document.getElementById("attention_1").innerHTML="取消关注";
-             }
-             if(data.collect==0){
-             document.like.src="<?php echo base_url()?>image/like_button1.png";
-             }
-             else{
-             document.like.src="<?php echo base_url()?>image/like_button2.png";	 
-             } 
-             });
-            $.post("<?php echo base_url('ajax/iscopyright_sign')?>", 
-           {
-            user_id:<?php echo $userid;?>,
-             music_id:data.music_id 	 	 
-             },
-            function(data,status){
-                if(data==0)
-                {
-                 document.getElementById("copyright").innerHTML="版权申请";
-                 document.getElementById("copyright").href="#myModal";
-                }
-                else
-                {
-                document.getElementById("copyright").innerHTML="取消申请";
-                document.getElementById("copyright").href="#myModal_1";
-                }
-            });
-    });	
-
-    // 去掉面纱
-    demo_click();
-}
-
-/*
- * toggle首页的搜索框
- ＊by 徐佳琛
- *
- * 1.注册搜索框的blur事件，搜索框失去焦点之后隐藏
- * 2.定义show_home_search函数，点击收藏中的音乐时直接调用
- *
- */
-$(function(){
-    $('#home_search_input').blur(function() {
-        $('#home_search_input').animate({"width":0},300, "linear", function(){
-            $(this).hide();
-        });
-    });   
-
-});
-
-function show_home_search() {
-    $('#home_search_input').show().animate({"width":400},300);
-    $("#home_search_input").focus();
+    if (is_lit) demo_click();
 }
 
 
@@ -878,6 +698,44 @@ function demo_click() {
     }
 }
 
+
+/*
+ * 首页的搜索框的事件绑定
+ ＊by 徐佳琛
+ *
+ * 1.注册搜索框按下回车键，执行搜索
+ * 2.注册搜索框的blur事件，搜索框失去焦点之后隐藏
+ * 3.定义show_home_search函数，点击收藏中的音乐时直接调用
+ *
+ */
+$(function(){
+    $("#home_search_input").keypress(function(event){       
+        if (event.keyCode == 13) {
+            $.post(
+                "<?php echo base_url('ajax/search'); ?>",
+                {keyword: $("#home_search_input").val()},
+                function(data, status) {
+                    if (data.length > 0) {
+                        play_music(data[0].music_id, false);
+                    }
+                },
+                "json"
+            );
+        }
+    });
+
+    $('#home_search_input').blur(function() {
+        $('#home_search_input').animate({"width":0},300, "linear", function(){
+            $(this).hide();
+        });
+    });   
+
+});
+
+function show_home_search() {
+    $('#home_search_input').show().animate({"width":200},300);
+    $("#home_search_input").focus();
+}
 </script>
 </head>
 <body >
@@ -889,9 +747,9 @@ function demo_click() {
             <a href="#" onclick="lititRbar.display('slideLeft');"><i class="icon-heart icon-white"></i></a>
             <a href="#" onclick=""><i class="icon-signal icon-white"></i></a>
             <a href="#" onclick="show_home_search();"><i class="icon-search icon-white"></i></a>
-            <div id="home_search">
+            <span id="home_search">
                 <input id="home_search_input" type="text">
-            </div>
+            </span>
         </div>
 		<div id="Rbar"></div>
 		<div id="play_button_background"></div>

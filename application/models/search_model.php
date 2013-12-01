@@ -68,7 +68,7 @@ class search_model extends CI_Model {
      	foreach($keywords as $keyword)
      	{
      		//echo $keyword;
-     		$sql = "select distinct music_id from wordindex inner join word on wordindex.word_id = word.id where word = ?";
+     		$sql = "select distinct music_id from wordindex inner join word on wordindex.word_id = word.word_id where word = ?";
      		$query = $this->db->query($sql, array($keyword));
      		$result = $query->result_array();
     		foreach($result as $row)
@@ -80,15 +80,16 @@ class search_model extends CI_Model {
     		}
      	}
      	asort($arrayHash);
-     	//echo $arrayHash['13'];
-     	$result = array_reverse($arrayHash, TRUE);
-        /*
-     	foreach(array_keys($result) as $row)
-     	{
-     		echo $row;
-     		echo '<br/>';
-     	}
-         */
+     	$pre_result = array_reverse($arrayHash, TRUE);
+        // make $result from $pre_result, transform the key value pair into 
+        // objects. By jchnxu
+        $result = array();
+        foreach ($pre_result as $key=>$value) {
+            $result_row = new stdClass;
+            $result_row->music_id = $key;
+            $result_row->hash = $value;
+            array_push($result, $result_row);
+        }
         return $result;
      }
   }

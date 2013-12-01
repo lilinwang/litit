@@ -110,9 +110,6 @@ img.litit_motto{float:left;margin-top:300px;margin-left:500px;z-index:100}
     cursor: pointer;
 }
 
-#home_search {
-    display: inline-block;
-}
 #home_search_input {
     width: 0;
     display: none;

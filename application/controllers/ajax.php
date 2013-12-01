@@ -582,5 +582,6 @@ class Ajax extends CI_Controller {
         $keyword = $this->input->post('keyword');
         $this->load->model('search_model');
         $result = $this->search_model->search(array($keyword));
+        echo json_encode($result);
     }
 }
