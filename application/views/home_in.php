@@ -353,7 +353,7 @@ function demo_click() {
 		});
 	});
 </script>
-<script>
+<script type="text/javascript">
 function changemusic(num){
 	document.getElementById("name").innerHTML=music_list[num].name;			
 	document.getElementById("story").innerHTML=music_list[num].story;
@@ -493,7 +493,7 @@ function private_letter_enable(){
 document.getElementById("private_letter_sign").disabled=false;
 }
 </script>
-<script>
+<script type="text/javascript">
 /*
  * Rbar 插件
  */
