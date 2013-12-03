@@ -584,4 +584,20 @@ class Ajax extends CI_Controller {
         $result = $this->search_model->search(array($keyword));
         echo json_encode($result);
     }
+    
+    public function personal_load_tab() {
+        $tab_for = $this->input->post('tab_for');
+        $this->load->library('session');
+        $user_id = $this->session->userdata('userid');
+        $user_type = $this->session->userdata('usertype');
+        $model_name = substr($tab_for, 0, strlen($tab_for) - 1);
+        if ($tab_for != 'uploads') 
+            $model_name .= $user_type == '0' ? 'm' : '';
+        $model_name .= '_model';
+        
+        $this->load->model($model_name, 'tab_content_model');
+        $data = $this->tab_content_model->display($user_id);
+    
+        echo json_encode($data);
+    }
 }

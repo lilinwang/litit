@@ -57,46 +57,46 @@
         }
     </script>
     <script type="text/javascript">
-	$(document).ready(function(){
-	$("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360);?>);
-	$(".prev").click(function(){
-		 //y=$("#music2_right_tab").position();
-		// if (y.left<0) 		 		 
-		 pagenum=parseInt(document.getElementById("pagenum").value);
+    $(document).ready(function(){
+    $("#music2_right_tab").width(<?php echo((((int)((count($collects)-1)/24))+1)*1360);?>);
+    $(".prev").click(function(){
+         //y=$("#music2_right_tab").position();
+        // if (y.left<0)                 
+         pagenum=parseInt(document.getElementById("pagenum").value);
          if (pagenum>0) {
-			pagenum=pagenum-1;
-			$("#music2_right_tab").animate({left: '+=1360px'},"slow");
-			tag = document.getElementById("page").getElementsByTagName("li");
-			taglength = tag.length;
-			for(i=0; i<taglength; i++){
-				tag[i].className = "";
-			}
-			document.getElementById(pagenum).className = "page_selectTag";
-			document.getElementById("pagenum").value=pagenum;
-		 }
-	});
-	$(".next").click(function(){
-		var pagenum=parseInt(document.getElementById("pagenum").value);
+            pagenum=pagenum-1;
+            $("#music2_right_tab").animate({left: '+=1360px'},"slow");
+            tag = document.getElementById("page").getElementsByTagName("li");
+            taglength = tag.length;
+            for(i=0; i<taglength; i++){
+                tag[i].className = "";
+            }
+            document.getElementById(pagenum).className = "page_selectTag";
+            document.getElementById("pagenum").value=pagenum;
+         }
+    });
+    $(".next").click(function(){
+        var pagenum=parseInt(document.getElementById("pagenum").value);
         if ((pagenum+1)<document.getElementById("totalnum").value) {
-			pagenum=pagenum+1;
-			$("#music2_right_tab").animate({left: '-=1360px'},"slow");
-			tag = document.getElementById("page").getElementsByTagName("li");
-			taglength = tag.length;
-			for(i=0; i<taglength; i++){
-				tag[i].className = "";
-			}
-			//alert(pagenum);
-			document.getElementById(pagenum).className = "page_selectTag";
-			document.getElementById("pagenum").value=pagenum;
-		 }
-		 
-	});
-		//用户修改信息
-	 $("#save").click(function(){
-	     	$.post("<?php echo base_url('ajax/information_change')?>", 
-			{
-			 id:<?php echo $musician['musician_id'];?>,
-			 type:<?php echo $usertype;?>,
+            pagenum=pagenum+1;
+            $("#music2_right_tab").animate({left: '-=1360px'},"slow");
+            tag = document.getElementById("page").getElementsByTagName("li");
+            taglength = tag.length;
+            for(i=0; i<taglength; i++){
+                tag[i].className = "";
+            }
+            //alert(pagenum);
+            document.getElementById(pagenum).className = "page_selectTag";
+            document.getElementById("pagenum").value=pagenum;
+         }
+         
+    });
+        //用户修改信息
+     $("#save").click(function(){
+            $.post("<?php echo base_url('ajax/information_change')?>", 
+            {
+             id:<?php echo $musician['musician_id'];?>,
+             type:<?php echo $usertype;?>,
              name:document.getElementById("name").value,
              nickname:document.getElementById("nickname").value,
              gender:document.getElementById("gender").value,
@@ -105,109 +105,109 @@
              self_intro:document.getElementById("introduction").value
              },
              function(data,status){
-             	 alert("提交成功，您的个人信息已修改！");
-			});
-   	})
-   	//用户修改密码
-   	$("#password_change").click(function(){
-   			$.post("<?php echo base_url('ajax/password_change')?>", 
-			{
-			 id:<?php echo $musician['musician_id'];?>,
-			 type:<?php echo $usertype;?>,
+                 alert("提交成功，您的个人信息已修改！");
+            });
+    })
+    //用户修改密码
+    $("#password_change").click(function(){
+            $.post("<?php echo base_url('ajax/password_change')?>", 
+            {
+             id:<?php echo $musician['musician_id'];?>,
+             type:<?php echo $usertype;?>,
              password:document.getElementById("password").value,
              password1:document.getElementById("password1").value,
              password2:document.getElementById("password2").value
              },
              function(data,status){
-             	 document.getElementById("password1").value="";
-             	 document.getElementById("password2").value="";
-             	 if(data==1) 
-             	 {
-             	 document.getElementById("password").value="";
-             	 alert("密码错误，请重新输入！");
-             	 }
-             	 if(data==2) 
-             	 {    	 
-             	 alert("两次密码不一致！");
-             	 }
-             	  if(data==3) 
-             	 {    	 
-             	 alert("密码位数应大于等于8位");
-             	 }
-             	 if(data==4) 
-             	 {
-             	 document.getElementById("password").value="";
-             	 alert("密码已修改！");
-             	 }
-			});
+                 document.getElementById("password1").value="";
+                 document.getElementById("password2").value="";
+                 if(data==1) 
+                 {
+                 document.getElementById("password").value="";
+                 alert("密码错误，请重新输入！");
+                 }
+                 if(data==2) 
+                 {       
+                 alert("两次密码不一致！");
+                 }
+                  if(data==3) 
+                 {       
+                 alert("密码位数应大于等于8位");
+                 }
+                 if(data==4) 
+                 {
+                 document.getElementById("password").value="";
+                 alert("密码已修改！");
+                 }
+            });
     })
-//申请版权信息更新		
-   	$("#sendmessage").click(function(){
-   				var myDate = new Date();
-             	 var tmp1=myDate.getMonth()+1;
-             	 var tmp='\n'+myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds()+'\n';
-          	     var tmp_time=myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds();
-          	     document.getElementById("story_message").value+=tmp+document.getElementById("copyright_nick_name").innerHTML+":"+document.getElementById("send_message").value;
-	     	$.post("<?php echo base_url('ajax/copyrightm_message')?>", 
-			{
-			 message:document.getElementById("story_message").value,
-			 copyright_id:document.getElementById("copyright_id").innerHTML,
-			 copyright_music_id:document.getElementById("copyright_music_id").innerHTML,
-			 copyright_musician_id:document.getElementById("copyright_musician_id").innerHTML,
-			 copyright_user_id:document.getElementById("copyright_user_id").innerHTML,
+//申请版权信息更新      
+    $("#sendmessage").click(function(){
+                var myDate = new Date();
+                 var tmp1=myDate.getMonth()+1;
+                 var tmp='\n'+myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds()+'\n';
+                 var tmp_time=myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds();
+                 document.getElementById("story_message").value+=tmp+document.getElementById("copyright_nick_name").innerHTML+":"+document.getElementById("send_message").value;
+            $.post("<?php echo base_url('ajax/copyrightm_message')?>", 
+            {
+             message:document.getElementById("story_message").value,
+             copyright_id:document.getElementById("copyright_id").innerHTML,
+             copyright_music_id:document.getElementById("copyright_music_id").innerHTML,
+             copyright_musician_id:document.getElementById("copyright_musician_id").innerHTML,
+             copyright_user_id:document.getElementById("copyright_user_id").innerHTML,
              new_time:tmp_time
              },
              function(data,status){
-             	 document.getElementById("send_message").value="";
-             	 alert("信息已发送！");
-			});
-   	})	
-   		$("#sendletter").click(function(){ 
-   	  			var myDate = new Date();
-             	 var tmp1=myDate.getMonth()+1;
-             	 var tmp='\n'+myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds()+'\n';
-             	 var tmp_time=myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds();
-          	    document.getElementById("story_letter").value+=tmp+document.getElementById("letter_nick_name").innerHTML+":"+document.getElementById("send_letter").value;
-          	     
-	     	$.post("<?php echo base_url('ajax/privatem_letter')?>", 
-			{
-			 letter:document.getElementById("story_letter").value,
-			 letter_id:document.getElementById("letter_id").innerHTML,
-			 letter_musician_id:document.getElementById("letter_musician_id").innerHTML,
-			 letter_user_id:document.getElementById("letter_user_id").innerHTML,
-			 new_time:tmp_time
+                 document.getElementById("send_message").value="";
+                 alert("信息已发送！");
+            });
+    })  
+        $("#sendletter").click(function(){ 
+                var myDate = new Date();
+                 var tmp1=myDate.getMonth()+1;
+                 var tmp='\n'+myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds()+'\n';
+                 var tmp_time=myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds();
+                document.getElementById("story_letter").value+=tmp+document.getElementById("letter_nick_name").innerHTML+":"+document.getElementById("send_letter").value;
+                 
+            $.post("<?php echo base_url('ajax/privatem_letter')?>", 
+            {
+             letter:document.getElementById("story_letter").value,
+             letter_id:document.getElementById("letter_id").innerHTML,
+             letter_musician_id:document.getElementById("letter_musician_id").innerHTML,
+             letter_user_id:document.getElementById("letter_user_id").innerHTML,
+             new_time:tmp_time
              },
              function(data,status){
-             	 document.getElementById("send_letter").value="";
-             	 alert("信息已发送！");
-			});
-   	     })		
-	$("#update-info").hide();
-	$("#viewinfo-button").click(function(){
-		$("#update-info").hide();
-		$("#view-info").show();
-	});
-	$("#updateinfo-button").click(function(){
-		$("#view-info").hide();
-		$("#update-info").show();
-	});
-	$(".demo").click(function(){
-			$("#home_hover").fadeToggle("quick");
-			if ($("#player").get(0).paused) 
-			{               
-				document.play_button.src="<?php echo base_url()?>image/Play_Button.png";         
-			}            
-			else {                
-				document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
-			}
-		});
-	});	
+                 document.getElementById("send_letter").value="";
+                 alert("信息已发送！");
+            });
+         })     
+    $("#update-info").hide();
+    $("#viewinfo-button").click(function(){
+        $("#update-info").hide();
+        $("#view-info").show();
+    });
+    $("#updateinfo-button").click(function(){
+        $("#view-info").hide();
+        $("#update-info").show();
+    });
+    $(".demo").click(function(){
+            $("#home_hover").fadeToggle("quick");
+            if ($("#player").get(0).paused) 
+            {               
+                document.play_button.src="<?php echo base_url()?>image/Play_Button.png";         
+            }            
+            else {                
+                document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
+            }
+        });
+    }); 
 $(function(){
-	$(".li_play_1").hover(function(){
-		$(this).find(".li_play").show();
-	},function(){
-		$(this).find(".li_play").hide();
-	});
+    $(".li_play_1").hover(function(){
+        $(this).find(".li_play").show();
+    },function(){
+        $(this).find(".li_play").hide();
+    });
 });
 </script>
 
@@ -482,7 +482,7 @@ $(function(){
             )
         });
     });
-	</script>
+    </script>
 
 </head>
 <body>
@@ -508,65 +508,65 @@ $(function(){
              birthday:document.getElementById("birthday").value
              },
              function(data,status){
-             	 document.getElementById("constellation").innerHTML="星座："+data;
-			});
-   	  }
+                 document.getElementById("constellation").innerHTML="星座："+data;
+            });
+      }
  //点击版权申请图片时获取相关信息并更改html元素
    function li_id(object)
-   	  {
-   	      
-   	  	  var tmp=object.id; 
-   	  	  var myDate = new Date();
+      {
+          
+          var tmp=object.id; 
+          var myDate = new Date();
           var tmp1=myDate.getMonth()+1;
-          var tmp_time=myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds(); 	  				 	  				
-   	  	  	$.post("<?php echo base_url('ajax/copyrightm_click');?>", 
-			{
-			 click_id:tmp,
-			 musician_id:<?php echo $musician['musician_id'];?>,
-			 new_time:tmp_time
+          var tmp_time=myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds();                                        
+            $.post("<?php echo base_url('ajax/copyrightm_click');?>", 
+            {
+             click_id:tmp,
+             musician_id:<?php echo $musician['musician_id'];?>,
+             new_time:tmp_time
              },
              function(data,status){
-             	 
-             	 data = eval("(" + data + ")");
-             	document.getElementById("copyright_id").innerHTML=data.copyright_id;
+                 
+                 data = eval("(" + data + ")");
+                document.getElementById("copyright_id").innerHTML=data.copyright_id;
                 document.getElementById("copyright_user_id").innerHTML=data.user_id;
-             	document.getElementById("copyright_musician_id").innerHTML=data.musician_id;
-             	document.getElementById("copyright_music_id").innerHTML=data.music_id;
-             	document.getElementById("name_message").innerHTML="姓名"+data.name;
-             	document.getElementById("phone_message").innerHTML="电话"+data.phone;
-             	document.getElementById("email_message").innerHTML="邮箱"+data.email;
-             	document.getElementById("company_message").innerHTML="公司"+data.company;
-             	document.getElementById("copyright_time").innerHTML="申请时间"+data.created;
-             	document.getElementById("copyright_info").innerHTML=data.copyright_info;
-             	document.getElementById("copyright_content").innerHTML=data.content;
-             	document.getElementById("story_message").value=data.copyright_message;
-             	if(data.remind==1) document.getElementById("num_message").innerHTML=document.getElementById("num_message").innerHTML-1;
-			});
+                document.getElementById("copyright_musician_id").innerHTML=data.musician_id;
+                document.getElementById("copyright_music_id").innerHTML=data.music_id;
+                document.getElementById("name_message").innerHTML="姓名"+data.name;
+                document.getElementById("phone_message").innerHTML="电话"+data.phone;
+                document.getElementById("email_message").innerHTML="邮箱"+data.email;
+                document.getElementById("company_message").innerHTML="公司"+data.company;
+                document.getElementById("copyright_time").innerHTML="申请时间"+data.created;
+                document.getElementById("copyright_info").innerHTML=data.copyright_info;
+                document.getElementById("copyright_content").innerHTML=data.content;
+                document.getElementById("story_message").value=data.copyright_message;
+                if(data.remind==1) document.getElementById("num_message").innerHTML=document.getElementById("num_message").innerHTML-1;
+            });
 
-   	  	  
-   	  } 
-   	   function li_id_letter(object)  
-   	  {
-   	  	  var tmp=object.id; 
-   	  	  var myDate = new Date();
+          
+      } 
+       function li_id_letter(object)  
+      {
+          var tmp=object.id; 
+          var myDate = new Date();
           var tmp1=myDate.getMonth()+1;
-          var tmp_time=myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds(); 	  				
-   	  	  	$.post("<?php echo base_url('ajax/privatem_letter_click');?>", 
-			{
-			 click_id:tmp,
-			 musician_id:<?php echo $musician['musician_id'];?>,
-			 new_time:tmp_time
+          var tmp_time=myDate.getFullYear()+"-"+tmp1+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds();                    
+            $.post("<?php echo base_url('ajax/privatem_letter_click');?>", 
+            {
+             click_id:tmp,
+             musician_id:<?php echo $musician['musician_id'];?>,
+             new_time:tmp_time
              },
              function(data,status){
-             	 
-             	 data = eval("(" + data + ")");
-             	document.getElementById("letter_id").innerHTML=data.letter_id;
-             	document.getElementById("letter_user_id").innerHTML=data.user_id;
-             	document.getElementById("letter_musician_id").innerHTML=data.musician_id;
-             	document.getElementById("story_letter").value=data.letter;
-             	if(data.remind==1) document.getElementById("num_letter").innerHTML=document.getElementById("num_letter").innerHTML-1;
-			}); 
-   	  }  	
+                 
+                 data = eval("(" + data + ")");
+                document.getElementById("letter_id").innerHTML=data.letter_id;
+                document.getElementById("letter_user_id").innerHTML=data.user_id;
+                document.getElementById("letter_musician_id").innerHTML=data.musician_id;
+                document.getElementById("story_letter").value=data.letter;
+                if(data.remind==1) document.getElementById("num_letter").innerHTML=document.getElementById("num_letter").innerHTML-1;
+            }); 
+      }     
 </script>
 <audio id="video1">
   <source src="" type="audio/mp3" preload="meta">
@@ -575,54 +575,54 @@ $(function(){
 
 <!----------------->
 <div class="music_all">
-	<?php $num_letter=0;$num_message=0;?>
-	<?php if (count($copyrights)>0){$i=0;$num_message=0;while ($i<count($copyrights)) {foreach ($copyrights as $copyright):$i++; if ($i>count($copyrights)) break;?>
-	<?php $copyright_message_time1=explode(" ", $copyright['created']);?>
-	<?php $copyright_message_time1=explode(":", $copyright_message_time1[1]);?>
-	<?php $copyright_message_time1=$copyright_message_time1[0]*10000+$copyright_message_time1[1]*100+$copyright_message_time1[2];?>
-	<?php $copyright_message_time2=explode(" ", $copyright['last_read_time']);?>
-	<?php $copyright_message_time2=explode(":", $copyright_message_time2[1]);?>
-	<?php $copyright_message_time2=$copyright_message_time2[0]*10000+$copyright_message_time2[1]*100+$copyright_message_time2[2];?>
-	<?php if(($copyright['last_read_time']<$copyright['created'])&&($copyright_message_time1-$copyright_message_time2>5)){$num_message++;}?>
-	<?php  endforeach;}}?>
-	<?php if (count($private_letters)>0){$i=0;$num_letter=0;while ($i<count($private_letters)) {foreach ($private_letters as $private_letter):$i++; if ($i>count($private_letters)) break;?>
-	<?php $letter_time1=explode(" ", $private_letter['created']);?>
-	<?php $letter_time1=explode(":", $letter_time1[1]);?>
-	<?php $letter_time1=$letter_time1[0]*10000+$letter_time1[1]*100+$letter_time1[2];?>
-	<?php $letter_time2=explode(" ", $private_letter['last_read_time']);?>
-	<?php $letter_time2=explode(":", $letter_time2[1]);?>
-	<?php $letter_time2=$letter_time2[0]*10000+$letter_time2[1]*100+$letter_time2[2];?>
-	<?php if(($letter_time1-$letter_time2>5)){$num_letter++;}?>		
-	<?php  endforeach;}}?>
+    <?php $num_letter=0;$num_message=0;?>
+    <?php if (count($copyrights)>0){$i=0;$num_message=0;while ($i<count($copyrights)) {foreach ($copyrights as $copyright):$i++; if ($i>count($copyrights)) break;?>
+    <?php $copyright_message_time1=explode(" ", $copyright['created']);?>
+    <?php $copyright_message_time1=explode(":", $copyright_message_time1[1]);?>
+    <?php $copyright_message_time1=$copyright_message_time1[0]*10000+$copyright_message_time1[1]*100+$copyright_message_time1[2];?>
+    <?php $copyright_message_time2=explode(" ", $copyright['last_read_time']);?>
+    <?php $copyright_message_time2=explode(":", $copyright_message_time2[1]);?>
+    <?php $copyright_message_time2=$copyright_message_time2[0]*10000+$copyright_message_time2[1]*100+$copyright_message_time2[2];?>
+    <?php if(($copyright['last_read_time']<$copyright['created'])&&($copyright_message_time1-$copyright_message_time2>5)){$num_message++;}?>
+    <?php  endforeach;}}?>
+    <?php if (count($private_letters)>0){$i=0;$num_letter=0;while ($i<count($private_letters)) {foreach ($private_letters as $private_letter):$i++; if ($i>count($private_letters)) break;?>
+    <?php $letter_time1=explode(" ", $private_letter['created']);?>
+    <?php $letter_time1=explode(":", $letter_time1[1]);?>
+    <?php $letter_time1=$letter_time1[0]*10000+$letter_time1[1]*100+$letter_time1[2];?>
+    <?php $letter_time2=explode(" ", $private_letter['last_read_time']);?>
+    <?php $letter_time2=explode(":", $letter_time2[1]);?>
+    <?php $letter_time2=$letter_time2[0]*10000+$letter_time2[1]*100+$letter_time2[2];?>
+    <?php if(($letter_time1-$letter_time2>5)){$num_letter++;}?>     
+    <?php  endforeach;}}?>
 <!------------------------用户信息修改界面----------------------------
 <div id="information_Modal1" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
     <div id="personal_hover">
-		<div class="modal-header">
-			<h2>
-				<?php if($musician['name']!=""):?>
-				<div id="musician_name">  <?php echo $musician['name'];?></div>
-				<?php else:?>
-					? ? ?
-				<?php endif;?>		
-			</h2>
-		</div>
-		<div id="information_left">
-			<div class="modal-body">
-				<div class="login_wrong" id="signMessage" ></div>
-			</div>
-				
-			<p>	<img id="musician-avatar" src="<?php echo $check_photo==0 ? base_url().'image/public.jpg':base_url().$musician['portaitdir'];?>" style="width:220px;height:200px;"/></p>
-			<div id="select">
-			<div id="upload">
-				<input type="file" id="fileupload-avatar" />
-			</div>                
-			<form>
-				<div id="queue1"></div> 
-			</form>
-			</div>
+        <div class="modal-header">
+            <h2>
+                <?php if($musician['name']!=""):?>
+                <div id="musician_name">  <?php echo $musician['name'];?></div>
+                <?php else:?>
+                    ? ? ?
+                <?php endif;?>      
+            </h2>
+        </div>
+        <div id="information_left">
+            <div class="modal-body">
+                <div class="login_wrong" id="signMessage" ></div>
+            </div>
+                
+            <p> <img id="musician-avatar" src="<?php echo $check_photo==0 ? base_url().'image/public.jpg':base_url().$musician['portaitdir'];?>" style="width:220px;height:200px;"/></p>
+            <div id="select">
+            <div id="upload">
+                <input type="file" id="fileupload-avatar" />
+            </div>                
+            <form>
+                <div id="queue1"></div> 
+            </form>
+            </div>
             <p> 修改密码<br/></p>
             <div id="information_left_1">            
-				<p>
+                <p>
                 原密码：
                 <br/><br/>
                 新密码：
@@ -633,29 +633,29 @@ $(function(){
             </div>
             <div id="information_left_2">
             <p>
-				<input type="password" name="password" id="password" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="原密码" />
-				<input type="password" name="password1" id="password1" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="新密码" />
-				<input type="password" name="password2" id="password2" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="确认密码" />              
-				<br/>
-				<input type="submit" id="password_change" class="btn" value="确认" />
+                <input type="password" name="password" id="password" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="原密码" />
+                <input type="password" name="password1" id="password1" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="新密码" />
+                <input type="password" name="password2" id="password2" style="width:100px;height:12px;" onfocus="sign_enable()" placeholder="确认密码" />              
+                <br/>
+                <input type="submit" id="password_change" class="btn" value="确认" />
             </p>
             </div> 
-		</div>
-		<div id="information_right">
-			<br/><br/>
+        </div>
+        <div id="information_right">
+            <br/><br/>
             邮箱：<?php echo $musician['email'];?>
             <br/>
             <br/>
             <br/>
-			身份证号：<input type="text" name="identity" id="identity"  style="width:150px" value=<?php echo $musician['identity'];?> />
+            身份证号：<input type="text" name="identity" id="identity"  style="width:150px" value=<?php echo $musician['identity'];?> />
             <br/>
             <br/>
-			姓名：<input type="text" name="name" id="name"  style="width:100px" value=<?php echo $musician['name'];?> />
+            姓名：<input type="text" name="name" id="name"  style="width:100px" value=<?php echo $musician['name'];?> />
             &nbsp;&nbsp;&nbsp;&nbsp;
-			昵称：<input type="text" name="nickname" id="nickname"  style="width:100px" value=<?php echo $musician['nickname'];?> /> 
-			<br/><br/>
-			性别：<select style='width:100px' id="gender" name="gender" >  
-			<option value=<?php echo $musician['gender'];?>>
+            昵称：<input type="text" name="nickname" id="nickname"  style="width:100px" value=<?php echo $musician['nickname'];?> /> 
+            <br/><br/>
+            性别：<select style='width:100px' id="gender" name="gender" >  
+            <option value=<?php echo $musician['gender'];?>>
             <?php if($musician['gender']==1):?>
             男
             <?php elseif($musician['gender']==0):?>
@@ -663,61 +663,61 @@ $(function(){
             <?php else:?>
             保密
             <?php endif;?>
-			</option>  			
-			</select>  
-			&nbsp;&nbsp;&nbsp;&nbsp;
-			破壳日：<input type="date" style="width:150px" id ="birthday" onblur=constellation() name="birthday" value=<?php echo $musician['birthday'];?> />
+            </option>           
+            </select>  
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            破壳日：<input type="date" style="width:150px" id ="birthday" onblur=constellation() name="birthday" value=<?php echo $musician['birthday'];?> />
             <br/>
             <br/> 
-			<p id=constellation>星座：<?php echo $constellation;?></p>
-			<br/> 
+            <p id=constellation>星座：<?php echo $constellation;?></p>
+            <br/> 
            
-			自我介绍
+            自我介绍
             <br/> 
             <br/> 
-			<textarea rows=4 style="width:700px" name="introduction" id="introduction"  ><?php echo $musician['introduction'];?></textarea>
+            <textarea rows=4 style="width:700px" name="introduction" id="introduction"  ><?php echo $musician['introduction'];?></textarea>
             <br/>   
-	  </div>
-	  <div id="head_foot">
+      </div>
+      <div id="head_foot">
          <input type="submit" id="save" class="btn" value="保存" />
          <input type="submit" id="exit" data-dismiss="modal" aria-hidden="true"class="btn" value="退出" />
       </div>  
-	</div>
+    </div>
 </div>
 
---->	
+--->    
      <!-- 主页面 --> 
      <div class="music2_right">
         <div class="music2_right_1">
-			<form name="input" action="<?php echo site_url('home')?>" method="post">
-			<input type="submit" class="btn" value="返回首页"/>
-			</form>
+            <form name="input" action="<?php echo site_url('home')?>" method="post">
+            <input type="submit" class="btn" value="返回首页"/>
+            </form>
         </div>
         <div class="music_right_1">
-			<a href="#information_Modal1" role="button" data-toggle="modal" class="btn" id="personal_information" >个人信息</a>
+            <a href="#information_Modal1" role="button" data-toggle="modal" class="btn" id="personal_information" >个人信息</a>
         </div>
         <div class="music_right1">
-			<a href="#information_Modal2" role="button" data-toggle="modal" class="btn" id="musicupload" >上传音乐</a>
+            <a href="#information_Modal2" role="button" data-toggle="modal" class="btn" id="musicupload" >上传音乐</a>
         </div>
         <ul id="music2_right_tags" >
             <li class="music2_right_detail_selectTag"><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent0',this)" href="javascript:void(0)">收藏的歌曲</a> </li>
             <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent1',this)" href="javascript:void(0)">关注的音乐人</a> </li>
             <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent2',this)" href="javascript:void(0)">下载的音乐</a> </li>
             <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent3',this)" href="javascript:void(0)">上传的歌曲</a> </li>
-			<li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent4',this)" href="javascript:void(0)">版权申请</a> </li>
-           	<div id="num_message">
-    		<?php if($num_message!=0):?>
-    		<?php echo $num_message;?>
-			<?php endif;?>
-			</div>
+            <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent4',this)" href="javascript:void(0)">版权申请</a> </li>
+            <div id="num_message">
+            <?php if($num_message!=0):?>
+            <?php echo $num_message;?>
+            <?php endif;?>
+            </div>
         <li><a onclick="music2_right_detail_selectTag('music2_right_detail_tagContent5',this)" href="javascript:void(0)">私信</a> </li>
         <div id="num_letter">
-    	<?php if($num_letter!=0):?>
-    	<?php echo $num_letter;?>
-		<?php endif;?>
+        <?php if($num_letter!=0):?>
+        <?php echo $num_letter;?>
+        <?php endif;?>
         </ul>
-		  							  				
-		
+                                                    
+        
       <div id="music2_right_tab">            
         <div class="music_clear"></div>
         <div id="music2_right_detail_tagContent">
@@ -832,12 +832,12 @@ $(function(){
             </ul>
             <a  class="next" href="#"></a>
             </div>
-			
-			
-			<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent4">
-			<ul class="li_play_0">
-		    <?php if (count($copyrights)>0){$num=(((int)((count($copyrights)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($copyrights as $copyright):$i++; if ($i>$num) break;?>
-			<li id="<?php echo ($i-1)%count($copyrights)?>" onclick=li_id(this)>
+            
+            
+            <div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent4">
+            <ul class="li_play_0">
+            <?php if (count($copyrights)>0){$num=(((int)((count($copyrights)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($copyrights as $copyright):$i++; if ($i>$num) break;?>
+            <li id="<?php echo ($i-1)%count($copyrights)?>" onclick=li_id(this)>
               <div class="li_play_1"><a href="#message" data-toggle="modal" id="user_image"><img src="<?php echo base_url().$copyright['user_image']?>" /></a>
                 <div class="li_play" style="display:none;">
                   <dl class="li_play_left">
@@ -846,43 +846,43 @@ $(function(){
                   </dl>
                 </div>
               </div>
-			</li>
-			<?php  endforeach;}}?>
-			</ul>
-			<a  class="prev" href="#"></a>
-			<ul id="page">
-				<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
-				<?php for ($i=1;$i<(((int)((count($copyrights)-1)/24))+1);$i++):?>
-				<li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
-				<?php endfor;?>
-			</ul>
-			<a  class="next" href="#"></a>
-			</div>
+            </li>
+            <?php  endforeach;}}?>
+            </ul>
+            <a  class="prev" href="#"></a>
+            <ul id="page">
+                <li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
+                <?php for ($i=1;$i<(((int)((count($copyrights)-1)/24))+1);$i++):?>
+                <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
+                <?php endfor;?>
+            </ul>
+            <a  class="next" href="#"></a>
+            </div>
 <!-------------------私信------------------------------->
-	<div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent5">
+    <div class="music2_right_detail_tagContent" id="music2_right_detail_tagContent5">
          <ul class="li_play_0">
-		    <?php if (count($private_letters)>0){$num=(((int)((count($private_letters)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($private_letters as $private_letter):$i++; if ($i>$num) break;?>
-		  <li id="<?php echo ($i-1)%count($private_letters)?>" onclick=li_id_letter(this)>
+            <?php if (count($private_letters)>0){$num=(((int)((count($private_letters)-1)/24))+1)*24;$i=0;while ($i<$num) {foreach ($private_letters as $private_letter):$i++; if ($i>$num) break;?>
+          <li id="<?php echo ($i-1)%count($private_letters)?>" onclick=li_id_letter(this)>
               <div class="li_play_1"><a href="#letter" data-toggle="modal" id="user_image"><img src="<?php echo base_url().$copyright['user_image']?>" /></a>
-	        <div class="li_play" style="display:none;">
+            <div class="li_play" style="display:none;">
                   <dl class="li_play_left">
                    <dt class="li_play_left_1"><?php echo $private_letter['name'];?></dt>
                     <dt class="li_play_left_2"><?php echo $private_letter['created'];?></dt>
                   </dl>
                 </div>
               </div>
-		  </li>
-		  <?php  endforeach;}}?>
-		</ul>
-		<a  class="prev" href="#"></a>
-		<ul id="page">
-		<li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
-		<?php for ($i=1;$i<(((int)((count($private_letters)-1)/24))+1);$i++):?>
+          </li>
+          <?php  endforeach;}}?>
+        </ul>
+        <a  class="prev" href="#"></a>
+        <ul id="page">
+        <li id="0" class="page_selectTag"><a onclick="page_selectTag(0,this)" href="javascript:void(0)"></a> </li>
+        <?php for ($i=1;$i<(((int)((count($private_letters)-1)/24))+1);$i++):?>
         <li id="<?php echo $i;?>"><a onclick="page_selectTag(<?php echo $i;?>,this)" href="javascript:void(0)"></a> </li>
-		<?php endfor;?>
-		</ul>
-		<a  class="next" href="#"></a>
-		</div>
+        <?php endfor;?>
+        </ul>
+        <a  class="next" href="#"></a>
+        </div>
 <!--------------------------------------------------------->
         </div>
       </div>
@@ -892,34 +892,34 @@ $(function(){
 <!----主页面结束---->
 <!--------私信页面开始---------> 
  <div id="letter" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
-    	<div id="personal_hover">
-		<div class="modal-header">
-		<h2>	
-        <p>私信</p>		
-	   	</h2>
-		</div>
-		<div id="message_left">
-		 <div style="display:none;">
-		    <p id ="letter_id"  name="copyright_id"/><?php echo $private_letters[0]['letter_id']; ?> </p>
-		    <p id ="letter_user_id"  name="copyright_user_id"/><?php echo $private_letters[0]['user_id']; ?> </p>
-		    <p id ="letter_musician_id"  name="copyright_musician_id"/><?php echo $private_letters[0]['musician_id']; ?> </p>
-		    <p id="letter_nick_name"><?php echo $musician['nickname'];?></p>
-		    </div>
-       	</div>
+        <div id="personal_hover">
+        <div class="modal-header">
+        <h2>    
+        <p>私信</p>     
+        </h2>
+        </div>
+        <div id="message_left">
+         <div style="display:none;">
+            <p id ="letter_id"  name="copyright_id"/><?php echo $private_letters[0]['letter_id']; ?> </p>
+            <p id ="letter_user_id"  name="copyright_user_id"/><?php echo $private_letters[0]['user_id']; ?> </p>
+            <p id ="letter_musician_id"  name="copyright_musician_id"/><?php echo $private_letters[0]['musician_id']; ?> </p>
+            <p id="letter_nick_name"><?php echo $musician['nickname'];?></p>
+            </div>
+        </div>
       <div id="information_right">
-	    历史消息：
+        历史消息：
         <br/><br/> 
-       	<textarea rows=7 style="width:500px" name="story_letter" id="story_letter"  ><?php echo $private_letters[0]['letter']; ?></textarea>
+        <textarea rows=7 style="width:500px" name="story_letter" id="story_letter"  ><?php echo $private_letters[0]['letter']; ?></textarea>
         <br/><br/> <br/> <br/> 
         发送消息：
         <br/><br/> 
-       	<textarea rows=3 style="width:500px" name="send_letter" id="send_letter"  ></textarea>
+        <textarea rows=3 style="width:500px" name="send_letter" id="send_letter"  ></textarea>
         <br/>  
-	    </div>
+        </div>
     <div id="head_foot">
      <input type="submit" id="sendletter" class="btn" value="发送" />
      <input type="submit" id="letterexit" data-dismiss="modal" aria-hidden="true"class="btn" value="退出" />
-    </div>	
+    </div>  
 </div>
     </div>
  <!-----------私信页面结束------------> 
@@ -927,51 +927,51 @@ $(function(){
  <!-------版权申请信息开始---------------> 
   <div id="message" class="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
     <div id="personal_hover">
-		<div class="modal-header">
-		<h2>	
-        <p>版权申请</p>		
-	   	</h2>
-		</div>
-		<div id="message_left">
-		 <div style="display:none;">
-		<p id ="copyright_id"  name="copyright_id"/><?php echo $copyrights[0]['copyrightm_id']; ?> </p>
-		<p id ="copyright_music_id"  name="copyright_music_id"/><?php echo $copyrights[0]['music_id']; ?> </p>
-		<p id ="copyright_user_id"  name="copyright_user_id"/><?php echo $copyrights[0]['user_id']; ?> </p>
-		<p id ="copyright_musician_id"  name="copyright_musician_id"/><?php echo $copyrights[0]['musician_id']; ?> </p>
-		<p id="copyright_nick_name"><?php echo $musician['nickname'];?></p>
-		</div>
-		 <p name="name_message" id="name_message">姓名：<?php echo $copyrights[0]['name']; ?> </p> 
-		 <p name="phone_message" id="phone_message"/>电话：<?php echo $copyrights[0]['phone']; ?> </p> 
-		 <p name="email_message" id="email_message" /> 邮箱：<?php echo $copyrights[0]['email']; ?> </p>
-		 <p name="company_message" id="company_message"/> 公司：<?php echo $copyrights[0]['company']; ?> </p>
-    	 <p id ="copyright_time"  name="copyright_time"/>申请时间：<?php echo $copyrights[0]['created']; ?> </p>
+        <div class="modal-header">
+        <h2>    
+        <p>版权申请</p>     
+        </h2>
+        </div>
+        <div id="message_left">
+         <div style="display:none;">
+        <p id ="copyright_id"  name="copyright_id"/><?php echo $copyrights[0]['copyrightm_id']; ?> </p>
+        <p id ="copyright_music_id"  name="copyright_music_id"/><?php echo $copyrights[0]['music_id']; ?> </p>
+        <p id ="copyright_user_id"  name="copyright_user_id"/><?php echo $copyrights[0]['user_id']; ?> </p>
+        <p id ="copyright_musician_id"  name="copyright_musician_id"/><?php echo $copyrights[0]['musician_id']; ?> </p>
+        <p id="copyright_nick_name"><?php echo $musician['nickname'];?></p>
+        </div>
+         <p name="name_message" id="name_message">姓名：<?php echo $copyrights[0]['name']; ?> </p> 
+         <p name="phone_message" id="phone_message"/>电话：<?php echo $copyrights[0]['phone']; ?> </p> 
+         <p name="email_message" id="email_message" /> 邮箱：<?php echo $copyrights[0]['email']; ?> </p>
+         <p name="company_message" id="company_message"/> 公司：<?php echo $copyrights[0]['company']; ?> </p>
+         <p id ="copyright_time"  name="copyright_time"/>申请时间：<?php echo $copyrights[0]['created']; ?> </p>
         申请信息：<br/><br/> 
         <textarea  rows="3" id="copyright_info"/>申请名字为《<?php echo $copyrights[0]['music_name']; ?>》的音乐的版权，音乐编号为<?php echo $copyrights[0]['music_id']; ?></textarea>
         <br/> 
         申请说明：<br/><br/>
         <textarea rows="5" id="copyright_content"/> <?php echo $copyrights[0]['content']; ?></textarea>
-       	</div>
-		
-		<div id="information_right">
-	    历史消息：
+        </div>
+        
+        <div id="information_right">
+        历史消息：
         <br/><br/> 
-       	<textarea rows=7 style="width:500px" name="story_message" id="story_message"  ><?php echo $copyrights[0]['copyright_message']; ?></textarea>
+        <textarea rows=7 style="width:500px" name="story_message" id="story_message"  ><?php echo $copyrights[0]['copyright_message']; ?></textarea>
         <br/><br/> <br/> <br/> 
         发送消息：
         <br/><br/> 
-       	<textarea rows=3 style="width:500px" name="send_message" id="send_message"  ></textarea>
+        <textarea rows=3 style="width:500px" name="send_message" id="send_message"  ></textarea>
         <br/>  
-	    </div>
-		<div id="head_foot">
-			<input type="submit" id="sendmessage" class="btn" value="发送" />
-			<input type="submit" id="messagexit" data-dismiss="modal" aria-hidden="true"class="btn" value="退出" />  
-		</div>	
-	</div>
+        </div>
+        <div id="head_foot">
+            <input type="submit" id="sendmessage" class="btn" value="发送" />
+            <input type="submit" id="messagexit" data-dismiss="modal" aria-hidden="true"class="btn" value="退出" />  
+        </div>  
+    </div>
 </div>
  <!-----------版权申请信息结束-----------> 
  </div>
 
-    <!-- 用户信息修改modal -->	
+    <!-- 用户信息修改modal -->  
     <div id="information_Modal1" class="modal hide fade modal-alter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
         <!-- modal header -->
         <div class="modal-header">
@@ -1040,7 +1040,7 @@ $(function(){
                                     <?php else:?>
                                     保密
                                     <?php endif;?>
-                                </option>  			
+                                </option>           
                             </select>  
                         </div>
                         <label class="control-label">破壳日</label>
@@ -1060,11 +1060,11 @@ $(function(){
         </div>
 
         <!-- modal footer -->
-	    <div class="modal-footer">
+        <div class="modal-footer">
            <input type="submit" id="save" class="btn" value="保存" />
            <input type="submit" id="exit" data-dismiss="modal" aria-hidden="true"class="btn" value="退出" />
         </div>  
-	</div>
+    </div>
 
 
 
@@ -1159,7 +1159,7 @@ $(function(){
             <button id="music-upload-ok" class="btn">保存</button>
             <button id="music-upload-cancel" class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
         </div>  
-	</div>
-	
+    </div>
+    
 </body>
 </html>

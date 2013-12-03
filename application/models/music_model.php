@@ -41,13 +41,13 @@ class music_model extends CI_Model{
         $disc_company, $perform_time, $story)
     {   
         $sql='INSERT INTO 
-            music(musician_id, name, lyrics_by, composed_by, arranged_by, 
+            music(musician_id, dir, image_dir, album_dir, name, lyrics_by, composed_by, arranged_by, 
                 disc_company, perform_time, story,
                 download_cnt,share_cnt,collect_cnt,view_cnt,randable) 
-            values (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+            values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
         $params = array(
-            $musician_id,$music_name, /*$album,*/ $lyrics_by, $composed_by, $arranged_by,
+            $musician_id, '', '', '', $music_name, /*$album,*/ $lyrics_by, $composed_by, $arranged_by,
             $disc_company, $perform_time, $story,
             0,0,0,0,0
         );
