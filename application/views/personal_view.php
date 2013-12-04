@@ -140,12 +140,14 @@
     <!-- ajax 读取内容函数 -->
     <script type="text/javascript">
     
+        // 绑定tab点击事件
         $(function() { 
             $(".global-tab").bind('click', function(){
                 load_tab_content($(this).attr("for"));
             });
         });
         
+        // 读取tab内容
         function load_tab_content(tab_for) {
             $.post(
                 "<?php echo base_url('ajax/personal_load_tab'); ?>",
@@ -161,6 +163,7 @@
             );
         }
         
+        // 改变tab内容
         function change_tab_content(tab_for, data) {
             $(".global-tab-content[for="+tab_for+"]").html("");
             
@@ -199,6 +202,7 @@
             $(".global-tab-content[for="+tab_for+"]").html(html);
         }
         
+        // 生成方块流控件的方块html
         function generate_square_block(bg_url, text) {
             str = 
             '<div class="square-block">' + 
@@ -322,6 +326,7 @@
     <!-- 上传音乐 javascript -->
     <script type="text/javascript">
     $(function(){
+        // 绑定 上传 按钮
         $("#music-upload-ok").click(function(){
             $.post(
                 "<?php echo base_url('ajax/upload_music')?>", 
@@ -468,40 +473,52 @@
                     <div class="control-line"> 
                         <label class="control-label">邮箱</label>
                         <div class="controls"><?php echo $user['email'];?></div>
+                        <?php if (isset($user['nickname'])): ?>
                         <label class="control-label">昵称</label>
-                        <!--
                         <div class="controls">
-                            <input type="text" name="nickname" id="nickname" value=<?php echo $musician['nickname'];?> /> 
+                            <input type="text" name="nickname" id="nickname" value=<?php echo $user['nickname'];?> /> 
                         </div>
-                        -->
+                        <?php endif; ?>
                     </div>
-                    <!--
+                    
+                    <?php if ($user_type == '0'): ?>
                     <div class="control-line">
                         <label class="control-label">身份证号</label>
                         <div class="controls">
-                            <input type="text" name="identity" id="identity"  value=<?php echo $musician['identity'];?> />
+                            <input type="text" name="identity" id="identity"  value=<?php echo $user['identity'];?> />
                         </div>
                         <label class="control-label">姓名</label>
                         <div class="controls">
-                            <input type="text" name="name" id="name" value=<?php echo $musician['name'];?> />
+                            <input type="text" name="name" id="name" value=<?php echo $user['name'];?> />
                         </div>
                     </div>
                     <div class="control-line">
                         <label class="control-label">性别</label>
                         <div class="controls">
                             <select id="gender" name="gender" >  
-                                <option>
-                                </option>           
-                            </select>  
+                                <option value="<?php echo $user['gender'];?>">
+                                    <?php if($user['gender']==1):?>
+                                    男
+                                    <?php elseif($user['gender']==0):?>
+                                    女
+                                    <?php else:?>
+                                    保密
+                                    <?php endif;?>
+                                </option>  
+                            </select>
+                        </div>
+                        <label class="control-label">破壳日</label>
+                        <div class="controls">
+                            <input type="date" id="birthday" onblur=constellation() name="birthday" value=<?php echo $user['birthday'];?> />
                         </div>
                     </div>
                     <div class="control-line">
                         <div class="control-label">自我介绍</div>
                         <div class="controls">
-                            <textarea rows=10 name="introduction" id="introduction"></textarea>
+                            <textarea rows=10 name="introduction" id="introduction"><?php echo $user['introduction'];?></textarea>
                         </div>
                     </div>
-                    -->
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
