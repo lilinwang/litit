@@ -121,7 +121,7 @@
     <script type="text/javascript">
         $(function(){
             // 标签控件
-            $(".global-tab").bind('click', function(){
+            $(".global-tab").on('click', function(){
                 $('.global-tab').removeClass("global-tab-active");
                 $(this).addClass("global-tab-active");
                 $(".global-tab-content").hide();
@@ -131,7 +131,7 @@
             $(".global-tab-content[for=collects]").show();
             
             // 方块流控件
-            $(".square-block").live("hover", function(){
+            $(".global-tab-content").on("hover", ".square-block", function(){
                 $(this).find(".square-block-hoverer").toggle();
             });
         });
@@ -151,15 +151,13 @@
                 "<?php echo base_url('ajax/personal_load_tab'); ?>",
                 {"tab_for": tab_for},
                 function(data, status){
-                    console.log(data);
-                    data = JSON.parse(data);
                     if (data) {
                         change_tab_content(tab_for, data);
                     }
                     else {
                     }
-                }/*,
-                "json"*/
+                },
+                "json"
             );
         }
         
@@ -167,12 +165,9 @@
             $(".global-tab-content[for="+tab_for+"]").html("");
             
             html = '';
-            console.log(data);
             if (tab_for == 'collects') {
                 for(i in data) {
-                    console.log(data[i].image_dir);
                     html += generate_square_block(data[i].image_dir, data[i].name);
-                    console.log(html);
                 }
             }
             else if (tab_for == 'follows') {
@@ -205,14 +200,11 @@
         }
         
         function generate_square_block(bg_url, text) {
-            console.log(bg_url);
-            console.log(text);
             str = 
             '<div class="square-block">' + 
                  '<img class="square-block-bg" src="' + bg_url + '" >' + 
                  '<div class="square-block-hoverer">' + text + '</div>' +
             '</div>';
-            console.log(str); 
             return str; 
         }
             
