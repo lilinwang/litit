@@ -8,7 +8,6 @@ class Home extends CI_Controller {
 		$this->load->helper('url');
 		$this->load->helper('form');
 		$this->load->library('session');
-		$this->load->database();
 	}
 	function index(){
         $this->load->model('musician_model');
@@ -105,5 +104,3 @@ class Home extends CI_Controller {
             $this->load->view('home_in',$data);
 	}
 }
-
-?>

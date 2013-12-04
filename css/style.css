@@ -83,12 +83,6 @@ audio{ width:100%; background:#ffcd0a;}
 
 
 div.music_right_1_hover{width:400px; height:30px; line-height:30px; float:right;}
-p.likemusic{position:absolute;top:2%;font-weight:bold;color:red;display:none;float:left;}
-p.no_likemusic{position:absolute;top:2%;font-weight:bold;color:red;display:none;float:left;}
-p.musician_attention{position:absolute;right:13%;margin-top:0px;font-weight:bold;color:red;display:none;float:left;}
-p.no_musician_attention{position:absolute;right:13%;margin-top:0px;font-weight:bold;color:red;display:none;float:left;}
-p.login_wrong{text-align:center;color:white;display:block;font-family:"宋体",Georgia,Serif;}
-div.panel_login{float:left;position:absolute;left:570px;top:280px;color:white;}
 div#home_hover{width:100%;height:100%;margin:0 0 0 0;float:left;position:absolute;left:0;top:0;right:0;bottom:0;z-index:98;background-color:#000000;display:none;opacity:0.95;}
 
 a.btn-login{width:36px;height:22px;margin:3px 1px 3px 12px;padding:0 0 0 0;background: #ecf336;color:white;font-family:黑体;font-size:14px;}
@@ -97,7 +91,6 @@ a.btn-signin{width:36px;height:22px;margin:3px 0 3px 1px;padding:0 0 0 0;backgro
 textarea{resize:none;}
 div#logo_hover{width:459px;height:152px;float:left;margin-top:513px;margin-left:5px;}
 img.litit_motto{float:left;margin-top:300px;margin-left:500px;z-index:100}
-
 #home_nav {
     position: absolute;
     top: 0;
@@ -110,12 +103,13 @@ img.litit_motto{float:left;margin-top:300px;margin-left:500px;z-index:100}
     cursor: pointer;
 }
 
+#home_search {
+    display: inline-block;
+}
 #home_search_input {
     width: 0;
     display: none;
 }
-
-
 btn.share{width:25px;height:20px;background-image:url('<?php echo base_url()?>image/music_pic_6.jpg')}
 btn.btn-group{width:25px;height:20px;}
 div.btn-group{margin-left:15px;}

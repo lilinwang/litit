@@ -1,14 +1,18 @@
 #example2 h6
-{margin:0 0 15px;
+{margin:0 0 5px 0;
 font-family:'Segoe UI',Arial,Verdana,sans-serif;
-line-height:80%;font-weight:normal;color:#222
+line-height:80%;font-weight:normal;color:#222;
+font-size:26px !important;
 }
 #example2 span
 {font-family:Arial,Verdana,sans-serif;
-padding:15px 20px 20px;
+padding:5px 20px 15px 20px ;
 margin:0;
 color:#444;
-background:#fff
+background:#fff;
+font-size:13px !important;
+height:47px;
+overflow:hidden;
 }
 #example2 .front
 {margin-top:0
@@ -56,7 +60,7 @@ font-size:7px
 margin:0;
 padding:0;
 position:relative;
-z-index:1
+z-index:1;
 }
 #example2 li
 {
@@ -66,14 +70,24 @@ list-style:none;
 position:absolute;
 z-index:1;
 display:none;
-border-width:0px
+border:1px solid #000;
+-moz-border-radius:500px;      /* Gecko browsers */
+-webkit-border-radius:500px;   /* Webkit browsers */
+border-radius:500px;            /* W3C syntax */
+
+overflow:hidden;
+cursor:pointer;
+top:10px !important;
 }
 #example2 img
 {
 border:0;
+margin:0 !important;
 vertical-align:bottom;
 width:120px;
-height:120px
+height:120px;
+cursor:pointer;
+border-radius:500px;
 }
 #example2 span
 {
@@ -81,16 +95,19 @@ display:block;
 position:absolute;
 left:0;
 right:0;
-bottom:0;
-text-align:left;
-cursor:default;
+bottom:0px;
+text-align:center;
+cursor:pointer;
 opacity:0.7;
+
 -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
-filter:alpha(opacity=70)
+filter:alpha(opacity=70);
 }
 #example2 h6
 {
-cursor:default
+cursor:pointer; 
+
+
 }
 #example2 a
 {
