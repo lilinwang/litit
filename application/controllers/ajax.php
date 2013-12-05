@@ -576,4 +576,12 @@ class Ajax extends CI_Controller {
             return 0;
         }
     }
+
+
+    public function search() {
+        $keyword = $this->input->post('keyword');
+        $this->load->model('search_model');
+        $result = $this->search_model->search(array($keyword));
+        echo json_encode($result);
+    }
 }

@@ -1,5 +1,5 @@
 <?php session_start();?>
-<!--<?php echo '这是音乐信息：';print_r($music);echo '这是相应音乐人信息：';var_dump($id);?>-->
+<!--<?php echo '这是音乐信息：';print_r($music);echo '这是相应音乐人信息：';var_dump($id); ?>-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <html xmlns:wb="http://open.weibo.com/wb">
@@ -313,7 +313,7 @@ function demo_click() {
 			$("#player").get(0).load();
 			$("#player").get(0).play();
 		});
-                
+		
 		$(".demo").bind('click', demo_click);
 	
 		$(document).ready(function(){
@@ -506,7 +506,7 @@ $(function() {
                 foreach ($collections as $music) {
                     $item['img'] = $music['image_dir'];
                     $item['text'] = $music['name'];
-                    $item['href'] = 'javascript:play_collection(' . $music['music_id'] . ');';
+                    $item['href'] = 'javascript:play_music(' . $music['music_id'] . ', true);';
                     array_push($collect_array, $item);
                 }
                 echo json_encode($collect_array);
@@ -525,7 +525,7 @@ $(function() {
 });
 
 /*
- * 播放收藏的音乐
+ * 播放音乐
  * by 徐佳琛
  *
  * 直接copy的next_song中的代码，做了三件事
@@ -533,10 +533,11 @@ $(function() {
  * 2.播放音乐
  * 3.去掉面纱
  *
- * 在Rbar中点击音乐的时候调用
+ * 1.在Rbar中点击音乐的时候调用
+ * 2.搜索音乐的时候调用
  *
  */
-function play_collection(music_id) {
+function play_music(music_id, is_lit) {
     // change magazine page, and play the music
     $.post(
         "<?php echo base_url('ajax/get_music_by_id')?>", 
@@ -546,7 +547,7 @@ function play_collection(music_id) {
         function(data, $status){
             data = eval("(" + data + ")");
             var innerHTML = "";
-            console.log(data);
+            //console.log(data);
             music_list = data.list;
             for(var i = 0; i < data.list.length; i++)
             {
@@ -628,17 +629,101 @@ function play_collection(music_id) {
     });	
 
     // 去掉面纱
-    demo_click();
+    if (is_lit) demo_click();
 }
+
+
+/* 
+ * 去掉面纱
+ * by 徐佳琛
+ * 
+ * 1.$('.demo').click 直接注册到这个函数
+ * 2.点击RBar中的音乐后会调用这个函数
+ *
+ */
+function demo_click() {
+    function generate(layout) {
+        var push_interva = 10000;
+        if(!$("#home_hover").is(":visible")) {
+            $.post("<?php echo base_url('ajax/get_message_push')?>", 
+                {
+                    user_id:<?php echo $userid;?>,
+                    musician_id:musician_id_html,
+                    user_type:<?php echo $usertype;?>
+                },
+                function(data, status){
+                    if(! status == 'success' ){
+                        return;
+                    }
+                    data = eval("(" + data + ")");
+                    if(! data.status == 'success' ){
+                        return;
+                    }
+                    var n = noty({
+                        text: data.label + ' : <a href="' + data.url + '">' + data.brief + '</a>',
+                        type: 'alert',
+                        dismissQueue: true,
+                        layout: layout,
+                        theme: 'defaultTheme'
+                    });
+                    // Close after 'duration' ms.
+                    var duration = 5000;
+                    setTimeout(function() {
+                        $.noty.close(n.options.id);
+                    }, duration);
+                }
+            );
+        }else{
+            push_interva = 5000;
+        }
+        // Pop up after 'interval' ms.
+        setTimeout(function() {
+            generate('topCenter');
+        }, push_interva);
+    }
+    if(!$("#home_hover").is(":visible")) { 			// The hover is not visible when the click is triggered.										
+        $.noty.closeAll();							// Thus all visible notys should be closed.
+    }
+    if(typeof noty.alreadySet === "undefined"){		// Avoid repetition of noty alert.
+        noty.alreadySet = 1;
+        generate('topCenter');
+    }
+    $("#home_hover").fadeToggle("quick");
+    if ($("#player").get(0).paused) 
+    {               
+        document.play_button.src="<?php echo base_url()?>image/Play_Button.png";         
+    }            
+    else {                
+        document.play_button.src="<?php echo base_url()?>image/Pause_Button.png";
+    }
+}
+
+
 /*
- * toggle首页的搜索框
+ * 首页的搜索框的事件绑定
  ＊by 徐佳琛
  *
- * 1.注册搜索框的blur事件，搜索框失去焦点之后隐藏
- * 2.定义show_home_search函数，点击收藏中的音乐时直接调用
+ * 1.注册搜索框按下回车键，执行搜索
+ * 2.注册搜索框的blur事件，搜索框失去焦点之后隐藏
+ * 3.定义show_home_search函数，点击收藏中的音乐时直接调用
  *
  */
 $(function(){
+    $("#home_search_input").keypress(function(event){       
+        if (event.keyCode == 13) {
+            $.post(
+                "<?php echo base_url('ajax/search'); ?>",
+                {keyword: $("#home_search_input").val()},
+                function(data, status) {
+                    if (data.length > 0) {
+                        play_music(data[0].music_id, false);
+                    }
+                },
+                "json"
+            );
+        }
+    });
+
     $('#home_search_input').blur(function() {
         $('#home_search_input').animate({"width":0},300, "linear", function(){
             $(this).hide();
@@ -648,7 +733,7 @@ $(function(){
 });
 
 function show_home_search() {
-    $('#home_search_input').show().animate({"width":400},300);
+    $('#home_search_input').show().animate({"width":200},300);
     $("#home_search_input").focus();
 }
 </script>
@@ -657,14 +742,14 @@ function show_home_search() {
 <div class="music_all">
 <div class="all_hover">
 	<div id="home_hover">		
-		<div id="home_nav">
-            <a href="<?php echo base_url('personal '); ?>"><i class="icon-home icon-white"></i></a>
+        <div id="home_nav">
+            <a href="<?php echo base_url('personal'); ?>"><i class="icon-home icon-white"></i></a>
             <a href="#" onclick="lititRbar.display('slideLeft');"><i class="icon-heart icon-white"></i></a>
             <a href="#" onclick=""><i class="icon-signal icon-white"></i></a>
             <a href="#" onclick="show_home_search();"><i class="icon-search icon-white"></i></a>
-            <div id="home_search">
+            <span id="home_search">
                 <input id="home_search_input" type="text">
-            </div>
+            </span>
         </div>
 		<div id="Rbar"></div>
 		<div id="play_button_background"></div>
