@@ -1,0 +1,189 @@
+#container-mask, #container-main {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#container-mask,
+#container-mask *
+{
+    z-index: 99;    
+}
+
+.mask-shade {
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.mask-blur {
+    -webkit-filter: blur(3px);
+    -moz-filter: blur(3px);
+    -o-filter: blur(3px);
+    -ms-filter: blur(3px);
+    filter: blur(3px);
+}
+
+.mask-blur1 {
+ -webkit-filter: blur(3px); 
+ -moz-filter: blur(3px);
+ -ms-filter: blur(3px);
+ -o-filter: blur(3px);
+ filter: blur(3px);
+ filter: url(#blur);   
+ filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='3');
+}
+
+/* container-mask */
+#container-mask {
+    
+}
+
+#mask-controls {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -71px;
+    margin-top: -57px;
+}
+
+#mask-controls #mask-play {
+    width: 142px;
+    height: 113px;
+    background-image: url('../image/center_btn.png');
+    background-position: -142px -33px;
+}
+
+#mask-controls #mask-play:hover {
+    background-position: 0 -33px;
+}
+
+#mask-logo {
+    position: absolute;
+    left: 15px;
+    bottom: 10px;
+}
+
+#mask-logo #mask-logo-img {
+    max-width: 350px;
+}
+
+#mask-nav {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1050;
+}
+
+#mask-nav i{
+    padding: 5px;
+    cursor: pointer;
+}
+
+#mask-search {
+    display: inline-block;
+}
+#mask-search-input {
+    width: 0;
+    display: none;
+}
+
+
+/* container-main */
+#container-main {
+
+}
+
+#global-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    
+    background-image: url('../image/square_stream_bg.png');
+}
+
+#global-main {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#music-player-col {
+    float: left;
+    height: 100%;
+    width: 350px;
+    
+    background-image: url('../image/leftbg.jpg');
+}
+
+#musician-details-col {
+    float: left;
+    overflow-y: scroll;
+}
+
+#musician-profile-col {
+    float: right;
+    height: 100%;
+    width: 250px;
+    
+    border-right: 1px solid #f0f0f0;
+}
+
+
+/* music player col */
+#music-image-outer {
+}
+
+#music-image-outer img {
+    max-height: 100px;
+    max-width: 100px;
+}
+
+.music-player #gutter{
+    display: inline-block;
+    width: 200px;
+    border: 1px solid #fff;
+}
+
+
+/* musician details col */
+#musician-details-col ul.img_wall{width:590px; height:150px; background:#111; position:relative}
+#musician-details-col ul.img_wall li{width:85px; overflow:hidden; float:left; cursor:pointer}
+#musician-details-col ul.img_wall li.left_arrow, #musician-details-col ul.img_wall li.right_arrow{position:absolute; background:#000; width:30px; height:150px; z-index:100; background:url(../image/black_bg_10.png) repeat}
+#musician-details-col ul.img_wall li.left_arrow:hover, #musician-details-col ul.img_wall li.right_arrow:hover{ background:url(../image/black_bg_50.png) repeat}
+#musician-details-col ul.img_wall li.left_arrow{left:0;}
+#musician-details-col ul.img_wall li.right_arrow{right:0}
+#musician-details-col ul.img_wall li.left_arrow span, #musician-details-col ul.img_wall li.right_arrow span{width:30px; height:60px; display:inline-block; background:url(../image/nav.png) no-repeat; margin-top:43px;}
+#musician-details-col ul.img_wall li.left_arrow span{ background-position:0 -60px}
+#musician-details-col ul.img_wall li.right_arrow span{background-position:-30px -60px}
+#musician-details-col ul.img_wall li.left_arrow:hover span{ background-position:0 0}
+#musician-details-col ul.img_wall li.right_arrow:hover span{background-position:-30px 0}
+#musician-details-col ul.img_wall li .img_wrap{position:relative; width:85px; height:75px;}
+#musician-details-col ul.img_wall li .img_wrap:hover span.img_hover{width:73px; height:63px; display:inline-block; border:6px solid #000; opacity:0.5; position:absolute}
+#musician-details-col ul.img_wall li.small_img, #musician-details-col ul.img_wall li.small_img .img_wrap{width:79px}
+#musician-details-col ul.img_wall li.small_img .img_wrap:hover span.img_hover{width:67px; height:63px;}
+#musician-details-col ul.img_wall li.big_img, #musician-details-col ul.img_wall li.big_img .img_wrap{width:171px; height:150px}
+#musician-details-col ul.img_wall li.big_img .img_wrap:hover span.img_hover{width:159px; height:138px}
+.modal{display:none; position:fixed;}
+#img_wall_max{ width:900px; margin:0 auto; position:relative; padding:30px; background: url(../image/modal_bg.png) repeat;  border:1px solid #ccc; min-height:250px;}
+#img_wall_max button{position:absolute; width:70px; height:70px; border:none; cursor:pointer}
+#img_wall_max button.arrow_left{ background:url(../image/button_left.png) no-repeat; left:100px}
+#img_wall_max button.arrow_right{ background:url(../image/button_right.png) no-repeat; right:100px}
+#img_wall_max button.arrow_left:hover{ background:url(../image/button_left_hover.png) no-repeat;}
+#img_wall_max button.arrow_right:hover{ background:url(../image/button_right_hover.png) no-repeat;}
+#img_wall_max .icon_close{width:14px; height:14px; display:inline-block; background: url(../image/close.png) no-repeat; position:absolute; right:7px; top:7px; cursor:pointer}
+#img_wall_max .total{text-align:center; color:#666; font-size:14px; line-height:45px; display:table; background:#eee; border-radius:3px; margin:0 auto; padding:0 20px; }
+#img_wall_max .total span{color:#000; font-size:20px; margin-right:3px; font-family:Arial, Helvetica, sans-serif,"å®‹ä½“"}
+#img_wall_max .img_container{background:#fff; border:4px; padding:20px; max-width:500px; margin-top:100px; margin:0 auto; text-align:center; overflow:hidden; margin-bottom:10px; }
+
+
+/* musician profile col */
+#musician-avatar-outer img {
+    max-height: 100px;
+    max-width: 100px;
+    margin: 0 auto;
+}

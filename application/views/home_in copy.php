@@ -1,9 +1,13 @@
+<?php session_start();?>
+<!--<?php echo '这是音乐信息：';print_r($music);echo '这是相应音乐人信息：';var_dump($id);?>-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <html xmlns:wb="http://open.weibo.com/wb">
 <head>
-    <title>Litit</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Litit</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <link href="<?php echo base_url()?>css/lititRightBar.css" rel="stylesheet" type="text/css">
 <link href="<?php echo base_url()?>css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url()?>css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
@@ -718,19 +722,19 @@ $(document).ready(function(){
  		<!--<form name="input" action="<?php echo site_url('personal')?>" method="post">
    	    <input type="submit" class="btn" value="我的Litit"/>
        </form>-->
- 		 <span class="user"><?php echo $user['nickname']?></span> 
+ 		 <span class="user"><?php echo $username?></span> 
  		</header>
  <article>
   <section class="left">
     <div class="player">
-      <div class="name"> <img src="<?php echo base_url().$music['image_dir']?>" />
+      <div class="name"> <img src="<?php echo base_url().$image_dir?>" />
         <div class="msg">
-          <h2><?php echo substr($user['name'],0,21); ?></h2>
+          <h2><?php echo substr($name,0,21); ?></h2>
           <p>专辑名</p>
        		 <p class="likemusic" id="likemusic">+1</p>
             <p class="no_likemusic" id="no_likemusic">-1</p>
           <div class="album_ctrl"> <span class="icon_share"></span> 
-        <?php if($music['is_collect']==0):?>
+        <?php if($collect==0):?>
 			<span class="like" id="like"style="display:inline-block"></span>
 			<span class="like_on" id="like_on" style="display:none"></span>
 			<?php else:?>
@@ -742,12 +746,12 @@ $(document).ready(function(){
       </div>
       <div class="progress">
       	<audio id="player" controls="controls" >
-				<source name="player" src="<?php echo base_url().$music['dir']?>" type="audio/mp3" preload="load">
+				<source name="player" src="<?php echo base_url().$dir?>" type="audio/mp3" preload="load">
 				Your browser does not support this audio format.
 			</audio>
 		</div>
       <div class="control"> <span class="ico_pause"></span> <span class="ico_next"></span> <span class="ico_sound"></span>
-        <?php if($music['is_copyright_sign']==0):?>
+        <?php if($copyright==0):?>
 		<a href="#myModal" type="button" data-toggle="modal" class="copyright" id="copyright" >版权申请</a>		
 		<?php else:?>
 	    <a href="#myModal_1" type="button" data-toggle="modal" class="copyright" id="copyright" >取消申请</a>
@@ -770,7 +774,7 @@ $(document).ready(function(){
             <div class="overview p-txt"> 
             <div id="music_story">
             <div class="p-title">音乐故事</div>
-             <div class="p-txt"><?php echo $music['story']?></div>
+             <div class="p-txt"><?php echo $story?></div>
              <div class="music_lyric" id="music_lyric">
         <pre>Chill out whatcha yelling for
 Lay back it's all been done before
@@ -784,7 +788,7 @@ And you're talking to me one on </pre>
           </div>
         </div>
       </div>
-    <!-- <div class="tag"><?php foreach ($tag as $key) echo "<span><a href=\"#\">".$key."</a><span>";?></div> -->
+    <div class="tag"><?php foreach ($tag as $key) echo "<span><a href=\"#\">".$key."</a><span>";?></div>
   </section>
   	
   	<!-----------------------center--------------------------------->
@@ -832,7 +836,7 @@ And you're talking to me one on </pre>
                 <li><a href="#" target="_blank">6. 其他~</a></li>-->
         	<?php 
 	        	$num=0;
-	        	foreach ($musician['all_music'] as $key) {
+	        	foreach ($list as $key) {
 			    echo "<li onclick=\"changemusic(".$num.")\"><a herf=\"#\" target=\"_blank\">".($num+1).".".substr($key['name'],0,16)."</li>\n";
 		    	$num++;
 		    	if($num==6)break;
@@ -846,6 +850,23 @@ And you're talking to me one on </pre>
 		</script> 
         
       </div>
+      <!--<div  class="wrapper-wair">
+        <div id="wrapper">
+          <ul id="example2">
+            <li><img src="image/1.png" /><span class="title">A second image</span></li>
+            <li><img src="image/2.png" /><span class="title">A second image</span></li>
+            <li><img src="image/3.png" /><span class="title">This is description</span></li>
+            <li><img src="image/4.png" /><span class="title">Another description</span></li>
+            <li><img src="image/5.png" /><span class="title">title for image</span></li>
+        <?php 
+		$num=0;
+		foreach ($list as $key) {
+			echo "<li><img class=\"play\"  onclick=\"changemusic(".$num.")\"style=\"cursor:pointer;\" src=image/".base_url().$key['album_dir']." /><span class=\"title\">Try Another One</span></li>\n";
+			$num++;
+		}?>
+          </ul>
+        </div>
+      </div>-->
     </div>
     <div class="list-activity">
       <h3><?php echo $musician['nickname']?>的活动</h3>
@@ -872,7 +893,7 @@ And you're talking to me one on </pre>
     <div class="musician_attention" id="musician_attention">+1</div>
 	<div class="no_musician_attention" id="no_musician_attention">-1</div>
     <div  class="btncss">
-    <?php if($music['is_follow']==0):?>
+    <?php if($follow==0):?>
     <button class="attention"  id="attention_1">关注</button>
     <?php else:?>
      <button class="attention"  id="attention_1">取消关注</button>
@@ -885,7 +906,138 @@ And you're talking to me one on </pre>
     <div class="owner"> <a href="#">上海交通大学主页</a> <a href="#"> <span>微博主页</span> <img src="<?php echo base_url()?>image/r_weibo.png" width="19" height="16" /></a> </div>
   </section>
   	</article>
-
+ <!--    <div class="music_left">
+    <div class="music_left_1">
+      <div class="music_left_1_left" id="left_1"><img src="<?php echo base_url().$image_dir?>" /></div>
+      <div class="music_left_1_right" id="right_1">
+         
+        <div class="music_left_1_right_1" id="name"><b><?php echo $name ?></b></div>
+        <div class="music_left_1_right_btm">
+            <p class=likemusic id=likemusic>+1</p>
+            <p class=no_likemusic id=no_likemusic>-1</p>
+            <?php if($collect==0):?>
+			<span><img class="like" name="like" src="<?php echo base_url()?>image/like_button1.png" href="#" class="music_left_1_right_btm_2"></span>
+			<?php else:?>
+			<span><img class="like" name="like" src="<?php echo base_url()?>image/like_button2.png" href="#" class="music_left_1_right_btm_2"></span>
+			<?php endif;?>
+			<span><wb:share-button title="litit独立音乐" url='<?php echo site_url("litit.me"); ?>'>
+			</wb:share-button></span>
+		</div>
+        <div class="music_clear"></div>
+        <div class="music_left_1_right_2">
+			<audio id="player" controls="controls" >
+				<source name="player" src="<?php echo base_url().$dir?>" type="audio/mp3" preload="load">
+				Your browser does not support this audio format.
+			</audio>
+		</div>
+        <div class="music_clear"></div>
+        <div class="music_left_1_right_3"><b>歌词：</b><br />
+          oh oh, oh oh, So much for my happy ending<br />
+          Let's talk this over<br />
+          It's not like we're dead<br />
+          Was it something I did?<br />
+          Was it something You said?<br />
+          Don't leave me hanging<br />
+          In a city so dead<br />
+          Don't leave me hanging<br />
+          In a city so dead<br />
+          Don't leave me hanging<br />
+          In a city so dead<br />
+        </div>
+        <div class="music_left_1_right_4">
+		<a href="#download" role="button" data-toggle="modal">我要下载</a>
+		<?php if($copyright==0):?>
+		<a href="#myModal" role="button" data-toggle="modal" class="copyright" id="copyright" >版权申请</a>		
+		<?php else:?>
+	    <a 	href="#myModal_1" role="button" data-toggle="modal" class="copyright" id="copyright" >取消申请</a>
+		<?php endif;?>
+		</div>
+        <div class="music_clear"></div>
+      </div>
+      <div class="music_clear"></div>
+    </div>
+    <div class="music_clear"></div>
+    <div class="music_left_2" id="left_2">
+      <div class="music_left_2_left">
+        <div class="music_left_2_left_1">标签</div>
+	<div class="music_left_2_left_2">
+	<?php foreach ($tag as $key) echo "<a href=\"#\">".$key."</a>";?>
+	</div>
+      </div>
+      <div class="music_left_2_right">
+        <div class="music_left_2_right_1">音乐故事</div>
+        <div class="music_left_2_right_2" id="story"><?php echo $story?></div>
+      </div>
+    </div>
+	<div class="music_left_3">
+			<img src="<?php echo base_url()?>image/music2_logo.png">
+			 <button class="demo"></button>
+	</div>
+  </div>	-->
+ <!-- <div class="music_right">
+	<div class="music_right_1">
+	<form name="input" action="<?php echo site_url('logout')?>" method="post">
+	<input type="submit" class="btn" value="注销"/>
+	</div>
+    </form>
+	<div class="music_right1">
+	<form name="input" action="<?php echo site_url('personal')?>" method="post">
+    <input type="submit" class="btn" value="我的Litit"/>
+    </form>
+	</div>
+    <div class="music_clear"></div>
+    <div class="music_right_2">
+      <div class="music_right_2_left" id="left_2">
+        <div class="music_right_2_left_1"><b>音乐人介绍</b></div>
+          <div class="music_right_2_left_2">
+            <div id="musicianintro" style="text-indent:20px"><?php echo $musician['introduction']?>  </div>
+            <div class="music_clear"></div>
+          </div>
+        <div class="music_clear"></div>
+      </div>
+      <div class="music_right_2_right" id="right_2">
+        <div class="music_right_2_right_1" id="musicianpt">
+			<img src="<?php echo base_url().$musician['portaitdir']?>" />
+			<div class="music_right_2_right_1_yyr" id="musiciannick" >
+				<p class=musician_attention id=musician_attention>+1</p>
+			    <p class=no_musician_attention id=no_musician_attention>-1</p>
+				<b>音乐人：</b><span><?php echo $musician['nickname']?></span>
+				</div>
+		</div>
+        <div class="music_clear"></div>
+        <div class="music_right_2_right_2">	
+          <div class="music_right_2_right_3">
+          	        <?php if($follow==0):?>
+          			<a class=attention id=attention_1 href="#">关注</a>
+          	        <?php else:?>
+          	        <a class=attention id=attention_1 href="#">取消关注</a>
+          	        <?php endif;?>
+          			<a href="#private_letter" role="button" data-toggle="modal" class="private_letter" id="private_letter" >私信TA</a>		
+          			</div>
+          <div class="music_clear"></div>
+          <div class="music_right_2_right_4" id="attention_2">人气：<b ><?php echo $musician['attention']?></b></div>
+          <div class="music_clear"></div>
+        </div>
+      </div>
+      <div class="music_clear"></div>
+    </div>
+    <div class="music_clear"></div>
+    <div class="music_right_3">
+     <div id="wrapper">
+        <ul id="example2">
+          <?php 
+		$num=0;
+		foreach ($list as $key) {
+			echo "<li><img class=\"play\" onclick=\"changemusic(".$num.")\" style=\"cursor:pointer;\" src=".base_url().$key['album_dir']." /><span class=\"title\">Try Another One</span></li>\n";
+			$num++;
+		}?>
+		</ul>
+      </div>
+    </div>
+    <div class="music_clear"></div>
+  </div>
+</div>
+</div>-->
 <!-------------------------------change------------------------------------------->
   	<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
         <div class="modal-header">
