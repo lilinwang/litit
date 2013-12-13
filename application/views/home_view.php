@@ -812,8 +812,8 @@ $(document).ready(function(){
                                <p class="likemusic" id="likemusic">+1</p>
                                 <p class="no_likemusic" id="no_likemusic">-1</p>
                                 -->
-                                <span class="icon">&#61749;</span>
-                                <span class="icon">&#61723;</span>
+                                <span id="like-button" class="icon-heart icon-large music-control-button"></span>
+                                <span id="share-button" class="icon-share icon-large music-control-button"></span>
                                 <!--
                                 <?php if($music['is_collect']==0):?>
                             	<span class="like" id="like"style="display:inline-block"></span>
@@ -836,9 +836,28 @@ $(document).ready(function(){
                                 <span id="handle" class="ui-slider-handle"></span>
                             </div>
                             <div id="controls">
-                                <span id="play-toggle"><img src="<?php echo base_url('image/play-100.png'); ?>"></span>
-                                <span id="play-next"><img src="<?php echo base_url('image/fast_forward-50.png'); ?>"></span>
-                                <span id="volume"><img src="<?php echo base_url('image/high_volume-50.png'); ?>"></span>
+                                <span id="play-toggle" class="music-player-control-button">
+                                    <span class="icon-stack">
+                                        <i class="icon-circle-blank icon-stack-base"></i>
+                                        <i id="icon-to-change" class="icon-play"></i>
+                                    </span>
+                                </span>
+                                <span id="play-next" class="music-player-control-button">
+                                    <span class="icon-stack">
+                                        <i class="icon-circle-blank icon-stack-base"></i>
+                                        <i class="icon-forward"></i>
+                                    </span>
+                                </span>
+                                <span id="volume" class="">
+                                    <span class="icon-stack">
+                                        <i class="icon-circle-blank icon-stack-base"></i>
+                                        <i class="icon-volume-off"></i>
+                                    </span>
+                                    <div id="volume-slider">
+                                        <div id="volume-slider-gutter-space"></div>
+                                        <span id="volume-slider-handle" class="ui-slider-handle"></span>
+                                    </div>
+                                </span>
                             </div>
                         </div>
               	        <audio id="player-audio" controls="controls" preload="auto">
@@ -1155,11 +1174,30 @@ $(document).ready(function(){
             });
         });
         
+        // bind volume slider 
+        $("#music-player #controls #volume").hover(function(){
+            $("#music-player #controls #volume #volume-slider").fadeToggle(200);
+        });
+        $("#music-player #controls #volume #volume-slider").hide();
+        
+        
+        $("#music-player #controls #volume #volume-slider").slider({
+            value: 1,
+            step: 0.05,
+            orientation: "horizontal",
+            min: 0,
+            max: 1,
+            animate: true,
+            slide:function(e,ui) {
+                audio.volume = ui.value;
+            }
+        });
+        
         // bind play, pause and ended
         $(audio).bind('play',function() {
-            $("#play-toggle").find("img").attr("src", "<?php echo base_url('image/pause-100.png'); ?>");			
+            $("#play-toggle").find("#icon-to-change").removeClass("icon-play").addClass("icon-pause");		
         }).bind('pause ended', function() {
-            $("#play-toggle").find("img").attr("src", "<?php echo base_url('image/play-100.png'); ?>");	
+            $("#play-toggle").find("#icon-to-change").removeClass("icon-pause").addClass("icon-play");	
         });
         		
         $("#play-toggle").click(function() {			
