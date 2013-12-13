@@ -12,7 +12,7 @@ class Logout extends CI_Controller {
 	
 	function index() {
 		$this->session->sess_destroy();
-		redirect(site_url('home'));
+		redirect(base_url('home'));
         //echo ($a[0]['musicianid']);
         //print_r ($this->musician_model->check_id($id));
 	}	

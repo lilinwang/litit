@@ -8,7 +8,7 @@ class Personal extends CI_Controller {
         $this->load->library('form_validation');
         $this->load->helper('form');
         $this->load->library('session');
-        if(!$this->session->userdata('is_login')){
+        if(!$this->session->userdata('is_logged_in')){
             redirect(base_url('home'));
         }
     }
@@ -16,8 +16,8 @@ class Personal extends CI_Controller {
     public function index() {
         $this->load->model('user_model');
         $this->load->model('musician_model');
-        $user_id = $this->session->userdata('userid');
-        $user_type = $this->session->userdata('usertype');
+        $user_id = $this->session->userdata('user_id');
+        $user_type = $this->session->userdata('user_type');
         
         $this->load->view('personal_view', $this->_generate_data($user_id, $user_type));
     }

@@ -144,6 +144,20 @@ class musician_model extends CI_Model{
     	unset($result['password']);
     	unset($result['reg_time']);
     	
+    	$result['user_id'] = $result['musician_id']; // for controller's convenience
+        return $result;
+    }
+    
+    function get_exposable_row_by_email($email) {
+    	$sql = "SELECT * FROM musician WHERE email=? LIMIT 1";
+    	$query = $this->db->query($sql,array($email));
+    	$result = $query->row_array();
+    	
+    	// unset user password, user reg_time
+    	unset($result['password']);
+    	unset($result['reg_time']);
+    	
+    	$result['user_id'] = $result['musician_id']; // for controller's convenience
         return $result;
     }
 }
