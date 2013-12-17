@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <!-- css -->
+    <link href="<?php echo base_url()?>css/normalize.css" rel="stylesheet" type="text/css">
     <link href="<?php echo base_url()?>css/lititRightBar.css" rel="stylesheet" type="text/css">
     <link href="<?php echo base_url()?>css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url()?>css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
@@ -706,8 +707,14 @@ $(document).ready(function(){
         // 点亮按钮,登陆的时候才出现 
         $(function(){
             $("#light-button").click(function(){
-                $("#container-mask").hide();
-                $("#container-main").removeClass("mask-blur");
+                if($("#container-mask").css("display") == "none") {
+                    $("#container-mask").show();
+                    $("#container-main").addClass("mask-blur");
+                }
+                else {
+                    $("#container-mask").hide();
+                    $("#container-main").removeClass("mask-blur");
+                }
             });
         });
         <?php endif; ?>
@@ -722,42 +729,44 @@ $(document).ready(function(){
     
     <!-- logo -->
     <div id="container-logo">
-        <div id="logo">
-        
-            <?php if(!$this->session->userdata('is_logged_in')): ?>
-            <!-- 登陆界面,未登陆的时候才出现 -->
-            <div id="forms-outer">
-                <div id="form-tabs">
-                    <span id="sign-in-tab">我是老用户?
-                    </span>
-                    <span id="sign-up-tab">我是新用户?
-                    </span>
-                </div>
-                <div id="sign-in-form-outer">
-                    <form id="sign-in-form" method="post" class="hover-form" action="<?php echo base_url('login');?>">
-                        <input placeholder="邮箱" type="text" id="sign-in-email" name="email">
-                        <input placeholder="密码" type="password" id="sign-in-password" name="password">
-                        <input name="user_type" type="radio" value="0" id="user-type-0"/><label for="user-type-0">音乐人</label> 
-                        <input name="user_type" type="radio" value="1" id="user-type-1" /><label for="user-type-1">普通用户</label> 
-                        <div class="prompt"><?php echo $this->session->flashdata('login_prompt'); ?></div>
-                        <input type="submit" value="登陆">
-                    </form>
-                </div>
-                <div id="sign-up-form-outer">
-                    <form id="sign-up-form" action="<?php echo base_url('sign_up');?>" method="post" class="hover-form">
-                        <input placeholder="邮箱" type="text" id="sign-up-email" name="email">
-                        <input placeholder="密码" type="password" id="sign-up-password" name="password">
-                        <input placeholder="密码确认" type="password" id="sign-up-password-confirm" name="password_confirm">
-                        <div class="prompt"><?php echo $this->session->flashdata('sign_up_prompt'); ?></div>
-                        <input type="submit" value="注册">
-                    </form>
-                </div>
-            </div>
-            <?php endif; ?>
+        <div id="logo-outer">
+            <div id="logo">
             
-            <!-- 点亮按钮 -->
-            <div id="light-button-outer">
-                <div id="light-button"></div>
+                <?php if(!$this->session->userdata('is_logged_in')): ?>
+                <!-- 登陆界面,未登陆的时候才出现 -->
+                <div id="forms-outer">
+                    <div id="form-tabs">
+                        <span id="sign-in-tab">我是老用户?
+                        </span>
+                        <span id="sign-up-tab">我是新用户?
+                        </span>
+                    </div>
+                    <div id="sign-in-form-outer">
+                        <form id="sign-in-form" method="post" class="hover-form" action="<?php echo base_url('login');?>">
+                            <input placeholder="邮箱" type="text" id="sign-in-email" name="email">
+                            <input placeholder="密码" type="password" id="sign-in-password" name="password">
+                            <input name="user_type" type="radio" value="0" id="user-type-0"/><label for="user-type-0">音乐人</label> 
+                            <input name="user_type" type="radio" value="1" id="user-type-1" /><label for="user-type-1">普通用户</label> 
+                            <div class="prompt"><?php echo $this->session->flashdata('login_prompt'); ?></div>
+                            <input type="submit" value="登陆">
+                        </form>
+                    </div>
+                    <div id="sign-up-form-outer">
+                        <form id="sign-up-form" action="<?php echo base_url('sign_up');?>" method="post" class="hover-form">
+                            <input placeholder="邮箱" type="text" id="sign-up-email" name="email">
+                            <input placeholder="密码" type="password" id="sign-up-password" name="password">
+                            <input placeholder="密码确认" type="password" id="sign-up-password-confirm" name="password_confirm">
+                            <div class="prompt"><?php echo $this->session->flashdata('sign_up_prompt'); ?></div>
+                            <input type="submit" value="注册">
+                        </form>
+                    </div>
+                </div>
+                <?php endif; ?>
+                
+                <!-- 点亮按钮 -->
+                <div id="light-button-outer">
+                    <div id="light-button"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -867,19 +876,18 @@ $(document).ready(function(){
                     </div>
         		  
                     <div class="row-fluid"> 
-                        <span class="ico_pause"></span> <span class="ico_next"></span> <span class="ico_sound"></span>
                         <?php if($music['is_copyright_sign']==0):?>
             		    <a href="#myModal" class="button" type="button" data-toggle="modal" class="copyright" id="copyright" >版权申请</a>		
             		    <?php else:?>
-            	        <a href="#myModal_1" class="" type="button" data-toggle="modal" class="copyright" id="copyright" >取消申请</a>
+            	        <a href="#myModal_1" class="button" type="button" data-toggle="modal" class="copyright" id="copyright" >取消申请</a>
             		    <?php endif;?>
-            		    <button type="button" id="music_lyric_btn">歌词</button>
-                        <button type="button" id="music_story_btn" style="display:none">音乐故事</button>
-                        <a href="#download" type="button" data-toggle="modal">下载</a>
+            		    <button class="button" type="button" id="music_lyric_btn">歌词</button>
+                        <button class="button" type="button" id="music_story_btn" style="display:none">音乐故事</button>
+                        <a class="button" href="#download" type="button" data-toggle="modal">下载</a>
                     </div>
                 </div>
               
-                <div class="music-text-outer">
+                <div id="music-text-outer">
                     <div id="scrollbar1">
                       <div class="scrollbar">
                         <div class="track">
@@ -910,106 +918,105 @@ $(document).ready(function(){
                 <!-- <div class="tag"><?php foreach ($tag as $key) echo "<span><a href=\"#\">".$key."</a><span>";?></div> -->
             </section>
           	
-          	<!-----------------------center--------------------------------->
+          	<!-- 中央 -->
           	 <section class="center">
-            <ul class="img_wall">
-            	<li class="left_arrow"><span class="icon_arrow_l"></span></li>
-                <li class="right_arrow"><span class="icon_arrow_r"></span></li>
-              <li>
-                <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
-                <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
-              </li>
-              <li class="small_img">
-                <div class="img_wrap"></div>
-                <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_3.jpg" /></div>
-              </li>
-              <li>
-                <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
-                <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
-              </li>
-              <li>
-                <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
-                <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
-              </li>
-              <li class="big_img">
-                <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_2.jpg" /></div>
-              </li>
-              <li>
-                <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
-                <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
-              </li>
-            </ul>
-            <div class="txt">
-              <p><?php echo $musician['introduction']?></p>
-                </div>
-                <div class="album">
-              <div class="list"> <span><?php echo $musician['nickname']?>的歌曲列表</span>
-                <div class="txtScroll-top">
-                    <div class="bd">
-                      <ul class="infoList">
-                       	<!-- <li><a href="#" class="current" target="_blank">1. 追梦赤子心</a></li>
-                        <li><a href="#" target="_blank">2. Keep holding on</a></li>
-                        <li><a href="#" target="_blank">3. 追梦赤子心</a></li>
-                        <li><a href="#" target="_blank">4. 其他~</a></li>
-                        <li><a href="#" target="_blank">5. 其他~</a></li>
-                        <li><a href="#" target="_blank">6. 其他~</a></li>-->
-                	<?php 
-        	        	$num=0;
-        	        	foreach ($musician['all_music'] as $key) {
-        			    echo "<li onclick=\"changemusic(".$num.")\"><a herf=\"#\" target=\"_blank\">".($num+1).".".substr($key['name'],0,16)."</li>\n";
-        		    	$num++;
-        		    	if($num==6)break;
-        	        	}?>
-                      </ul>
-                    </div>
-                    <div class="hd"> <a class="prev"></a> <a class="next"></a> </div>
-                  </div>
-                  <!--
-                  <script type="text/javascript">
-        		jQuery(".txtScroll-top").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"top",autoPlay:false,vis:3});
-        		</script>
-        		--> 
+                 <ul class="img_wall">
+                	<li class="left_arrow"><span class="icon_arrow_l"></span></li>
+                    <li class="right_arrow"><span class="icon_arrow_r"></span></li>
+                  <li>
+                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
+                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
+                  </li>
+                  <li class="small_img">
+                    <div class="img_wrap"></div>
+                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_3.jpg" /></div>
+                  </li>
+                  <li>
+                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
+                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
+                  </li>
+                  <li>
+                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
+                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
+                  </li>
+                  <li class="big_img">
+                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_2.jpg" /></div>
+                  </li>
+                  <li>
+                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
+                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
+                  </li>
+                </ul>
                 
-              </div>
-            </div>
-            <div class="list-activity">
-              <h3><?php echo $musician['nickname']?>的活动</h3>
-               <div id="scrolldiv">
-              <div class="scrolltext">
-              <ul>
-              <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-              <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-              <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-              <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-              <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-               </ul>
-              </div>
-              <button type="button" class="up" ></button>
-              <button type="button" class="down"></button>
-            </div>
-            		   </div>
-          </section>
-          	 <section class="right">
-            <div><a href="#"><img src="<?php echo base_url().$musician['portaitdir']?>" width="204" height="204" /></a></div>
-            <h1 id="musiciannick"><?php echo $musician['nickname']?></h1>
-            <div class="attention"id="attention_2">人气<b ><?php echo $musician['attention']?></b>	
-            </div>
-            <div class="musician_attention" id="musician_attention">+1</div>
-        	<div class="no_musician_attention" id="no_musician_attention">-1</div>
-            <div  class="btncss">
-            <?php if($music['is_follow']==0):?>
-            <button class="attention"  id="attention_1">关注</button>
-            <?php else:?>
-             <button class="attention"  id="attention_1">取消关注</button>
-             <?php endif;?>
-            <button href="#private_letter"  data-toggle="modal" class="private_letter" id="private_letter" >私信TA</button>		
-            </div>
-            <div  class="txt">
-              <p>hi!</p>
-            </div>
-            <div class="owner"> <a href="#">上海交通大学主页</a> <a href="#"> <span>微博主页</span> <img src="<?php echo base_url()?>image/r_weibo.png" width="19" height="16" /></a> </div>
-          </section>
-          	</article>
+                <div id="musician-intro-outer" class="content-outer">
+                  <p id="musician-intro"><?php echo $musician['introduction']?></p>
+                </div>
+                
+                <div id="musician-all-music" class="content-outer">
+                    <div id="musician-all-music-title" class="content-title">
+                        <span class="musician-name"><?php echo $musician['nickname']?></span>的歌曲列表
+                    </div>
+                        
+                    <div id="musician-all-music-list-outer">
+                        <ul id="musician-all-music-list">
+                            <?php foreach ($musician['all_music'] as $item): ?>
+                                <li><?php echo $item['name']; ?></li>
+                            <?php endforeach;?>
+                        </ul>
+                    </div>
+                    
+                </div>
+                  
+                <div id="musician-activities" class="content-outer">
+                    <div id="musician-activities-title" class="content-title">
+                        <span class="musician-name"><?php echo $musician['nickname']?></span>的活动
+                    </div>
+                   <div id="scrolldiv">
+                  <div class="scrolltext">
+                  <ul>
+                  <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                  <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                  <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                  <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                  <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                   </ul>
+                  </div>
+                  <button type="button" class="up" ></button>
+                  <button type="button" class="down"></button>
+                </div>
+                </div>
+            </section>
+          	
+          	
+          	<section class="right">
+                <div id="musician-avatar-outer">
+                    <img src="<?php echo base_url().$musician['portaitdir']?>" width="204" height="204" />
+                </div>
+                <div id="musician-name-outer">
+                    <span class="musician-name"><?php echo $musician['nickname']?></span>
+                </div>
+                <div id="musician-attention-outer">
+                    人气
+                    <span class="musician-attention"><?php echo $musician['attention']?></span>	
+                </div>
+                <!--
+                <div class="musician_attention" id="musician_attention">+1</div>
+            	<div class="no_musician_attention" id="no_musician_attention">-1</div>
+            	-->
+                <div  class="btncss">
+                <?php if($music['is_follow']==0):?>
+                <button class="attention button"  id="attention_1">关注</button>
+                <?php else:?>
+                 <button class="attention button"  id="attention_1">取消关注</button>
+                 <?php endif;?>
+                <button href="#private_letter"  data-toggle="modal" class="private_letter button" id="private_letter" >私信TA</button>
+                </div>
+                <div  class="txt">
+                  <p>hi!</p>
+                </div>
+                <div class="owner"> <a href="#">上海交通大学主页</a> <a href="#"> <span>微博主页</span> <img src="<?php echo base_url()?>image/r_weibo.png" width="19" height="16" /></a> </div>
+            </section>
+        </article>
     
     </div>    
     
@@ -1109,15 +1116,105 @@ $(document).ready(function(){
 </body>
 </html>
 <script type="text/javascript">
+    function change_magazine(music) {
+        change_music_player_info(music);
+        change_musician_info(music.musician);
+    }
+    function change_music_player_info(music) {
+        $("#music-image-outer").find("img").attr("src", music.image_dir);
+        $("#music-image-sidebar").find("#music-name").text(music.name);
+    }
+    function change_musician_info(musician) {
+        $(".musician-name").text(musician.nickname);
+        $("#musician-intro").text(musician.intro);
+        $("#musician-avatar-outer").find("img").attr("src", musician.portaitdir);
+        
+        $("#musician-all-music-list").empty();
+        for(i in musician.all_music) {
+            $("#musician-all-music-list").append("<li>" + musician.all_music[i].name + "</li>");
+        }
+    }
+    
+    function Player(audio) {
+        this.audio = audio;
+    }
+    Player.prototype = {
+        audio: null,
+        current_music: {},
+        prior_list: {
+            list: [],
+            prepend: function(item) {
+                this.list.unshift(item);
+            },
+            pop: function() {
+                return this.list.pop();
+            },
+            empty: function() {
+                return this.list.length == 0;
+            }
+        },
+        radio_list: {
+            list: [],
+            fetch: function(handler) {
+                var radio_list = this;
+                $.post(
+                    "<?php echo base_url('ajax/fetch_radio_music');?>",
+                    {},
+                    function(data, status) {
+                        console.log(data);
+                        data = JSON.parse(data);
+                        //console.log(data);
+                        radio_list.list = data;
+                        //console.log(radio_list.list);
+                        handler();
+                    }
+                );
+            },
+            pop: function() {
+                return this.list.pop();
+            },
+            empty: function() {
+                return this.list.length == 0;
+            }
+        },
+        start_over: function() {
+            $(this.audio).find("source").attr("src", this.current_music.dir);
+            change_magazine(this.current_music);
+            this.audio.load();
+            this.audio.play();
+        },
+        play_next: function(){
+            if(!this.prior_list.empty()){
+                this.current_music = this.prior_list.pop();
+                this.start_over();
+            }
+            else {
+                this.play_radio();
+            }
+        },
+        play_radio: function(){
+            if(!this.radio_list.empty()){
+                this.current_music = this.radio_list.pop();
+                this.start_over();
+            }
+            else {
+                p = this;
+                this.radio_list.fetch(function(){
+                    p.play_radio();
+                });
+            }
+        }
+    };
+    
     
     // 播放控件
     $(function(){
+    
         $('#player-audio').hide();
-        //audio = new Audio();
-        //audio.src = "<?php echo $music['dir']; ?>";
         
         // get html elements
         audio = $('#player-audio').get(0);
+        player = new Player(audio);
         
         $gutter_slider = $('#music-player #gutter'); // gutter slider, controls audio time
         $loading_indicator = $('#music-player #loading'); // shows download percentage
@@ -1202,7 +1299,10 @@ $(document).ready(function(){
         		
         $("#play-toggle").click(function() {			
             if (audio.paused) { audio.play(); } 
-            else { audio.pause(); }			
+            else { audio.pause(); }	
+        });
+        $("#play-next").click(function(){
+            player.play_next();
         });
     });
     

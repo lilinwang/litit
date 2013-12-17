@@ -15,9 +15,49 @@ html, body {
     overflow: hidden;
 }
 
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
 .icon {
     cursor: pointer;
-    margin-right: 5px;
+}
+
+.button {
+    background-color: #f2f64b;
+    border: medium none;
+    color: #000;
+    
+    text-decoration: none;
+    *width: 100%;
+    display: inline-block;
+    padding: 4px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    outline: none !important;
+    -webkit-appearance:none;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    
+    transition: all 0.2s linear 0s;
+
+}
+
+.button:hover {
+    text-decoration: none;
+    background-color: #222;
+    color: #fff;
 }
 
 
@@ -32,19 +72,27 @@ html, body {
 
 /* @group container-logo */
 #container-logo {
-    position: relative;
-    margin: 0 auto;
-    width: 1278px;
-    z-index: 1051;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
 }
+    #container-logo #logo-outer {
+        position: relative;
+        margin: 0 auto;
+        width: 1278px;
+        height: 100%;
+    }
     
     #container-logo #logo{
         position: absolute;
-        top: 600px;
+        bottom: 20px;
         left: 40px;
         width: 268px;
         height: 92px;
         background: url(../image/logo.png) no-repeat;
+        z-index: 1051;
     }
         #container-logo #logo #forms-outer {
             display: block;
@@ -235,11 +283,9 @@ html, body {
 
 /* @group container main */
 #container-main {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
     background-color: #eee;
 }
 
@@ -273,14 +319,16 @@ html, body {
     /* article & sections */
     article{
         width:1278px; 
-        position: relative;
+        height: 100%;
         margin: 0 auto;
-        content:""; 
-        display:table;
         background-color: #f0f0f0;
     } 
     section{float:left;}
-        section.left{ width:354px; height:665px; background:url(../image/leftbg.jpg) no-repeat;}
+        section.left{ 
+            width:354px; 
+            height:100%; 
+            background:url(../image/leftbg.jpg) repeat-y;
+        }
             section.left #music-player-outer {
                 padding: 30px 45px 10px 45px;
                 background-color: rgba(255, 255, 255, .25);
@@ -427,6 +475,29 @@ html, body {
                     
                 /* @end */
         section.center{ width:589px; padding:25px 30px 0 30px}
+            .content-outer {
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            .content-title {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+            #musician-intro-outer {
+                
+            }
+            #musician-all-music {
+                
+            }
+                #musician-all-music-title {
+                    
+                }
+                #musician-all-music-list-outer {
+                    
+                }
+                    #musician-all-music-list {
+                        
+                    }
         section.right{ width:250px; padding:25px 0 0 20px;}
     
 /* @end */
@@ -496,20 +567,6 @@ button.demo {
 }
 
 
-
-/* CSS Document */
-html {overflow-x:hidden;}
-body{ margin:0px; padding:0px; background:#f5f5f5; font-family:"宋体"}
-div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,blockquote,p{padding:0; margin:0;}
-table,td,tr,th{font-size:12px;}
-ol,ul {list-style:none;}
-li{list-style-type:none;}
-img{vertical-align:top;border:0; margin:0; padding:0}
-h1,h2,h3,h4,h5,h6{font-size:inherit; font-weight:normal;}
-address,cite,code,em,th,i{font-weight:normal; font-style:normal;}
-
-/*layout*/
-
 section.left .player{ height:181px; padding:45px 25px 0 45px; background:rgba(255,255,255,0.3);/*前三个参数为rgb颜色，第四个参数为透明度*/}
 section.left .player .name{content:""; display:table}
 section.left .player .name img{width:90px; height:87px; overflow:hidden; float:left}
@@ -542,6 +599,7 @@ section.left .music_story{overflow:hidden}
 section.left .music_lyric{font-family:Arial, Helvetica, sans-serif,"宋体"; display:none;}
 section.left .music_lyric pre{line-height:22px;font-family:Arial, Helvetica, sans-serif,"宋体"}
 
+section.center{ width:589px; padding:25px 30px 0 30px}
 section.center ul.img_wall{width:590px; height:150px; background:#111; position:relative}
 section.center ul.img_wall li{width:85px; overflow:hidden; float:left; cursor:pointer}
 section.center ul.img_wall li.left_arrow, section.center ul.img_wall li.right_arrow{position:absolute; background:#000; width:30px; height:150px; z-index:100; background:url(../image/black_bg_10.png) repeat}
@@ -571,28 +629,9 @@ section.center ul.img_wall li.big_img .img_wrap:hover span.img_hover{width:159px
 #img_wall_max .total span{color:#000; font-size:20px; margin-right:3px; font-family:Arial, Helvetica, sans-serif,"宋体"}
 #img_wall_max .img_container{background:#fff; border:4px; padding:20px; max-width:500px; margin-top:100px; margin:0 auto; text-align:center; overflow:hidden; margin-bottom:10px; }
 
-section.center .txt{width:590px; height:125px;border-top:1px solid #d0d0d0; margin-top:11px; padding-top:10px;}
-section.center .txt p{ font-size:12px; margin:0px; padding:0px; line-height:16px; color:#444444;}
-/*section.center .list{margin-top:11px;}
-section.center .album{ width:590px; height:170px;border-top:1px solid #d0d0d0;margin-top:11px; padding-top:10px;}
-section.center .album .list{ float:left;width:150px; height:170px; overflow:hidden}
-section.center .album .list span{ font-size:12px; color:#313131; font-family:Arial, Helvetica, sans-serif}
-/*section.center .album .list ul{ padding-top:15px;}
-section.center .album .list ul li{font-size:12px; color:#636363; line-height:20px; cursor:pointer;}
-section.center .album .list ul li.current, section.center .album .list ul li:hover{ color:#f7941d}
-section.center .list-activity{ width:590px;border-top:1px solid #d0d0d0; margin-top:11px; padding-top:10px;} 
-section.center .list-activity h3{font-weight:normal;font-family:Arial, Helvetica, sans-serif}
-section.center .list-activity h3, section.center .list-activity span{font-size:12px; color:#313131; }
-section.center .list-activity .la-btn{ width:24px; float:right; padding-top:20px;}
-section.center .list-activity .la-btn .t-btn{border:1px solid #f7941d;color:#f7941d; cursor:pointer; background:url(../image/m_t.png) no-repeat 3px 0; width:35px; height:20px;
--moz-border-radius:3px;      /* Gecko browsers */
--webkit-border-radius:3px;   /* Webkit browsers */
-border-radius:3px;            /* W3C syntax */}
-section.center .list-activity .la-btn .b-btn{border:1px solid #f7941d;color:#f7941d; cursor:pointer; background:url(../image/m_b.png) no-repeat  4px 1px; width:35px; height:20px; margin-top:30px;
--moz-border-radius:3px;      /* Gecko browsers */
--webkit-border-radius:3px;   /* Webkit browsers */
-border-radius:3px;            /* W3C syntax */}
 
+
+section.right{ width:250px; padding:25px 0 0 20px;}
 section.right h1{ font-size:13px; font-weight:bold; display:block; line-height:12px; margin-top:10px;} 
 section.right .attention{ color:#767676; font-size:12px; line-height:15px;}
 section.right .btncss button{ border:1px solid #f7941d;  line-height:19px; margin-top:10px; color:#f7941d; cursor:pointer;
@@ -608,57 +647,3 @@ section.right .owner a:hover{text-decoration:underline;}
 section.right .owner span{ float:left;}
 section.right .owner span:hover{text-decoration:underline;}
 section.right .owner img{ float:left; }
-
-/*专辑*/
-.wrapper-wair{width:430px; margin-left:10px; height:170px; float:left;}
-#scrolldiv{ overflow:auto; position:relative; margin-top:8px;}
-#scrolldiv .scrolltext{width:500px;height:80px;min-height:25px;float:left;overflow:hidden}
-#scrolldiv .scrolltext ul{ margin-top:0; width:500px; float:left;  overflow:hidden;}
-#scrolldiv .scrolltext ul li{width:500px; content:""; display:table; border-bottom:1px solid #d0d0d0; height:20px; line-height:20px; margin-bottom:5px;}
-#scrolldiv .scrolltext ul li .la-left{ float:left;}
-#scrolldiv .scrolltext ul li .la-left a{ color:#f7941d; text-decoration:none}
-#scrolldiv .scrolltext ul li .la-left a:hover{text-decoration:underline}
-#scrolldiv .scrolltext ul li .la-right{ float:right;}
-#scrolldiv button{position:absolute; right:15px; border:1px solid #f7941d;color:#f7941d; cursor:pointer; width:35px; height:20px;-moz-border-radius:3px;   
--webkit-border-radius:3px;  
-border-radius:3px; }         
-#scrolldiv .up{background:url(../image/m_t.png) no-repeat 3px 0;  top:1px;}
-#scrolldiv .down{background:url(../image/m_b.png) no-repeat 4px 1px;bottom:7px;
--moz-border-radius:3px;     
--webkit-border-radius:3px;  
-border-radius:3px;}   
-/*专辑歌曲滚动*/
-.txtScroll-top{ width:150px;  position:relative;    }
-.txtScroll-top .hd{ overflow:hidden;  height:30px; background:#f4f4f4; padding:0 10px 0 0;  margin-top:10px  }
-.txtScroll-top .hd .prev,.txtScroll-top .hd .next{ display:block;  width:53px; height:21px; float:left; margin:0 3px 0 0;  overflow:hidden;cursor:pointer; #000000;background:url("../image/music_play.png") no-repeat; }
-.txtScroll-top .hd .prev{ background-position:-10px -4px; }
-.txtScroll-top .hd .next{ background-position:-70px -4px; }
-.txtScroll-top .hd .prev:hover{ background-position:-10px -33px; }
-.txtScroll-top .hd .next:hover{ background-position:-70px -33px; }
-.txtScroll-top .bd{margin-top:10px }
-.txtScroll-top .infoList li{ height:24px; line-height:24px;   }
-.txtScroll-top .infoList li .date{ float:right; color:#999;  }
-.txtScroll-top .infoList li a{text-decoration:none;font-size:12px; color:#636363; line-height:20px; cursor:pointer;}
-.txtScroll-top .infoList li a.current, .txtScroll-top .infoList li a:hover{color:#f7941d}
-
-/* Tiny Scrollbar */
-#scrollbar1 { width: 340px; clear: both; margin: 20px 0 10px; }
-#scrollbar1 .viewport { width: 320px; height:140px; overflow: hidden; position: relative; }
-#scrollbar1 .overview { list-style: none; position: absolute; left: 0; top: 0; }
-#scrollbar1 .scrollbar,
-#scrollbar1 .thumb .end,
-#scrollbar1 .thumb {background: transparent url(../image/bg-scrollbar.png) no-repeat; }
-#scrollbar1 .scrollbar { position: relative; background-position: 0 0; float: right; width: 15px; }
-#scrollbar1 .track	{ background:none; height: 100%; width:13px; position: relative; padding: 0 1px; }
-#scrollbar1 .thumb { background-position: 100% 100%; height: 20px; width: 13px; cursor: pointer; overflow: hidden; position: absolute; top: 0; }
-#scrollbar1 .thumb .end { background-position: 100% 0; height: 5px; width: 13px; }
-#scrollbar1 .disable { display: none; }       
-p.likemusic{position:absolute;top: 155px;left:210px;font-weight:bold;display:none;float:left;}
-p.no_likemusic{position:absolute;top: 155px;left:210px;font-weight:bold;display:none;float:left;}
-.musician_attention{position:relative;font-weight:bold;color:black;display:none;float:left;}
-.no_musician_attention{position:relative;font-weight:bold;color:black;display:none;float:left;}
-p.login_wrong{text-align:center;color:white;display:block;font-family:"宋体",Georgia,Serif;}
-div.panel_login{float:left;position:absolute;left:570px;top:280px;color:white;}
-
-/*浏览器检测*/
-#html5txt{text-align:center; padding-top:200px; font-size:30px; font-family:"微软雅黑"; color:#888}

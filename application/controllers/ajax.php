@@ -82,7 +82,7 @@ class Ajax extends CI_Controller {
 	 * filter筛选条件,格式按需求来定
 	 *
 	 * 返回值目前为随机10首歌
-	 */ 
+	 */
 	function fetchmusic()
 	{
 		$user_id=$this->input->get('user_id');
@@ -94,6 +94,22 @@ class Ajax extends CI_Controller {
 		$this->load->model('music_model');
 		$data = $this->music_model->randmore();
 		echo json_encode($data);
+	}
+	
+	/*
+	    随机返回10首歌
+	    希望以后能有筛选条件
+	*/
+	public function fetch_radio_music() 
+	{
+		$this->load->model('music_model');
+		$this->load->model('musician_model');
+		$data = $this->music_model->randmore();
+		foreach($data as &$music) {
+	        $music['musician'] = $this->musician_model->check_id($music['musician_id']);
+	        $music['musician']['all_music'] = $this->music_model->getallmusic_by_musician_id($music['musician_id']);
+	    }
+	    echo json_encode($data);
 	}
 
     /*
