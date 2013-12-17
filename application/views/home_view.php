@@ -18,6 +18,7 @@
     <script type="text/javascript" src="<?php echo base_url()?>js/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="<?php echo base_url()?>js/jquery.boutique_min.js"></script>
     <script type="text/javascript" src="<?php echo base_url()?>js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url()?>js/jquery.tinyscrollbar.min.js"></script>
     <!--<script type="text/javascript" src="<?php echo base_url()?>js/jquery-migrate-1.1.1.js"></script> -->
     <!-- <script type="text/javascript" src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=" charset="utf-8"></script> -->
     <!--<script type="text/javascript" src="<?php echo base_url()?>js/jQuery-1.7.1.js"></script>
@@ -27,7 +28,7 @@
     <script type="text/javascript" src="<?php echo base_url()?>js/jquery.SuperSlide.2.1.source.js"></script>
     <script type="text/javascript" src="<?php echo base_url()?>js/view.js"></script>
     <link rel="stylesheet" href="<?php echo base_url()?>css/website.css" type="text/css" media="screen"/>
-    <script type="text/javascript" src="<?php echo base_url()?>js/jquery.tinyscrollbar.min.js"></script>
+    
     <script type="text/javascript" src="<?php echo base_url()?>js/cufon.js"></script>
     <script type="text/javascript" src="<?php echo base_url()?>js/website.js"></script>
 
@@ -685,8 +686,9 @@ $(document).ready(function(){
 
     <!-- 控件 -->
     <script type="text/javascript">
-        // 登陆和注册的tab
         $(function() {
+            
+            // 登陆和注册的tab
             $("#sign-in-tab").click(function(){
                 $("#sign-in-form-outer").show();
                 $("#sign-up-form-outer").hide();
@@ -700,26 +702,32 @@ $(document).ready(function(){
                 $("#sign-up-tab").hide();
             });
             $("#sign-in-tab").trigger("click");
-        });
         
-    
-        <?php if($this->session->userdata('is_logged_in')): ?>
-        // 点亮按钮,登陆的时候才出现 
-        $(function(){
-            $("#light-button").click(function(){
-                if($("#container-mask").css("display") == "none") {
-                    $("#container-mask").show();
-                    $("#container-main").addClass("mask-blur");
-                }
-                else {
-                    $("#container-mask").hide();
-                    $("#container-main").removeClass("mask-blur");
-                }
+            <?php if($this->session->userdata('is_logged_in')): ?>
+            // 点亮按钮,登陆的时候才出现 
+                $("#light-button").click(function(){
+                    if($("#container-mask").css("display") == "none") {
+                        $("#container-mask").show();
+                        $("#container-main").addClass("mask-blur");
+                    }
+                    else {
+                        $("#container-mask").hide();
+                        $("#container-main").removeClass("mask-blur");
+                    }
+                });
+            <?php endif; ?>
+            
+            // 音乐人所有音乐列表 
+            $("#musician-all-music-list li").on("mouseover", function(){
+                $(this).find(".li-music-controls").show();
             });
+            $("#musician-all-music-list li").on("mouseout", function(){
+                $(this).find(".li-music-controls").hide();
+            });
+        
+            // 
+            $("section.center").tinyscrollbar();
         });
-        <?php endif; ?>
-        
-        
     </script>
 </head>
 <body >
@@ -776,10 +784,10 @@ $(document).ready(function(){
     		
     	<div id="mask-top">
         	<div id="mask-nav">
-        	    <a href="<?php echo base_url('personal'); ?>"><i class="icon-home icon-white"></i></a>
-        	    <a href="#" onclick="lititRbar.display('slideLeft');"><i class="icon-heart icon-white"></i></a>
-        	    <a href="#" onclick=""><i class="icon-signal icon-white"></i></a>
-        	    <a href="#" onclick="show_home_search();"><i class="icon-search icon-white"></i></a>
+        	    <a href="<?php echo base_url('personal'); ?>"><i class="icon-home"></i></a>
+        	    <a href="#" onclick="lititRbar.display('slideLeft');"><i class="icon-heart-empty"></i></a>
+        	    <a href="#" onclick=""><i class="icon-signal"></i></a>
+        	    <a href="#" onclick="show_home_search();"><i class="icon-search"></i></a>
         	    <div id="mask-search">
         	        <input id="mask-search-input" type="text">
         	    </div>
@@ -821,7 +829,7 @@ $(document).ready(function(){
                                <p class="likemusic" id="likemusic">+1</p>
                                 <p class="no_likemusic" id="no_likemusic">-1</p>
                                 -->
-                                <span id="like-button" class="icon-heart icon-large music-control-button"></span>
+                                <span id="like-button" class="icon-heart-empty icon-large music-control-button"></span>
                                 <span id="share-button" class="icon-share icon-large music-control-button"></span>
                                 <!--
                                 <?php if($music['is_collect']==0):?>
@@ -857,7 +865,7 @@ $(document).ready(function(){
                                         <i class="icon-forward"></i>
                                     </span>
                                 </span>
-                                <span id="volume" class="">
+                                <span id="volume" class="music-player-control-button">
                                     <span class="icon-stack">
                                         <i class="icon-circle-blank icon-stack-base"></i>
                                         <i class="icon-volume-off"></i>
@@ -902,13 +910,7 @@ $(document).ready(function(){
                         <div class="p-title">音乐故事</div>
                          <div class="p-txt"><?php echo $music['story']?></div>
                          <div class="music_lyric" id="music_lyric">
-                            <pre>Chill out whatcha yelling for
-                    Lay back it's all been done before
-                    And if you could only let it be
-                    You will see
-                    I like you the way you are
-                    When we're driving in your car
-                    And you're talking to me one on </pre>
+                            <pre>尼玛歌词的后台还木有写啊！！！</pre>
                           </div>
                         </div>  
                       </div>
@@ -916,73 +918,92 @@ $(document).ready(function(){
                   </div>
                 </div>
                 <!-- <div class="tag"><?php foreach ($tag as $key) echo "<span><a href=\"#\">".$key."</a><span>";?></div> -->
+
             </section>
           	
           	<!-- 中央 -->
           	 <section class="center">
-                 <ul class="img_wall">
-                	<li class="left_arrow"><span class="icon_arrow_l"></span></li>
-                    <li class="right_arrow"><span class="icon_arrow_r"></span></li>
-                  <li>
-                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
-                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
-                  </li>
-                  <li class="small_img">
-                    <div class="img_wrap"></div>
-                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_3.jpg" /></div>
-                  </li>
-                  <li>
-                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
-                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
-                  </li>
-                  <li>
-                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
-                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
-                  </li>
-                  <li class="big_img">
-                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_2.jpg" /></div>
-                  </li>
-                  <li>
-                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
-                    <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
-                  </li>
-                </ul>
-                
-                <div id="musician-intro-outer" class="content-outer">
-                  <p id="musician-intro"><?php echo $musician['introduction']?></p>
-                </div>
-                
-                <div id="musician-all-music" class="content-outer">
-                    <div id="musician-all-music-title" class="content-title">
-                        <span class="musician-name"><?php echo $musician['nickname']?></span>的歌曲列表
-                    </div>
-                        
-                    <div id="musician-all-music-list-outer">
-                        <ul id="musician-all-music-list">
-                            <?php foreach ($musician['all_music'] as $item): ?>
-                                <li><?php echo $item['name']; ?></li>
-                            <?php endforeach;?>
-                        </ul>
+          	 
+          	     <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+          	     <div class="viewport">
+          	     <div class="overview">
+                     <ul class="img_wall">
+                    	<li class="left_arrow"><span class="icon_arrow_l"></span></li>
+                        <li class="right_arrow"><span class="icon_arrow_r"></span></li>
+                      <li>
+                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
+                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
+                      </li>
+                      <li class="small_img">
+                        <div class="img_wrap"></div>
+                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_3.jpg" /></div>
+                      </li>
+                      <li>
+                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
+                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
+                      </li>
+                      <li>
+                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
+                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
+                      </li>
+                      <li class="big_img">
+                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_2.jpg" /></div>
+                      </li>
+                      <li>
+                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
+                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
+                      </li>
+                    </ul>
+                    
+                    <div id="musician-intro-outer" class="content-outer">
+                      <p id="musician-intro"><?php echo $musician['introduction']?></p>
                     </div>
                     
-                </div>
-                  
-                <div id="musician-activities" class="content-outer">
-                    <div id="musician-activities-title" class="content-title">
-                        <span class="musician-name"><?php echo $musician['nickname']?></span>的活动
+                    <div id="musician-all-music" class="content-outer">
+                        <div id="musician-all-music-title" class="content-title">
+                            <span class="content-title-inner">
+                                <span class="musician-name"><?php echo $musician['nickname']?></span>的音乐
+                            </span>
+                        </div>
+                            
+                        <div id="musician-all-music-list-outer">
+                            <ul id="musician-all-music-list">
+                                <?php foreach ($musician['all_music'] as $item): ?>
+                                    <li>
+                                        <span class="music-name"><?php echo $item['name']; ?></span>
+                                        <span class="li-music-controls">
+                                            <span class="icon-play icon-button"></span>
+                                            <span class="icon-plus icon-button"></span>
+                                            <span class="icon-heart-empty icon-button"></span>
+                                            <span class="icon-share icon-button"></span>
+                                        </span>
+                                    </li>
+                                <?php endforeach;?>
+                            </ul>
+                        </div>
+                        
                     </div>
-                   <div id="scrolldiv">
-                  <div class="scrolltext">
-                  <ul>
-                  <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-                  <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-                  <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-                  <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-                  <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-                   </ul>
-                  </div>
-                  <button type="button" class="up" ></button>
-                  <button type="button" class="down"></button>
+                      
+                    <div id="musician-activities" class="content-outer">
+                        <div id="musician-activities-title" class="content-title">
+                            <span class="content-title-inner">
+                                <span class="musician-name"><?php echo $musician['nickname']?></span>的活动
+                            </span>
+                        </div>
+                       <div id="scrolldiv">
+                      <div class="scrolltext">
+                      <ul>
+                      <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                      <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                      <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                      <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                      <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                       </ul>
+                      </div>
+                      <button type="button" class="up" ></button>
+                      <button type="button" class="down"></button>
+                    </div>
+                    </div>
                 </div>
                 </div>
             </section>
@@ -1003,13 +1024,13 @@ $(document).ready(function(){
                 <div class="musician_attention" id="musician_attention">+1</div>
             	<div class="no_musician_attention" id="no_musician_attention">-1</div>
             	-->
-                <div  class="btncss">
-                <?php if($music['is_follow']==0):?>
-                <button class="attention button"  id="attention_1">关注</button>
-                <?php else:?>
-                 <button class="attention button"  id="attention_1">取消关注</button>
-                 <?php endif;?>
-                <button href="#private_letter"  data-toggle="modal" class="private_letter button" id="private_letter" >私信TA</button>
+                <div class="">
+                    <?php if($music['is_follow']==0):?>
+                    <button class="button"  id="attention_1">关注</button>
+                    <?php else:?>
+                     <button class="button"  id="attention_1">取消关注</button>
+                     <?php endif;?>
+                    <button href="#private_letter"  data-toggle="modal" class="private_letter button" id="private_letter" >私信TA</button>
                 </div>
                 <div  class="txt">
                   <p>hi!</p>
@@ -1277,7 +1298,6 @@ $(document).ready(function(){
         });
         $("#music-player #controls #volume #volume-slider").hide();
         
-        
         $("#music-player #controls #volume #volume-slider").slider({
             value: 1,
             step: 0.05,
@@ -1289,7 +1309,18 @@ $(document).ready(function(){
                 audio.volume = ui.value;
             }
         });
-        
+        // click volume button to mute & unmute
+        $("#music-player #controls #volume").click(function(){
+            if (audio.volume > 0) {
+                audio.unmute_volume = audio.volume;
+                audio.volume = 0;
+                $("#music-player #controls #volume #volume-slider").slider("value", 0);
+            }
+            else {
+                audio.volume = audio.unmute_volume;
+                $("#music-player #controls #volume #volume-slider").slider("value", audio.volume);
+            }
+        });
         // bind play, pause and ended
         $(audio).bind('play',function() {
             $("#play-toggle").find("#icon-to-change").removeClass("icon-play").addClass("icon-pause");		
