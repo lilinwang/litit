@@ -604,8 +604,8 @@ class Ajax extends CI_Controller {
     public function personal_load_tab() {
         $tab_for = $this->input->post('tab_for');
         $this->load->library('session');
-        $user_id = $this->session->userdata('userid');
-        $user_type = $this->session->userdata('usertype');
+        $user_id = $this->session->userdata('user_id');
+        $user_type = $this->session->userdata('user_type');
         $model_name = substr($tab_for, 0, strlen($tab_for) - 1);
         if ($tab_for != 'uploads') 
             $model_name .= $user_type == '0' ? 'm' : '';
@@ -615,5 +615,27 @@ class Ajax extends CI_Controller {
         $data = $this->tab_content_model->display($user_id);
     
         echo json_encode($data);
+    }
+    
+    public function follow() {
+        $this->load->library('session');
+    
+        $user_id = $this->session->userdata('user_id');
+        $musician_id = $this->input->post("musician_id");
+        $action = $this->input->post("action");
+        if($this->session->userdata('user_type') == 1) {
+            $this->load->model('follow_model');
+        }
+        else {
+            $this->load->model('followm_model', 'follow_model');
+        }
+        if($action == "add") {
+            $this->follow_model->add_follow($user_id, $musician_id);
+            echo '{"errno":0, "msg":"关注成功"}';
+        }
+        else if ($action == "delete"){
+            $this->follow_model->delete_follow($user_id, $musician_id);
+            echo '{"errno":0, "msg":"已经取消关注"}';
+        }
     }
 }

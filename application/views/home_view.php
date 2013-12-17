@@ -725,8 +725,71 @@ $(document).ready(function(){
                 $(this).find(".li-music-controls").hide();
             });
         
-            // 
-            $("section.center").tinyscrollbar();
+            // 中间模块的tinysrollbar
+            $("section.center").tinyscrollbar({
+                autohide: true,
+                autohideTimeout : 500
+            });
+            $( window ).resize(function() {
+                $("section.center").tinyscrollbar_update();
+            });
+            
+            // 右边模块  关注
+            $("#unfollow-button")
+                .on('mouseover', function(){
+                    $(this).text("取消关注");
+                }).on('mouseout', function(){
+                    $(this).text("已关注");
+                });
+            $("#follow-button")
+                .on('mouseover', function(){
+                    $(this).text("关注");
+                }).on('mouseout', function(){
+                    $(this).text("未关注");
+                });
+            
+            $("#unfollow-button").on('click', function(){
+                // 取消关注
+                $.post(
+                    "<?php echo base_url('ajax/follow'); ?>",
+                    {
+                        musician_id: $(this).parent().attr("mid"),
+                        action: "delete"
+                    },
+                    function (data, status) {
+                        data = JSON.parse(data);
+                        if (data.errno == 0) {
+                            attention = parseInt($(".musician-attention").text());
+                            $(".musician-attention").text(attention - 1);
+                            $("#unfollow-button").hide();
+                            $("#follow-button").show();
+                        }
+                        else {
+                        }
+                    }
+                );
+            });
+            $("#follow-button").on('click', function(){
+                // 关注
+                $.post(
+                    "<?php echo base_url('ajax/follow'); ?>",
+                    {
+                        musician_id: $(this).parent().attr("mid"),
+                        action: "add"
+                    },
+                    function (data, status) {
+                        data = JSON.parse(data);
+                        if (data.errno == 0) {
+                            attention = parseInt($(".musician-attention").text());
+                            $(".musician-attention").text(attention + 1);
+                            $("#follow-button").hide();
+                            $("#unfollow-button").show();
+                        }
+                        else {
+                        }
+                    }
+                );
+            });
         });
     </script>
 </head>
@@ -781,7 +844,7 @@ $(document).ready(function(){
     
     <!-- 面纱 -->
     <div id="container-mask">
-    		
+    	
     	<div id="mask-top">
         	<div id="mask-nav">
         	    <a href="<?php echo base_url('personal'); ?>"><i class="icon-home"></i></a>
@@ -891,7 +954,7 @@ $(document).ready(function(){
             		    <?php endif;?>
             		    <button class="button" type="button" id="music_lyric_btn">歌词</button>
                         <button class="button" type="button" id="music_story_btn" style="display:none">音乐故事</button>
-                        <a class="button" href="#download" type="button" data-toggle="modal">下载</a>
+                        <a class="button" href="#download" type="button" data-toggle="modal"><span class="icon-download-alt"></span>下载</a>
                     </div>
                 </div>
               
@@ -925,117 +988,116 @@ $(document).ready(function(){
           	 <section class="center">
           	 
           	     <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
-          	     <div class="viewport">
-          	     <div class="overview">
-                     <ul class="img_wall">
-                    	<li class="left_arrow"><span class="icon_arrow_l"></span></li>
-                        <li class="right_arrow"><span class="icon_arrow_r"></span></li>
-                      <li>
-                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
-                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
-                      </li>
-                      <li class="small_img">
-                        <div class="img_wrap"></div>
-                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_3.jpg" /></div>
-                      </li>
-                      <li>
-                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
-                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
-                      </li>
-                      <li>
-                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
-                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
-                      </li>
-                      <li class="big_img">
-                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_2.jpg" /></div>
-                      </li>
-                      <li>
-                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
-                        <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
-                      </li>
-                    </ul>
-                    
-                    <div id="musician-intro-outer" class="content-outer">
-                      <p id="musician-intro"><?php echo $musician['introduction']?></p>
-                    </div>
-                    
-                    <div id="musician-all-music" class="content-outer">
-                        <div id="musician-all-music-title" class="content-title">
-                            <span class="content-title-inner">
-                                <span class="musician-name"><?php echo $musician['nickname']?></span>的音乐
-                            </span>
-                        </div>
-                            
-                        <div id="musician-all-music-list-outer">
-                            <ul id="musician-all-music-list">
-                                <?php foreach ($musician['all_music'] as $item): ?>
-                                    <li>
-                                        <span class="music-name"><?php echo $item['name']; ?></span>
-                                        <span class="li-music-controls">
-                                            <span class="icon-play icon-button"></span>
-                                            <span class="icon-plus icon-button"></span>
-                                            <span class="icon-heart-empty icon-button"></span>
-                                            <span class="icon-share icon-button"></span>
-                                        </span>
-                                    </li>
-                                <?php endforeach;?>
-                            </ul>
+          	     <div class="viewport">   <!-- brought by jquery tinyscrollbar -->
+              	     <div class="overview"> <!-- brought by jquery tinyscrollbar -->
+                         <ul class="img_wall">
+                        	<li class="left_arrow"><span class="icon_arrow_l"></span></li>
+                            <li class="right_arrow"><span class="icon_arrow_r"></span></li>
+                          <li>
+                            <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
+                            <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
+                          </li>
+                          <li class="small_img">
+                            <div class="img_wrap"></div>
+                            <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_3.jpg" /></div>
+                          </li>
+                          <li>
+                            <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
+                            <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
+                          </li>
+                          <li>
+                            <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
+                            <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
+                          </li>
+                          <li class="big_img">
+                            <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_2.jpg" /></div>
+                          </li>
+                          <li>
+                            <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_1.jpg" /></div>
+                            <div class="img_wrap"><span class="img_hover"></span><img src="<?php echo base_url()?>image/img_wall/img_4.jpg" /></div>
+                          </li>
+                        </ul>
+                        
+                        <div id="musician-intro-outer" class="content-outer">
+                          <p id="musician-intro"><?php echo $musician['introduction']?></p>
                         </div>
                         
-                    </div>
-                      
-                    <div id="musician-activities" class="content-outer">
-                        <div id="musician-activities-title" class="content-title">
-                            <span class="content-title-inner">
-                                <span class="musician-name"><?php echo $musician['nickname']?></span>的活动
-                            </span>
+                        <div id="musician-all-music" class="content-outer">
+                            <div id="musician-all-music-title" class="content-title">
+                                <span class="content-title-inner">
+                                    <span class="musician-name"><?php echo $musician['nickname']?></span>的音乐
+                                </span>
+                            </div>
+                                
+                            <div id="musician-all-music-list-outer">
+                                <ul id="musician-all-music-list">
+                                    <?php foreach ($musician['all_music'] as $item): ?>
+                                        <li>
+                                            <span class="music-name"><?php echo $item['name']; ?></span>
+                                            <span class="li-music-controls">
+                                                <span class="icon-play icon-button"></span>
+                                                <span class="icon-plus icon-button"></span>
+                                                <span class="icon-heart-empty icon-button"></span>
+                                                <span class="icon-share icon-button"></span>
+                                            </span>
+                                        </li>
+                                    <?php endforeach;?>
+                                </ul>
+                            </div>
+                            
                         </div>
-                       <div id="scrolldiv">
-                      <div class="scrolltext">
-                      <ul>
-                      <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-                      <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-                      <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-                      <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-                      <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
-                       </ul>
-                      </div>
-                      <button type="button" class="up" ></button>
-                      <button type="button" class="down"></button>
+                          
+                        <div id="musician-activities" class="content-outer">
+                            <div id="musician-activities-title" class="content-title">
+                                <span class="content-title-inner">
+                                    <span class="musician-name"><?php echo $musician['nickname']?></span>的活动
+                                </span>
+                            </div>
+                            <div id="musician-activities-outer">
+                              <ul id="musician-activities-list">
+                              <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                              <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                              <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                              <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                              <li><span class="la-left"><a href="#">同济大学一二九大礼堂演出</a></span> <span class="la-right">11月01号 周六19:00-21:00   同济大学一二九礼堂</span></li>
+                               </ul>
+                           </div>
+                        </div>
                     </div>
-                    </div>
-                </div>
                 </div>
             </section>
           	
           	
           	<section class="right">
                 <div id="musician-avatar-outer">
-                    <img src="<?php echo base_url().$musician['portaitdir']?>" width="204" height="204" />
+                    <img src="<?php echo base_url().$musician['portaitdir']?>"/>
                 </div>
                 <div id="musician-name-outer">
                     <span class="musician-name"><?php echo $musician['nickname']?></span>
                 </div>
                 <div id="musician-attention-outer">
-                    人气
-                    <span class="musician-attention"><?php echo $musician['attention']?></span>	
+                    <div id="musician-attention-top">
+                        <span class="musician-attention"><?php echo $musician['attention']?></span>人
+                    </div>
+                    <div id="musician-attention-bottom">
+                        正在关注
+                    </div>
                 </div>
                 <!--
                 <div class="musician_attention" id="musician_attention">+1</div>
             	<div class="no_musician_attention" id="no_musician_attention">-1</div>
             	-->
-                <div class="">
+                <div id="musician-controls-outer" mid="<?php echo $musician['musician_id'];?>">
                     <?php if($music['is_follow']==0):?>
-                    <button class="button"  id="attention_1">关注</button>
+                        <button class="button"  id="follow-button" style="display:inline-block;">未关注</button>
+                        <button class="button"  id="unfollow-button" style="display:none;">已关注</button>
                     <?php else:?>
-                     <button class="button"  id="attention_1">取消关注</button>
-                     <?php endif;?>
-                    <button href="#private_letter"  data-toggle="modal" class="private_letter button" id="private_letter" >私信TA</button>
+                        <button class="button"  id="follow-button" style="display:none;">未关注</button>
+                        <button class="button"  id="unfollow-button" style="display:inline-block;">已关注</button>
+                    <?php endif;?>
+                    <button href="#private_letter"  data-toggle="modal" class="private_letter button" id="private_letter" ><span class="icon-pencil"></span>私信TA</button>
                 </div>
-                <div  class="txt">
-                  <p>hi!</p>
-                </div>
-                <div class="owner"> <a href="#">上海交通大学主页</a> <a href="#"> <span>微博主页</span> <img src="<?php echo base_url()?>image/r_weibo.png" width="19" height="16" /></a> </div>
+                <div class="owner" style="text-align: left;"> <a href="#">上海交通大学主页</a> <a href="#"> <span>微博主页</span> <img src="<?php echo base_url()?>image/r_weibo.png" width="19" height="16" /></a> </div>
             </section>
         </article>
     
@@ -1146,6 +1208,7 @@ $(document).ready(function(){
         $("#music-image-sidebar").find("#music-name").text(music.name);
     }
     function change_musician_info(musician) {
+        $("section.center").tinyscrollbar_update(0);
         $(".musician-name").text(musician.nickname);
         $("#musician-intro").text(musician.intro);
         $("#musician-avatar-outer").find("img").attr("src", musician.portaitdir);

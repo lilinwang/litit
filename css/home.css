@@ -66,7 +66,7 @@ ul {
     color: #000;
 }
 .icon-button:hover{
-    color: #333;
+    color: #999;
 }
 .icon-button:active{
     top: 1px;
@@ -507,7 +507,7 @@ ul {
             width:649px; height: 100%;
             margin: 0; 
         }
-            /* @group tiny scrollbar */
+            /* @group jquery tinyscrollbar */
             section.center .viewport { height: 100%; overflow: hidden; position: relative; }
             section.center .overview { 
                 width: 600px;
@@ -515,10 +515,10 @@ ul {
                 padding: 20px 20px 40px 20px;}
             section.center .thumb .end,
             section.center .thumb { background-color: #FABE75; }
-            section.center .scrollbar { position: relative; float: right; width: 7px; }
-            section.center .track { background-color: #eee; height: 100%; width:5px; position: relative; padding: 0 1px; }
-            section.center .thumb { height: 20px; width: 5px; cursor: pointer; overflow: hidden; position: absolute; top: 0; }
-            section.center .thumb .end { overflow: hidden; height: 5px; width: 5px; }
+            section.center .scrollbar { position: relative; float: right; width: 6px; }
+            section.center .track { background-color: #eee; height: 100%; width:4px; position: relative; padding: 0 1px; }
+            section.center .thumb { height: 20px; width: 4px; cursor: pointer; overflow: hidden; position: absolute; top: 0; }
+            section.center .thumb .end { overflow: hidden; height: 5px; width: 4px; }
             section.center .disable{ display: none; }
             .noSelect { user-select: none; -o-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
             /* @end */
@@ -528,16 +528,16 @@ ul {
                 margin-bottom: 10px;
             }
             .content-title {
-                color: #eee;
+                color: #333;
                 padding-bottom: 5px;
-                border-bottom: 1px solid #720b1e;
+                border-bottom: 4px solid #ddd;
                 *margin-bottom: 10px;
                 font-size: 20px;
                 line-height: 20px;
             }
                 .content-title-inner{
-                    padding: 5px 10px 5px 10px;
-                    background-color: #720b1e;
+                    padding: 5px 20px 4px 20px;
+                    border-bottom: 4px solid #FABE75;
                 }
             #musician-intro-outer {
                 
@@ -565,15 +565,61 @@ ul {
                         #musician-all-music-list li .li-music-controls span{
                             font-size: 16px;
                         }
+            #musician-activities {
+                
+            }
+                #musician-activities-title {
+                    
+                }
+                #musician-activities-list-outer {
+                    
+                }
+                    #musician-activities-list {
+                        
+                    }
+                        #musician-activities-list li {
+                            padding: 7px;
+                            border-bottom: 1px solid #ddd;
+                        }
         section.right{
-            width:250px; 
+            width:230px; 
             height: 100%;
-            padding:25px 0 0 20px;
+            padding:20px;
+            text-align: center;
             
             -webkit-box-shadow: 7px 0px 12px rgba(0,0,0, 0.2);
             -moz-box-shadow: 7px 0px 12px rgba(0,0,0, 0.2);
             box-shadow: 7px 0px 12px rgba(0,0,0, 0.2);
         }
+            #musician-avatar-outer {
+                width: 100%;
+            }
+                #musician-avatar-outer img {
+                    width: 100%;
+                    max-height: 300px;
+                    border-bottom: 4px solid #FABE75;
+                }
+            #musician-name-outer{
+                font-size: 30px;
+                color: #333;
+                text-align: center;
+                padding: 10px;
+            }
+            #musician-attention-outer {
+                color: #333;
+                text-align: center;   
+                padding: 10px;
+            }
+                #musician-attention-top {
+                    font-size: 25px;
+                }
+                #musician-attention-bottom {
+                    padding-top: 5px;
+                    font-size: 15px;
+                }
+            #musician-controls-outer {
+                display: inline-block;
+            }
     
 /* @end */
 
@@ -590,7 +636,7 @@ img.motto{float:left;position:absolute;left:533px;top:200px;}
 
 #myModal.modal.fade.in{
 	top: 5%;
-} 
+}
 
 .modal-body input[type="radio"]{
 	margin: 0;
@@ -705,7 +751,6 @@ section.center ul.img_wall li.big_img .img_wrap:hover span.img_hover{width:159px
 
 
 
-section.right{ width:250px; padding:25px 0 0 20px;}
 section.right h1{ font-size:13px; font-weight:bold; display:block; line-height:12px; margin-top:10px;} 
 section.right .attention{ color:#767676; font-size:12px; line-height:15px;}
 section.right .btncss button{ border:1px solid #f7941d;  line-height:19px; margin-top:10px; color:#f7941d; cursor:pointer;

@@ -4,10 +4,22 @@ class follow_model extends CI_Model{
 		parent::__construct();
 	}
 //增添喜欢曲目 
-	function addfollow($user_id,$musician_id){
+	function add_follow($user_id, $musician_id){
 		$sql="INSERT INTO follow(user_id,musician_id) VALUES(?,?)";
 		$this->db->query($sql,array($user_id,$musician_id));
-		$this->db->query("UPDATE musician SET attention = attention+1 WHERE musician_id = $musician_id");
+		$this->db->trans_start();
+		$sql2 = "UPDATE musician SET attention = attention+1 WHERE musician_id = ?";
+		$this->db->query($sql2, array($musician_id));
+		$this->db->trans_complete();
+	}
+	
+	function delete_follow($user_id, $musician_id){    
+		$sql="DELETE FROM follow WHERE user_id = ? AND musician_id = ?";
+		$this->db->query($sql,array($user_id,$musician_id));
+		$this->db->trans_start();
+		$sql2 = "UPDATE musician SET attention = attention-1 WHERE musician_id = ?";
+		$this->db->query($sql2, array($musician_id));
+		$this->db->trans_complete();
 	}
  
 //列出用户喜欢歌曲名称列表  
