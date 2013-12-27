@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 17, 2013 at 12:51 AM
--- Server version: 5.5.34
--- PHP Version: 5.3.26
+-- Generation Time: Dec 27, 2013 at 03:00 PM
+-- Server version: 5.6.14
+-- PHP Version: 5.4.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `collect` (
   `music_id` int(11) NOT NULL,
   PRIMARY KEY (`collect_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=70 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=74 ;
 
 -- --------------------------------------------------------
 
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `collectm` (
   `user_id` int(11) DEFAULT NULL,
   `music_id` int(50) DEFAULT NULL,
   PRIMARY KEY (`collect_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=59 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=99 ;
 
 -- --------------------------------------------------------
 
@@ -95,19 +95,24 @@ CREATE TABLE IF NOT EXISTS `collectm` (
 --
 
 CREATE TABLE IF NOT EXISTS `copyright` (
-  `id` int(50) NOT NULL AUTO_INCREMENT,
+  `copyright_id` int(50) NOT NULL AUTO_INCREMENT,
   `musician_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `music_id` int(11) NOT NULL,
+  `music_name` text,
   `name` varchar(255) NOT NULL,
   `company` varchar(255) DEFAULT NULL,
   `identity` int(18) NOT NULL,
   `phone` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `content` text,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `user_image` text,
+  `musician_image` text,
+  `copyright_message` text,
+  `last_read_time` varchar(20) NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`copyright_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -126,7 +131,8 @@ CREATE TABLE IF NOT EXISTS `copyrightm` (
   `phone` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `content` text,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_read_time` varchar(20) NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -184,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `follow` (
   `musician_id` int(11) NOT NULL,
   PRIMARY KEY (`follow_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
@@ -197,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `followm` (
   `user_id` int(11) DEFAULT NULL,
   `musician_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`follow_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=102 ;
 
 -- --------------------------------------------------------
 
@@ -208,9 +214,8 @@ CREATE TABLE IF NOT EXISTS `followm` (
 CREATE TABLE IF NOT EXISTS `genre` (
   `genre_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,
-  PRIMARY KEY (`genre_id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  PRIMARY KEY (`genre_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -220,27 +225,27 @@ CREATE TABLE IF NOT EXISTS `genre` (
 
 CREATE TABLE IF NOT EXISTS `music` (
   `music_id` int(11) NOT NULL AUTO_INCREMENT,
-  `musician_id` int(11) NOT NULL,
   `name` text NOT NULL,
   `dir` text NOT NULL,
-  `album_id` int(11) NOT NULL,
-  `lyrics_by` varchar(20) NOT NULL,
-  `composed_by` varchar(20) NOT NULL,
-  `arranged_by` varchar(20) NOT NULL,
-  `disc_company` varchar(40) NOT NULL,
-  `perform_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `genre` varchar(40) NOT NULL,
-  `custom_tag` varchar(40) NOT NULL,
   `story` text NOT NULL,
   `download_cnt` int(11) NOT NULL,
   `share_cnt` int(11) NOT NULL,
   `collect_cnt` int(11) NOT NULL,
   `view_cnt` int(11) NOT NULL,
   `randable` int(11) NOT NULL,
+  `musician_id` int(11) NOT NULL,
   `image_dir` text NOT NULL,
-  `album_dir` varchar(40) NOT NULL,
+  `album_dir` text NOT NULL,
+  `lyrics_by` varchar(20) DEFAULT NULL,
+  `composed_by` varchar(20) DEFAULT NULL,
+  `arranged_by` varchar(20) DEFAULT NULL,
+  `disc_company` varchar(40) DEFAULT NULL,
+  `perform_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `genre` varchar(40) DEFAULT NULL,
+  `custom_tag` varchar(40) DEFAULT NULL,
+  `album_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`music_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=70 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
 
 -- --------------------------------------------------------
 
@@ -262,10 +267,11 @@ CREATE TABLE IF NOT EXISTS `musician` (
   `portaitdir` text,
   `certificate` tinyint(1) NOT NULL,
   `famousfor` int(11) NOT NULL,
-  `reg_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `reg_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `organization` int(11) DEFAULT NULL,
   PRIMARY KEY (`musician_id`),
   UNIQUE KEY `identity` (`identity`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 -- --------------------------------------------------------
 
@@ -278,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `music_genre` (
   `music_id` int(11) NOT NULL,
   `genre_id` int(11) NOT NULL,
   PRIMARY KEY (`music_genre_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
 
@@ -292,7 +298,7 @@ CREATE TABLE IF NOT EXISTS `music_musician` (
   `musician_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `musician_id` (`musician_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=30 ;
 
 -- --------------------------------------------------------
 
@@ -304,9 +310,94 @@ CREATE TABLE IF NOT EXISTS `music_tag` (
   `music_tag_id` int(11) NOT NULL AUTO_INCREMENT,
   `music_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL,
-  PRIMARY KEY (`music_tag_id`),
-  UNIQUE KEY `tag_id` (`tag_id`,`music_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+  PRIMARY KEY (`music_tag_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `organization`
+--
+
+CREATE TABLE IF NOT EXISTS `organization` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(40) NOT NULL,
+  `introduction` varchar(255) NOT NULL,
+  `location` varchar(40) NOT NULL,
+  `attention` int(11) NOT NULL,
+  `portaitdir` varchar(255) NOT NULL,
+  `type` int(11) NOT NULL,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `play_song`
+--
+
+CREATE TABLE IF NOT EXISTS `play_song` (
+  `play_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `music_id` int(11) NOT NULL,
+  `time_stamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`play_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=30 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `private_letter`
+--
+
+CREATE TABLE IF NOT EXISTS `private_letter` (
+  `letter_id` int(14) NOT NULL AUTO_INCREMENT,
+  `musician_id` int(12) NOT NULL,
+  `user_id` int(12) NOT NULL,
+  `name` text NOT NULL,
+  `letter` text NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_read_time` text,
+  `user_image` text,
+  `musician_image` text,
+  `apply_from` int(1) DEFAULT NULL,
+  PRIMARY KEY (`letter_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `private_letterm`
+--
+
+CREATE TABLE IF NOT EXISTS `private_letterm` (
+  `letter_id` int(14) NOT NULL AUTO_INCREMENT,
+  `musician_id` int(12) NOT NULL,
+  `user_id` int(12) NOT NULL,
+  `name` text NOT NULL,
+  `letter` text NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_read_time` text,
+  `user_image` text,
+  `musician_image` text,
+  `applay_from` int(1) DEFAULT NULL,
+  PRIMARY KEY (`letter_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `skip_song`
+--
+
+CREATE TABLE IF NOT EXISTS `skip_song` (
+  `skip_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `music_id` int(11) NOT NULL,
+  `time_stamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`skip_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 -- --------------------------------------------------------
 
@@ -398,10 +489,9 @@ CREATE TABLE IF NOT EXISTS `stockprice_month` (
 
 CREATE TABLE IF NOT EXISTS `tag` (
   `tag_id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(40) NOT NULL,
-  PRIMARY KEY (`tag_id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+  `name` text NOT NULL,
+  PRIMARY KEY (`tag_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -415,7 +505,7 @@ CREATE TABLE IF NOT EXISTS `upload` (
   `music_id` int(11) NOT NULL,
   PRIMARY KEY (`upload_id`),
   KEY `user_id` (`music_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
 
 -- --------------------------------------------------------
 
@@ -435,7 +525,33 @@ CREATE TABLE IF NOT EXISTS `user` (
   `reg_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `introduction` text NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `word`
+--
+
+CREATE TABLE IF NOT EXISTS `word` (
+  `word_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `word` varchar(30) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`word_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=77 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wordindex`
+--
+
+CREATE TABLE IF NOT EXISTS `wordindex` (
+  `index_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `word_id` bigint(20) NOT NULL,
+  `music_id` bigint(20) NOT NULL,
+  `location` int(11) NOT NULL,
+  PRIMARY KEY (`index_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=454 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
