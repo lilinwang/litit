@@ -133,4 +133,31 @@ class musician_model extends CI_Model{
         $sql = 'update musician set portaitdir = ? where musician_id = ?';
         $this->db->query($sql, array($url, $musician_id));
     }
+    
+    // 获取一行中可以暴露的信息（所以不包括密码，注册时间(用来加密密码)）
+    function get_exposable_row($id) {
+    	$sql = "SELECT * FROM musician WHERE musician_id=? LIMIT 1";
+    	$query = $this->db->query($sql,array($id));
+    	$result = $query->row_array();
+    	
+    	// unset user password, user reg_time
+    	unset($result['password']);
+    	unset($result['reg_time']);
+    	
+    	$result['user_id'] = $result['musician_id']; // for controller's convenience
+        return $result;
+    }
+    
+    function get_exposable_row_by_email($email) {
+    	$sql = "SELECT * FROM musician WHERE email=? LIMIT 1";
+    	$query = $this->db->query($sql,array($email));
+    	$result = $query->row_array();
+    	
+    	// unset user password, user reg_time
+    	unset($result['password']);
+    	unset($result['reg_time']);
+    	
+    	$result['user_id'] = $result['musician_id']; // for controller's convenience
+        return $result;
+    }
 }

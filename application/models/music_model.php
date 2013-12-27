@@ -19,12 +19,13 @@ class music_model extends CI_Model{
 
 	}
  
-    function get_by_id($id){                        //通过id获取音乐所有信息
-        $sql='SELECT * FROM music WHERE music_id=?';
-        $result=$this->db->query($sql,$id);
-        $result=$result->result_array();
-        if($result){
-            return $result[0];
+    function get_by_id($id){                       //通过id获取音乐所有信息
+        $query = $this->db->query(
+            'SELECT * FROM music WHERE music_id=? LIMIT 1',
+            array($id)
+        );
+        if($query->num_rows() > 0){
+            return $query->row_array();
         }else{
             return;
         }
@@ -41,13 +42,13 @@ class music_model extends CI_Model{
         $disc_company, $perform_time, $story)
     {   
         $sql='INSERT INTO 
-            music(musician_id, name, lyrics_by, composed_by, arranged_by, 
+            music(musician_id, dir, image_dir, album_dir, name, lyrics_by, composed_by, arranged_by, 
                 disc_company, perform_time, story,
                 download_cnt,share_cnt,collect_cnt,view_cnt,randable) 
-            values (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+            values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
         $params = array(
-            $musician_id,$music_name, /*$album,*/ $lyrics_by, $composed_by, $arranged_by,
+            $musician_id, '', '', '', $music_name, /*$album,*/ $lyrics_by, $composed_by, $arranged_by,
             $disc_company, $perform_time, $story,
             0,0,0,0,0
         );
@@ -128,6 +129,15 @@ class music_model extends CI_Model{
     function randmore(){
         $sql = 'select * from music order by rand()  limit 10';
         $query = $this->db->query($sql);
+        $result=$query->result_array();
+        return $result;
+    }
+    
+    function rand_return_only_ids($count){
+        $query = $this->db->query(
+            'select music_id from music order by rand() limit ?', 
+            array($count)
+        );
         $result=$query->result_array();
         return $result;
     }
