@@ -59,7 +59,6 @@
 }
 
 .square-block {
-    cursor: pointer;
     box-sizing: border-box;
     position: relative;
     float: left;
@@ -74,6 +73,8 @@
 
 .square-block-bg {
     z-index: -1;
+    min-width: 100%;
+    min-height: 100%;
 }
 
 .square-block-hoverer {
@@ -86,6 +87,10 @@
     
     color: #fff;
     background-color: rgba(255, 205, 10, .8);
+}
+
+.square-block-hoverer .play-button {
+    cursor: pointer;
 }
 
 @font-face {

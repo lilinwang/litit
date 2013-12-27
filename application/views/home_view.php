@@ -677,7 +677,7 @@
     	
     	<div id="mask-top">
         	<div id="mask-nav">
-        	    <a href="<?php echo base_url('personal'); ?>"><i class="icon-home"></i></a>
+        	    <a target="_blank" href="<?php echo base_url('personal'); ?>"><i class="icon-home"></i></a>
         	    <a href="#" onclick="lititRbar.display('slideLeft');"><i class="icon-heart-empty"></i></a>
         	    <a href="#" onclick=""><i class="icon-signal"></i></a>
         	    <a href="#" onclick="show_home_search();"><i class="icon-search"></i></a>

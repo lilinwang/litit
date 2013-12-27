@@ -6,6 +6,7 @@
     <!-- css -->
     <link href="<?php echo base_url()?>css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url()?>css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url()?>css/icon.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url()?>css/personal.css" rel="stylesheet" type="text/css" />
 
     <!-- javascript global dependencies -->
@@ -133,6 +134,11 @@
             // 方块流控件
             $(".global-tab-content").on("hover", ".square-block", function(){
                 $(this).find(".square-block-hoverer").toggle();
+            });
+            
+            // 播放音乐
+            $(".global-tab-content").on("click", ".play-button", function(){
+                window.opener.player.play_now($(this).attr("mid"));
             });
         });
     </script>
@@ -380,11 +386,11 @@
     
         <!-- 顶部导航栏 -->
         <div id="global-header">
-            <div id="header-left">
+            <!--<div id="header-left">
                 <a href="<?php echo base_url(); ?>" role="button" class="btn">
                     返回首页
                 </a>
-            </div>
+            </div>-->
             <div id="header-right">
                 <a href="#upload-music-modal" role="button" data-toggle="modal" class="btn" >
                     上传歌曲
@@ -414,7 +420,11 @@
                         <div class="square-block">
                             <img class="square-block-bg" src="<?php echo base_url($collect['image_dir']); ?>" >
                             <div class="square-block-hoverer">
-                                <?php echo $collect['name']; ?>
+                                <span class="music-name"><?php echo $collect['name']; ?></span>
+                                <span class="icon-stack play-button" mid="<?php echo $collect['music_id']; ?>">
+                                    <i class="icon-circle-blank icon-stack-base"></i>
+                                    <i id="icon-to-change" class="icon-play"></i>
+                                </span>
                             </div>
                         </div>
                         <?php endforeach; ?>
