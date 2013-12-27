@@ -10,8 +10,6 @@ transition: 200ms;
 display:none;
 overflow: auto;
 width: 265px;
-background: #4B4B4B;
-box-shadow: inset 8px 0 16px #000;
 }
 .litit-right-bar .item {
 cursor:pointer;
@@ -21,7 +19,7 @@ min-height: 70px;
 overflow: hidden;
 margin: 8px 0 8px 60px;
 padding-left:40px;
-background: #8D8D8D;
+background: rgba(0, 0, 0, .3);
 }
 .litit-right-bar .item:hover {
 margin-left:55px;
@@ -34,6 +32,7 @@ margin-left: -80px;
 width: 70px;
 height: 70px;
 border-radius: 50%;
+background: rgba(0, 0, 0, .3);
 }
 .litit-right-bar .item > .img > img:hover {
 box-shadow:0 0 20px black;
@@ -42,7 +41,7 @@ box-shadow:0 0 20px black;
 width:160px;
 overflow:hidden;
 float:left;
-color:black;
+color:#eee;
 font:20px/1 "黑体";
 padding:10px 0;
 }

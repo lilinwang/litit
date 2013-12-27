@@ -50,18 +50,16 @@
             /*
              * 首页的搜索框
              */
-            $(function(){
-                // toggle 搜索框
-                $('#mask-search-input').blur(function() {
-                    hide_home_search();
-                });
-                
-                // 搜索
-                $('#mask-search-input').keyup(function(event) {
-                    if (event.which == 13) {
-                        player.search_and_play($(this).val());
-                    }
-                });
+            // toggle 搜索框
+            $('#mask-search-input').blur(function() {
+                hide_home_search();
+            });
+            
+            // 搜索
+            $('#mask-search-input').keyup(function(event) {
+                if (event.which == 13) {
+                    player.search_and_play($(this).val());
+                }
             });
             
             
@@ -127,6 +125,17 @@
                                 location.href=href;
                         });
               
+            close_right_bar = true;
+            $(lititRbar).find('.litit-right-bar-list').click(function(){
+                close_right_bar = !close_right_bar;
+                console.log(close_right_bar);
+            });
+            /*
+            $("#container-mask").click(function() {
+                close_right_bar = false;
+                console.log(close_right_bar);
+            });
+            */
             
             <?php endif; ?>
             
