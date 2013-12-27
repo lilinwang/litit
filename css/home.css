@@ -280,7 +280,6 @@ ul {
             position: relative;
             left: 46px;
             top: 20px;
-            cursor: pointer;
             background: url(../image/center_btn.png) no-repeat;
             width: 142px;
             height: 113px;
@@ -289,6 +288,22 @@ ul {
         #mask-play:hover {
             background-position: -142px -33px;
         }
+            #mask-play-button {
+                cursor: pointer;
+                position: absolute;
+                top: 24px;
+                left: 24px;
+                width: 62px;
+                height: 62px;
+            }
+            #mask-next-button {
+                cursor: pointer;
+                position: absolute;
+                bottom: 10px;
+                right: 10px;
+                height: 30px;
+                width: 30px;
+            }
 /* @end */
     
 
@@ -396,6 +411,13 @@ ul {
                         }
                         #music-image-sidebar #music-controls .music-control-button:active{
                             top: 1px;
+                        }
+                        
+                        #music-image-sidebar #music-controls #uncollect-button{
+                            color: #e00;
+                        }
+                        #music-image-sidebar #music-controls #uncollect-button:hover{
+                            color: #900;
                         }
                 /* @group player */
                 #music-player {

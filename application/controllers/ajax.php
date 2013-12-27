@@ -102,14 +102,43 @@ class Ajax extends CI_Controller {
 	*/
 	public function fetch_radio_music() 
 	{
-		$this->load->model('music_model');
-		$this->load->model('musician_model');
-		$data = $this->music_model->randmore();
-		foreach($data as &$music) {
-	        $music['musician'] = $this->musician_model->check_id($music['musician_id']);
-	        $music['musician']['all_music'] = $this->music_model->getallmusic_by_musician_id($music['musician_id']);
-	    }
+	    $this->load->model('music_model');
+		$data = $this->music_model->rand_return_only_ids(10); // return 10 music_ids randomly
 	    echo json_encode($data);
+	}
+	
+	public function fetch_music_info() {
+	    $this->load->model('music_model');
+	    $this->load->model('musician_model');
+	    $this->load->library('session');
+	    
+	    $user_id = $this->session->userdata('user_id');
+	    $user_type = $this->session->userdata('user_type');
+	    $music_id = $this->input->post("music_id");
+	    
+	    // 如果要合并 user 和 musician 两张表，修改这里就好
+	    if ($user_type == 1) { // 普通用户
+	        $this->load->model('collect_model');
+	        $this->load->model('follow_model');
+	        $this->load->model('copyright_model');
+	        $user = $this->user_model->get_exposable_row($user_id);
+	    }
+	    else { // 音乐人
+	        $this->load->model('collectm_model', 'collect_model');
+	        $this->load->model('followm_model', 'follow_model');
+	        $this->load->model('copyrightm_model', 'copyright_model');
+	        $user = $this->musician_model->get_exposable_row($user_id);
+	    }
+	    
+	    $music = $this->music_model->get_by_id($music_id);
+	    
+    	$music['musician'] = $this->musician_model->check_id($music['musician_id']);
+    	$music['musician']['all_music'] = $this->music_model->getallmusic_by_musician_id($music['musician_id']);
+    	$music['is_follow'] = $this->follow_model->is_follow($user_id, $music['musician_id']);
+    	$music['is_collect'] = $this->collect_model->is_collect($user_id, $music['music_id']);
+    	$music['is_copyright_sign'] = $this->copyright_model->is_copyright_sign($user_id, $music['music_id']);
+	    
+	    echo json_encode($music);
 	}
 
     /*
@@ -607,7 +636,7 @@ class Ajax extends CI_Controller {
         $user_id = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
         $model_name = substr($tab_for, 0, strlen($tab_for) - 1);
-        if ($tab_for != 'uploads') 
+        if ($tab_for != 'uploads')
             $model_name .= $user_type == '0' ? 'm' : '';
         $model_name .= '_model';
         
@@ -630,12 +659,68 @@ class Ajax extends CI_Controller {
             $this->load->model('followm_model', 'follow_model');
         }
         if($action == "add") {
-            $this->follow_model->add_follow($user_id, $musician_id);
-            echo '{"errno":0, "msg":"关注成功"}';
+            $errno = $this->follow_model->add_follow($user_id, $musician_id);
+            if($errno == 0) {
+                echo '{"errno":0, "msg":"关注成功"}';
+            }
+            else if($errno == 1){
+                echo '{"errno":1, "msg":"已经关注了该音乐人"}';
+            }
+            else if($errno < 0) {
+                echo '{"errno":' . $errno . ', "msg":"关注失败"}';
+            }
         }
         else if ($action == "delete"){
-            $this->follow_model->delete_follow($user_id, $musician_id);
-            echo '{"errno":0, "msg":"已经取消关注"}';
+            $errno = $this->follow_model->delete_follow($user_id, $musician_id);
+            if($errno == 0) {
+                echo '{"errno":0, "msg":"取消关注成功"}';
+            }
+            else if($errno == 1){
+                echo '{"errno":1, "msg":"已经取消关注了该音乐人"}';
+            }
+            else if($errno < 0) {
+                echo '{"errno":' . $errno . ', "msg":"取消关注失败"}';
+            }
+        }
+    }
+    
+    public function collect_music() { 
+        $this->load->library('session');
+    
+        $user_id = $this->session->userdata('user_id');
+        $music_id = $this->input->post("music_id");
+        $action = $this->input->post("action");
+        
+        if($this->session->userdata('user_type') == 1) {
+            $this->load->model('collect_model');
+        }
+        else {
+            $this->load->model('collectm_model', 'collect_model');
+        }
+        
+        if($action == "add") {
+            $errno = $this->collect_model->add_collect($user_id, $music_id);
+            if($errno == 0) {
+                echo '{"errno":0, "msg":"收藏成功"}';
+            }
+            else if($errno == 1){
+                echo '{"errno":1, "msg":"已经收藏过该音乐"}';
+            }
+            else if($errno < 0) {
+                echo '{"errno":' . $errno . ', "msg":"收藏失败"}';
+            }
+        }
+        else if ($action == "delete"){
+            $errno = $this->collect_model->delete_collect($user_id, $music_id);
+            if($errno == 0) {
+                echo '{"errno":0, "msg":"取消收藏成功"}';
+            }
+            else if($errno == 1){
+                echo '{"errno":1, "msg":"已经取消收藏该音乐"}';
+            }
+            else if($errno < 0) {
+                echo '{"errno":' . $errno . ', "msg":"取消收藏失败"}';
+            }
         }
     }
 }

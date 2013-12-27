@@ -79,6 +79,9 @@ class Home extends CI_Controller {
 		    $music['is_follow'] = $this->follow_model->is_follow($user_id, $music['musician_id']);
 		    $music['is_collect'] = $this->collect_model->is_collect($user_id, $music['music_id']);
 		    $music['is_copyright_sign'] = $this->copyright_model->is_copyright_sign($user_id, $music['music_id']);
+		    
+		    // 用户的收藏
+		    $collection = $this->collect_model->display($user_id);
 		}
 		else {
 		    $user = null;
@@ -86,14 +89,19 @@ class Home extends CI_Controller {
 		    $music['is_follow'] = false;
 		    $music['is_collect'] = false;
 		    $music['is_copyright_sign'] = false;
+		    
+		    // 用户的收藏
+		    $collection = null;
 		}
+		
 		
 		// 这里就是选定的参数
 		return array(
-		    'music' => $music,        // 当前播放的音乐
-		    'musician' => $musician,  // 当前播放的音乐的音乐人
-		    'user' => $user,          // 当前登陆用户
-		    'user_type' => $user_type // 当前登陆用户类型
+		    'music' => $music,            // 当前播放的音乐
+		    'musician' => $musician,      // 当前播放的音乐的音乐人
+		    'user' => $user,              // 当前登陆用户
+		    'user_type' => $user_type,    // 当前登陆用户类型
+		    'collection' => $collection // 当前用户的收藏
 		);
 	}
 	
