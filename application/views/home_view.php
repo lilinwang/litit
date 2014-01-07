@@ -168,7 +168,7 @@
                 }).on("click", ".li-music-play", function(){
                     player.play_now($(this).parent().attr("mid"));
                 }).on("click", ".li-music-add", function(){
-                    player.append_to_prior_list($(this).parent().attr("mid"));
+                    player.contentWindow.append_to_prior_list($(this).parent().attr("mid"));
                 });
         
             // 中间模块的tinysrollbar
@@ -228,7 +228,36 @@
                     }
                 );
             });
+			
+            /* section.left上的控件 */
+            // 左边模块  歌词和音乐故事切换
+            $("#music_lyric_btn")
+                .on('mouseover', function(){
+                    $(this).text("歌词");
+                }).on('mouseout', function(){
+                    $(this).text("音乐故事");
+                });
+            $("#music_story_btn")
+                .on('mouseover', function(){
+                    $(this).text("音乐故事");
+                }).on('mouseout', function(){
+                    $(this).text("歌词");
+                });
             
+            $("#music_lyric_btn").on('click', function(){
+                // 显示歌词
+				$("#music_lyric").show();
+				$("#music_story").hide();
+				$("#music_story_btn").hide();
+				$("#music_lyric_btn").show();                
+            });
+            $("#music_story_btn").on('click', function(){
+                // 显示歌词
+				$("#music_story").show();
+				$("#music_lyric").hide();
+				$("#music_story_btn").show();
+				$("#music_lyric_btn").hide();                
+            });
             
         });
         
@@ -548,7 +577,7 @@
                  			
                 // bind audio progress(of download) to loading_indicator;
                 audio.addEventListener('progress', function() {
-                    var loaded = parseInt(((audio.buffered.end(0) / audio.duration) * 100), 10);
+                    var loaded = parseInt(((audio.buffered.end(0) / (audio.duration+0.1)) * 100), 10);
                     $loading_indicator.css({width: loaded + '%'});
                 });
                 
@@ -677,10 +706,10 @@
     	
     	<div id="mask-top">
         	<div id="mask-nav">
-        	    <a target="_blank" href="<?php echo base_url('personal'); ?>"><i class="icon-home"></i></a>
-        	    <a href="#" onclick="lititRbar.display('slideLeft');"><i class="icon-heart-empty"></i></a>
-        	    <a href="#" onclick=""><i class="icon-signal"></i></a>
-        	    <a href="#" onclick="show_home_search();"><i class="icon-search"></i></a>
+        	    <a target="_blank" href="<?php echo base_url('personal'); ?>" class="iconhome"></a>
+        	    <a href="#" onclick="lititRbar.display('slideLeft');" class="iconheartempty"> </a>
+        	    <a href="#" onclick="" class="iconsignal"></a>
+        	    <a href="#" onclick="show_home_search();" class="iconsearch"></a>
         	    <div id="mask-search">
         	        <input id="mask-search-input" type="text">
         	    </div>
@@ -729,8 +758,8 @@
                                 <?php else:?>
                                 <span id="collect-button" class="icon-heart-empty icon-large music-control-button" style="display:inline-block;"></span>
                                 <span id="uncollect-button" class="icon-heart icon-large music-control-button" style="display:none;"></span>
-                                <?php endif;?>
-                                <span id="share-button" class="icon-share icon-large music-control-button"></span>
+                                <?php endif;?>                                
+								<span id="share-button" class="icon-share icon-large music-control-button"><wb:share-button ></wb:share-button></span>
                             </div>
                         </div>
                     </div>
@@ -799,9 +828,9 @@
                         <div class="overview p-txt"> 
                         <div id="music_story">
                         <div class="p-title">音乐故事</div>
-                         <div class="p-txt"><?php echo $music['story']?></div>
-                         <div class="music_lyric" id="music_lyric">
-                            <pre>尼玛歌词的后台还木有写啊！！！</pre>
+                         <div class="p-txt" id="music_story"><?php echo $music['story']?></div>
+                         <div class="music_lyric" id="music_lyric" style="display:none">
+							<?php echo $music['lyrics']?>
                           </div>
                         </div>  
                       </div>

@@ -54,7 +54,17 @@ class Home extends CI_Controller {
 		else {
 		    $music = $this->music_model->rand();
 		}
-		
+		if(!file_exists($music['lyrics_dir'])){ 
+			$record=fgets($music['lyrics_dir']);
+			if($record!=NULL){ 
+				$music['lyrics'] = explode("\t", $record); 
+			} 
+			else {
+				$music['lyrics'] = "";
+			}
+		}
+
+		$music['lyrics']=
 		// 获得当前音乐的音乐人的信息 以及全部音乐
 		$musician = $this->musician_model->check_id($music['musician_id']);
 		$musician['all_music'] = $this->music_model->getallmusic_by_musician_id($music['musician_id']);
