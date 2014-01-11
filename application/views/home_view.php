@@ -125,12 +125,13 @@
                                 location.href=href;
                         });
               
+            
+            /*
             close_right_bar = true;
             $(lititRbar).find('.litit-right-bar-list').click(function(){
                 close_right_bar = !close_right_bar;
                 console.log(close_right_bar);
             });
-            /*
             $("#container-mask").click(function() {
                 close_right_bar = false;
                 console.log(close_right_bar);
