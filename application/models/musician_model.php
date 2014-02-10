@@ -19,6 +19,20 @@ class musician_model extends CI_Model{
      	else{return 3;}//无此用户
 	
 	}
+	//查询用户是否存在和获取用户所有信息
+	function check($email){
+		$sql="SELECT * FROM user WHERE email=?";
+		$query=$this->db->query($sql,array($email));
+		return $query->result_array();
+	}
+	function register_all($email,$password,$name,$nickname,$gender,$birthday,$reg_time){//全部项
+		$sql="INSERT INTO user (email,password,name,nickname,gender,birthday,reg_time) VALUES (?,?,?,?,?,?,?)";
+		$this->db->query($sql,array($email,$password,$name,$nickname,$gender,$birthday,$reg_time));	
+	}
+	function register_simple($email,$password,$reg_time){//必填项
+		$sql="INSERT INTO user (email,password,reg_time) VALUES (?,?,?)";
+		$this->db->query($sql,array($email,$password,$reg_time));	
+	}
 	//查询用户是否存在相片
 	function check_photo($id){
 		$sql="SELECT portaitdir FROM musician WHERE musician_id=?";

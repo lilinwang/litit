@@ -50,19 +50,19 @@
             /*
              * 首页的搜索框
              */
-            $(function(){
-                // toggle 搜索框
-                $('#mask-search-input').blur(function() {
-                    hide_home_search();
-                });
-                
-                // 搜索
-                $('#mask-search-input').keyup(function(event) {
-                    if (event.which == 13) {
-                        player.search_and_play($(this).val());
-                    }
-                });
+	    $(function(){
+            // toggle 搜索框
+            $('#mask-search-input').blur(function() {
+                hide_home_search();
             });
+            
+            // 搜索
+            $('#mask-search-input').keyup(function(event) {
+                if (event.which == 13) {
+                    player.search_and_play($(this).val());
+                }
+	    });
+        });
             
             
             // 面纱播放按钮、面纱下一首按钮
@@ -127,6 +127,17 @@
                                 location.href=href;
                         });
               
+            /*close_right_bar = true;
+            $(lititRbar).find('.litit-right-bar-list').click(function(){
+                close_right_bar = !close_right_bar;
+                console.log(close_right_bar);
+            });
+            
+            $("#container-mask").click(function() {
+                close_right_bar = false;
+                console.log(close_right_bar);
+            });
+            */
             
             <?php endif; ?>
             
@@ -678,7 +689,7 @@
                             <input name="user_type" type="radio" value="0" id="user-type-0"/><label for="user-type-0">音乐人</label> 
                             <input name="user_type" type="radio" value="1" id="user-type-1" /><label for="user-type-1">普通用户</label> 
                             <div class="prompt"><?php echo $this->session->flashdata('login_prompt'); ?></div>
-                            <input type="submit" value="登陆">
+                            <input type="submit" value="登录">
                         </form>
                     </div>
                     <div id="sign-up-form-outer">
@@ -686,6 +697,7 @@
                             <input placeholder="邮箱" type="text" id="sign-up-email" name="email">
                             <input placeholder="密码" type="password" id="sign-up-password" name="password">
                             <input placeholder="密码确认" type="password" id="sign-up-password-confirm" name="password_confirm">
+							<input name="user_type" type="hidden" value="1">
                             <div class="prompt"><?php echo $this->session->flashdata('sign_up_prompt'); ?></div>
                             <input type="submit" value="注册">
                         </form>

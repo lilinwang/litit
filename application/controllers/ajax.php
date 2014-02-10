@@ -109,6 +109,7 @@ class Ajax extends CI_Controller {
 	
 	public function fetch_music_info() {
 	    $this->load->model('music_model');
+	    $this->load->model('user_model');
 	    $this->load->model('musician_model');
 	    $this->load->library('session');
 	    

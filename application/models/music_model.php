@@ -18,7 +18,6 @@ class music_model extends CI_Model{
 		 return $music_id;
 
 	}
- 
     function get_by_id($id){                       //通过id获取音乐所有信息
         $query = $this->db->query(
             'SELECT * FROM music WHERE music_id=? LIMIT 1',

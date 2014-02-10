@@ -43,13 +43,13 @@ class user_model extends CI_Model{
 	}
 	
 	//注册
-	function register_all($email,$password,$name,$nickname,$gender,$birthday){//全部项
-		$sql="INSERT INTO user (email,password,name,nickname,gender,birthday) VALUES (?,?,?,?,?,?)";
-		$this->db->query($sql,array($email,$password,$name,$nickname,$gender,$birthday));	
+	function register_all($email,$password,$name,$nickname,$gender,$birthday,$reg_time){//全部项
+		$sql="INSERT INTO user (email,password,name,nickname,gender,birthday,reg_time) VALUES (?,?,?,?,?,?,?)";
+		$this->db->query($sql,array($email,$password,$name,$nickname,$gender,$birthday,$reg_time));	
 	}
-	function register_simple($email,$password){//必填项
-		$sql="INSERT INTO user (email,sha1（password）) VALUES (?,?)";
-		$this->db->query($sql,array($email,$password));	
+	function register_simple($email,$password,$reg_time){//必填项
+		$sql="INSERT INTO user (email,password,reg_time) VALUES (?,?,?)";
+		$this->db->query($sql,array($email,$password,$reg_time));	
 	}
 	
 	
