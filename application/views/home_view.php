@@ -1,4 +1,4 @@
-<!-- <?php var_dump($music['is_collect']); ?>-->
+<!-- <?php ?>-->
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -50,6 +50,7 @@
             /*
              * 首页的搜索框
              */
+	    $(function(){
             // toggle 搜索框
             $('#mask-search-input').blur(function() {
                 hide_home_search();
@@ -60,7 +61,8 @@
                 if (event.which == 13) {
                     player.search_and_play($(this).val());
                 }
-            });
+	    });
+        });
             
             
             // 面纱播放按钮、面纱下一首按钮
@@ -101,6 +103,7 @@
             /*
              * Rbar 插件
              */
+             /*
             lititRbar = lititRightBarPlugin("#Rbar")
                 .setDefaultImg("<?php echo base_url()?>image/li_play.png")
                 .load(
@@ -124,14 +127,14 @@
                             else
                                 location.href=href;
                         });
+              */
               
-            
-            /*
-            close_right_bar = true;
+            /*close_right_bar = true;
             $(lititRbar).find('.litit-right-bar-list').click(function(){
                 close_right_bar = !close_right_bar;
                 console.log(close_right_bar);
             });
+            
             $("#container-mask").click(function() {
                 close_right_bar = false;
                 console.log(close_right_bar);
@@ -147,6 +150,7 @@
                     "add",
                     function(data, status) {
                         data = JSON.parse(data);
+                        console.log(data);
                         if(data.errno == 0 || data.errno == 1) {
                             show_uncollect_button();
                         }
@@ -159,6 +163,7 @@
                     "delete",
                     function(data, status) {
                         data = JSON.parse(data);
+                        console.log(data);
                         if(data.errno == 0 || data.errno == 1) {
                             show_collect_button();
                         }
@@ -178,7 +183,7 @@
                 }).on("click", ".li-music-play", function(){
                     player.play_now($(this).parent().attr("mid"));
                 }).on("click", ".li-music-add", function(){
-                    player.append_to_prior_list($(this).parent().attr("mid"));
+                    player.contentWindow.append_to_prior_list($(this).parent().attr("mid"));
                 });
         
             // 中间模块的tinysrollbar
@@ -217,6 +222,7 @@
                     'delete',
                     function(data, status){
                         data = JSON.parse(data);
+                        console.log(data);
                         if (data.errno == 0 || data.errno == 1) {
                             show_follow_button();
                             decrement_attention();
@@ -231,6 +237,7 @@
                     'add',
                     function(data, status){
                         data = JSON.parse(data);
+                        console.log(data);
                         if (data.errno == 0 || data.errno == 1) {
                             show_unfollow_button();
                             increment_attention();
@@ -238,7 +245,36 @@
                     }
                 );
             });
+			
+            /* section.left上的控件 */
+            // 左边模块  歌词和音乐故事切换
+            $("#music_lyric_btn")
+                .on('mouseover', function(){
+                    $(this).text("歌词");
+                }).on('mouseout', function(){
+                    $(this).text("音乐故事");
+                });
+            $("#music_story_btn")
+                .on('mouseover', function(){
+                    $(this).text("音乐故事");
+                }).on('mouseout', function(){
+                    $(this).text("歌词");
+                });
             
+            $("#music_lyric_btn").on('click', function(){
+                // 显示歌词
+				$("#music_lyric").show();
+				$("#music_story").hide();
+				$("#music_story_btn").hide();
+				$("#music_lyric_btn").show();                
+            });
+            $("#music_story_btn").on('click', function(){
+                // 显示歌词
+				$("#music_story").show();
+				$("#music_lyric").hide();
+				$("#music_story_btn").show();
+				$("#music_lyric_btn").hide();                
+            });
             
         });
         
@@ -325,7 +361,7 @@
         
         //改变音乐播放器周围的信息
         function change_music_player_info(music) {
-            $("#music-image-outer").find("img").attr("src", "<?php echo base_url();?>" + music.image_dir);
+            $("#music-image-outer").find("img").attr("src", "<?php echo base_url();?>" + music.musician.avatar_src);
             $("#music-image-sidebar").find("#music-name").text(music.name);
             
             if(music.is_collect){
@@ -343,7 +379,7 @@
             $(".musician-name").text(musician.nickname); 
             $(".musician-attention").text(musician.attention);
             $("#musician-intro").text(musician.intro);
-            $("#musician-avatar-outer").find("img").attr("src", "<?php echo base_url(); ?>" + musician.portaitdir);
+            $("#musician-avatar-outer").find("img").attr("src", "<?php echo base_url(); ?>" + musician.avatar_src);
             if(is_follow){
                 show_unfollow_button();
             }
@@ -450,9 +486,9 @@
             
             // 重新播放 this.current_music 中的音乐
             start_over: function() {
-                $(this.audio).find("source").attr("src", "<?php echo base_url(); ?>" + this.current_music.dir);
+                $(this.audio).find("source").attr("src", "<?php echo base_url(); ?>" + this.current_music.src);
                 change_magazine(
-                    this.current_music, 
+                    this.current_music,
                     this.current_music.musician.musician_id != this.last_music.musician.musician_id// need to change musician?
                 );
                 this.audio.load();
@@ -558,7 +594,7 @@
                  			
                 // bind audio progress(of download) to loading_indicator;
                 audio.addEventListener('progress', function() {
-                    var loaded = parseInt(((audio.buffered.end(0) / audio.duration) * 100), 10);
+                    var loaded = parseInt(((audio.buffered.end(0) / (audio.duration+0.1)) * 100), 10);
                     $loading_indicator.css({width: loaded + '%'});
                 });
                 
@@ -659,7 +695,7 @@
                             <input name="user_type" type="radio" value="0" id="user-type-0"/><label for="user-type-0">音乐人</label> 
                             <input name="user_type" type="radio" value="1" id="user-type-1" /><label for="user-type-1">普通用户</label> 
                             <div class="prompt"><?php echo $this->session->flashdata('login_prompt'); ?></div>
-                            <input type="submit" value="登陆">
+                            <input type="submit" value="登录">
                         </form>
                     </div>
                     <div id="sign-up-form-outer">
@@ -667,6 +703,7 @@
                             <input placeholder="邮箱" type="text" id="sign-up-email" name="email">
                             <input placeholder="密码" type="password" id="sign-up-password" name="password">
                             <input placeholder="密码确认" type="password" id="sign-up-password-confirm" name="password_confirm">
+							<input name="user_type" type="hidden" value="1">
                             <div class="prompt"><?php echo $this->session->flashdata('sign_up_prompt'); ?></div>
                             <input type="submit" value="注册">
                         </form>
@@ -687,10 +724,10 @@
     	
     	<div id="mask-top">
         	<div id="mask-nav">
-        	    <a target="_blank" href="<?php echo base_url('personal'); ?>"><i class="icon-home"></i></a>
-        	    <a href="#" onclick="lititRbar.display('slideLeft');"><i class="icon-heart-empty"></i></a>
-        	    <a href="#" onclick=""><i class="icon-signal"></i></a>
-        	    <a href="#" onclick="show_home_search();"><i class="icon-search"></i></a>
+        	    <a target="_blank" href="<?php echo base_url('personal'); ?>" class="iconhome"></a>
+        	    <a href="#" onclick="lititRbar.display('slideLeft');" class="iconheartempty"> </a>
+        	    <a href="#" onclick="" class="iconsignal"></a>
+        	    <a href="#" onclick="show_home_search();" class="iconsearch"></a>
         	    <div id="mask-search">
         	        <input id="mask-search-input" type="text">
         	    </div>
@@ -716,7 +753,7 @@
     <div id="container-main" class="mask-blur">
         <!-- 顶部导航 -->
         <header class="header">
-     	    <span class="user"><?php echo $user['name']?>的Litit</span> 
+     	    <span class="user"><?php echo $user['nickname']?>的Litit</span> 
      	</header>
      	
      	<!-- 正文内容 -->
@@ -726,7 +763,7 @@
                 <div id="music-player-outer">
                     <div class="row-fluid"> 
                         <div id="music-image-outer" class="">
-                            <img src="<?php echo base_url().$music['image_dir']?>" />
+                            <img src="<?php echo base_url().$musician['avatar_src']?>" />
                         </div>
                         <div id="music-image-sidebar" class="">
                             <div id="music-name">
@@ -739,8 +776,8 @@
                                 <?php else:?>
                                 <span id="collect-button" class="icon-heart-empty icon-large music-control-button" style="display:inline-block;"></span>
                                 <span id="uncollect-button" class="icon-heart icon-large music-control-button" style="display:none;"></span>
-                                <?php endif;?>
-                                <span id="share-button" class="icon-share icon-large music-control-button"></span>
+                                <?php endif;?>                                
+								<span id="share-button" class="icon-share icon-large music-control-button"><wb:share-button ></wb:share-button></span>
                             </div>
                         </div>
                     </div>
@@ -779,17 +816,19 @@
                             </div>
                         </div>
               	        <audio id="player-audio" controls="controls" preload="auto">
-        				    <source name="player" src="<?php echo base_url().$music['dir']?>" type="audio/mp3" preload="load">
+        				    <source name="player" src="<?php echo base_url().$music['src']?>" type="audio/mp3" preload="load">
         				Your browser does not support this audio format.
         			    </audio>
                     </div>
         		  
-                    <div class="row-fluid"> 
+                    <div class="row-fluid">
+                        <!--
                         <?php if($music['is_copyright_sign']==0):?>
             		    <a href="#myModal" class="button" type="button" data-toggle="modal" class="copyright" id="copyright" >版权申请</a>		
             		    <?php else:?>
             	        <a href="#myModal_1" class="button" type="button" data-toggle="modal" class="copyright" id="copyright" >取消申请</a>
             		    <?php endif;?>
+            		    -->
             		    <button class="button" type="button" id="music_lyric_btn">歌词</button>
                         <button class="button" type="button" id="music_story_btn" style="display:none">音乐故事</button>
                         <a class="button" href="#download" type="button" data-toggle="modal"><span class="icon-download-alt"></span>下载</a>
@@ -809,16 +848,15 @@
                         <div class="overview p-txt"> 
                         <div id="music_story">
                         <div class="p-title">音乐故事</div>
-                         <div class="p-txt"><?php echo $music['story']?></div>
-                         <div class="music_lyric" id="music_lyric">
-                            <pre>尼玛歌词的后台还木有写啊！！！</pre>
+                         <div class="p-txt" id="music_story"><?php echo $music['story']?></div>
+                         <div class="music_lyric" id="music_lyric" style="display:none">
+							歌词<?php /*echo $music['lyrics']*/ ?>
                           </div>
                         </div>  
                       </div>
                     </div>
                   </div>
                 </div>
-                <!-- <div class="tag"><?php foreach ($tag as $key) echo "<span><a href=\"#\">".$key."</a><span>";?></div> -->
 
             </section>
           	
@@ -908,14 +946,14 @@
           	
           	<section class="right">
                 <div id="musician-avatar-outer">
-                    <img src="<?php echo base_url().$musician['portaitdir']?>"/>
+                    <img src="<?php echo base_url().$musician['avatar_src']?>"/>
                 </div>
                 <div id="musician-name-outer">
                     <span class="musician-name"><?php echo $musician['nickname']?></span>
                 </div>
                 <div id="musician-attention-outer">
                     <div id="musician-attention-top">
-                        <span class="musician-attention"><?php echo $musician['attention']?></span>人
+                        <span class="musician-attention"><?php echo $musician['follower_cnt']?></span>人
                     </div>
                     <div id="musician-attention-bottom">
                         正在关注
@@ -990,6 +1028,7 @@
 
 
     <!-- 私信 modal -->		
+    <!--
 	<div id="private_letter" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" data-keyboard="true" data-show="true">
         <div style="display:none;">
         <p id ="usernickname" /><?php echo $username; ?> </p>
@@ -1009,7 +1048,7 @@
    </div>
         </div>
     </div>
-    
+    -->
     
     
     <!-- 下载 modal -->

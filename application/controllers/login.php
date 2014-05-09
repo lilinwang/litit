@@ -16,14 +16,10 @@ class Login extends CI_Controller {
         $password = $this->input->post('password');
         
         // 读取model
-        if($this->input->post('user_type')=="1"){
-			$this->load->model('user_model');
-		} else {
-			$this->load->model('musician_model', 'user_model');
-		};	
+        $this->load->model('user_model');
 	
 	    // 判断是否通过登陆
-		$result = $this->user_model->login($email, $password);
+		$result = $this->user_model->check_login($email, $password);
         if ($result == 1) { // 1表示登陆成功
             // 设置session中的参数
             $row = $this->user_model->get_exposable_row_by_email($email);

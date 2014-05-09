@@ -5,7 +5,7 @@ class follow_model extends CI_Model{
 	}
 	
 	function add_follow($user_id, $musician_id){
-		if ($this->is_follow($user_id, $musician_id) == 0) {
+		if ($this->is_follow($user_id, $musician_id)) {
 		    return 1; // 表示已经操作了
 		}
 		
@@ -28,7 +28,7 @@ class follow_model extends CI_Model{
 	}
 	
 	function delete_follow($user_id, $musician_id){
-		if (!$this->is_follow($user_id, $musician_id) == 0) {
+		if (!$this->is_follow($user_id, $musician_id)) {
 		    return 1; // 表示已经操作了
 		}
 		

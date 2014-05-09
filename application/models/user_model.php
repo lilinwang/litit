@@ -5,6 +5,77 @@ class user_model extends CI_Model{
 		parent::__construct();
 	}
 
+    function get_user_by_musician_id($id) {
+    	$sql = "SELECT * FROM user NATURAL JOIN musician WHERE musician_id=?";
+    	$query=$this->db->query($sql,array($id));
+    	if ($query->num_rows() > 0) {
+    	    return $query->row_array();
+	    }
+    	else {
+    	    return [];
+        }
+    }
+    
+    function check_login($email, $password){//登录检查
+    	$sql="SELECT * FROM user WHERE email=?";
+    	$query=$this->db->query($sql,array($email));
+    	$result1=$query->result_array();
+    	$query=$query->row();
+    	if($result1)//检查账户密码是否正确
+    	{
+    	    $result2=($query->password==sha1($password.$query->reg_time));
+    	    if($result2){
+    	        return 1;
+    	    }//用户名与密码匹配
+    	    else{
+    	        return 2;
+    	    }//密码错误
+    	}
+     	else{
+     	    return 3;
+     	}//无此用户
+    }
+    
+    function email_exists($email) {
+        $query = $this->db->query(
+            "SELECT count(*) FROM user WHERE email = ?",
+            array($email)
+        );
+        return $query->result_array()[0]['count(*)'] != '0';
+    }
+    
+    function register_simple($email,$password,$reg_time){
+    // user type 0 means normal user
+    	$sql="INSERT INTO user (email,password,user_type,nickname,reg_time,introduction) VALUES (?,?,?,?,?,?)";
+    	$this->db->query($sql,array($email,$password, 1, $email, $reg_time, ""));
+    }
+    
+    // 获取一行中可以暴露的信息（所以不包括密码，注册时间(用来加密密码)）
+    function get_exposable_row($id) {
+    	$sql = "SELECT * FROM user WHERE user_id=? LIMIT 1";
+    	$query = $this->db->query($sql,array($id));
+    	$result = $query->row_array();
+    	
+    	// unset user password, user reg_time
+    	unset($result['password']);
+    	unset($result['reg_time']);
+    	
+        return $result;
+    }
+    
+    function get_exposable_row_by_email($email) {
+    	$sql = "SELECT * FROM user WHERE email=? LIMIT 1";
+    	$query = $this->db->query($sql,array($email));
+    	$result = $query->row_array();
+    	
+    	// unset user password, user reg_time
+    	unset($result['password']);
+    	unset($result['reg_time']);
+    	
+        return $result;
+    }
+    
+    /*
 	//查询用户是否存在和获取用户所有信息
 	function check($email){
 		$sql="SELECT * FROM user WHERE email=?";
@@ -43,36 +114,24 @@ class user_model extends CI_Model{
 	}
 	
 	//注册
-	function register_all($email,$password,$name,$nickname,$gender,$birthday){//全部项
-		$sql="INSERT INTO user (email,password,name,nickname,gender,birthday) VALUES (?,?,?,?,?,?)";
-		$this->db->query($sql,array($email,$password,$name,$nickname,$gender,$birthday));	
+	function register_all($email,$password,$name,$nickname,$gender,$birthday,$reg_time){//全部项
+		$sql="INSERT INTO user (email,password,name,nickname,gender,birthday,reg_time) VALUES (?,?,?,?,?,?,?)";
+		$this->db->query($sql,array($email,$password,$name,$nickname,$gender,$birthday,$reg_time));	
 	}
-	function register_simple($email,$password){//必填项
-		$sql="INSERT INTO user (email,sha1（password）) VALUES (?,?)";
-		$this->db->query($sql,array($email,$password));	
+	function register_simple($email,$password,$reg_time){//必填项
+		$sql="INSERT INTO user (email,password,reg_time) VALUES (?,?,?)";
+		$this->db->query($sql,array($email,$password,$reg_time));	
 	}
 	
 	
 	//更新
 	function update_by_email($map,$email){//更改某些项
-		/*例如：
-			$map['gender']='1';
-			$map['name']='hello';
-			$this->user_model->update_by_email($map,$email);
-		 * *
-		 */
 		foreach($map as $key=>$var){
 	    	$sql="UPDATE user SET ".$key."=? WHERE email=?";
 			$result=$this->db->query($sql,array($var,$email));
 		}
 	}
 	function update_by_id($map,$id){//更改某些项
-		/*例如：
-			$map['gender']='1';
-			$map['name']='hello';
-			$this->user_model->update_by_id($map,$id);
-		 * *
-		 */
 		foreach($map as $key=>$var){
 	    	$sql="UPDATE user SET ".$key."=? WHERE user_id=?";
 			$result=$this->db->query($sql,array($var,$id));
@@ -109,28 +168,6 @@ class user_model extends CI_Model{
         return $constellation;
     }
     
-    // 获取一行中可以暴露的信息（所以不包括密码，注册时间(用来加密密码)）
-    function get_exposable_row($id) {
-    	$sql = "SELECT * FROM user WHERE user_id=? LIMIT 1";
-    	$query = $this->db->query($sql,array($id));
-    	$result = $query->row_array();
-    	
-    	// unset user password, user reg_time
-    	unset($result['password']);
-    	unset($result['reg_time']);
-    	
-        return $result;
-    }
     
-    function get_exposable_row_by_email($email) {
-    	$sql = "SELECT * FROM user WHERE email=? LIMIT 1";
-    	$query = $this->db->query($sql,array($email));
-    	$result = $query->row_array();
-    	
-    	// unset user password, user reg_time
-    	unset($result['password']);
-    	unset($result['reg_time']);
-    	
-        return $result;
-    }
+    */
 }

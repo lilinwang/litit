@@ -9,13 +9,39 @@ class Sign_up extends CI_Controller {
 		$this->load->helper('form');
 		$this->load->library('session');
 	}
-	
-	function index(){
+	function index() {
+		date_default_timezone_set("PRC");
+        $time_stamp = date("Y-m-d H:i:s");
+        // 获得参数
+        $user_type = $this->input->post('user_type');
+        $email = $this->input->post('email');
+        $password = sha1( $this->input->post('password').$time_stamp);    
+        // 读取model
+        if($user_type=="0"){
+			$this->load->model('musician_model', 'user_model');
+		} else {
+			$this->load->model('user_model');
+		};
+		// 检查是否邮箱已被注册
+		$email_exists = $this->user_model->email_exists($this->input->post('email'));          
+        if(!$email_exists){
+			// 设置session中的参数，自动登录
+			$this->user_model->register_simple($email,$password,$time_stamp);
+			$row = $this->user_model->get_exposable_row_by_email($email);
+            $this->session->set_userdata('is_logged_in', true);
+            $this->session->set_userdata('user_type', $user_type);
+            $this->session->set_userdata('user_id', $row['user_id']);
+			redirect(base_url());
+		}
+		else {
+			$this->session->set_flashdata('sign_up_prompt', '该邮箱已被注册');
+            redirect(base_url());
+		}	 
+    }
+	/*function index(){
         $this->load->model('user_model');
         $this->load->model('musician_model');
         $this->load->model('music_model');
-        date_default_timezone_set("PRC");
-        $time_stamp = date("Y-m-d H:i:s");
         if($this->input->post('usertype')=="1"){ // 用户类型是听众
             $result=$this->user_model->check($this->input->post('email'));            
             if(!$result){ 
@@ -46,14 +72,14 @@ class Sign_up extends CI_Controller {
 						$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 						$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
 						$data['message']=' ';
-						$this->load->view('home_in',$data);			           	
+						$this->load->view('home_view',$data);			           	
             }else{
                     $data = $this->music_model->rand();
 					$data['musician'] = $this->musician_model->check_id($data['musician_id']);
 					$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 					$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
 					$data['message']='该邮箱已被注册';
-					$this->load->view('home',$data);
+					$this->load->view('home_view',$data);
             };
         }else{                     
             $result=$this->musician_model->check_user($this->input->post('email'));        
@@ -91,7 +117,7 @@ class Sign_up extends CI_Controller {
 					$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 					$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
 					$data['message']=' ';
-					$this->load->view('home_in',$data);
+					$this->load->view('home_view',$data);
 					
             }else{
 					$data = $this->music_model->rand();
@@ -99,10 +125,10 @@ class Sign_up extends CI_Controller {
 					$data['list']= $this->music_model->getallmusic_by_musician_id($data['musician_id']);
 					$data['tag']=$this->music_model->gettag_by_id($data['music_id']);
 					$data['message']='该邮箱已被注册';
-					$this->load->view('home',$data);
+					$this->load->view('home_view',$data);
             }
         }
      
-    }		
+    }		*/
 }
 ?>

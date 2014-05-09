@@ -138,7 +138,7 @@
             
             // 播放音乐
             $(".global-tab-content").on("click", ".play-button", function(){
-                window.opener.player.play_now($(this).attr("id")); // pass music_id
+                window.opener.player.play_now($(this).attr("mid"));
             });
         });
     </script>
@@ -176,32 +176,32 @@
             html = '';
             if (tab_for == 'collects') {
                 for(i in data) {
-                    html += generate_square_block(data[i].music_id, data[i].image_dir, data[i].name);
+                    html += generate_square_block(data[i].image_dir, data[i].name);
                 }
             }
             else if (tab_for == 'follows') {
                 for(i in data) {
-                    html += generate_square_block(data[i].musician_id, data[i].portaitdir, data[i].name, false);
+                    html += generate_square_block(data[i].portaitdir, data[i].name);
                 }
             }
             else if (tab_for == 'downloads') {
                 for(i in data) {
-                    html += generate_square_block(data[i].music_id, data[i].portaitdir, data[i].name);
+                    html += generate_square_block(data[i].portaitdir, data[i].name);
                 }
             }
             else if (tab_for == 'uploads') {
                 for(i in data) {
-                    html += generate_square_block(data[i].music_id, data[i].image_dir, data[i].name);
+                    html += generate_square_block(data[i].image_dir, data[i].name);
                 }
             }
             else if (tab_for == 'copyrights') {
                 for(i in data) {
-                    html += generate_square_block(data[i].music_id, '#', data[i].name);
+                    html += generate_square_block('#', data[i].name);
                 }
             }
             else if (tab_for == 'private_letter') {
                 for(i in data) {
-                    html += generate_square_block(data[i].id, '#', data[i].name);
+                    html += generate_square_block('#', data[i].name);
                 }
             }
             
@@ -209,23 +209,12 @@
         }
         
         // 生成方块流控件的方块html
-        function generate_square_block(id, bg_url, text, can_play) {        
-            if(typeof(can_play)==='undefined') can_play = true;
-
+        function generate_square_block(bg_url, text) {
+            //TODO
             str = 
             '<div class="square-block">' + 
-                 '<img class="square-block-bg" src="' + bg_url + '" >' + 
-                 '<div class="square-block-hoverer">' +
-                     '<span class="music-name">' + text + '</span>';
-            if (can_play) {
-                str +=
-                     '<span class="icon-stack play-button" id="' + id +'">' +
-                         '<i class="icon-circle-blank icon-stack-base"></i>' +
-                         '<i id="icon-to-change" class="icon-play"></i>' +
-                     '</span>';
-            }
-            str += 
-                 '</div>' +
+                 '<img class="square-block-bg" src="' + "upload/avatar/user_28/avatar_1388719443.jpeg" + '" >' + 
+                 '<div class="square-block-hoverer">' + text + '</div>' +
             '</div>';
             return str; 
         }
@@ -430,10 +419,11 @@
                     <div class="square-stream-outer">
                         <?php foreach($collects as $collect): ?>
                         <div class="square-block">
-                            <img class="square-block-bg" src="<?php echo base_url($collect['image_dir']); ?>" >
+                            <!-- TODO -->
+                            <img class="square-block-bg" src="<?php echo base_url("upload/avatar/user_28/avatar_1388719443.jpeg"); ?>" >
                             <div class="square-block-hoverer">
                                 <span class="music-name"><?php echo $collect['name']; ?></span>
-                                <span class="icon-stack play-button" id="<?php echo $collect['music_id']; ?>">
+                                <span class="icon-stack play-button" mid="<?php echo $collect['music_id']; ?>">
                                     <i class="icon-circle-blank icon-stack-base"></i>
                                     <i id="icon-to-change" class="icon-play"></i>
                                 </span>

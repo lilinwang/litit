@@ -52,33 +52,31 @@ class Home extends CI_Controller {
     		$music = $this->music_model->get_by_id($music_id);
 		}
 		else {
-		    $music = $this->music_model->rand();
+		    $music = $this->music_model->get_by_random();
 		}
-		
+		if(file_exists($music['lyrics_src'])){ 
+			$record=fgets($music['lyrics_src']);
+			if($record!=NULL){ 
+				$music['lyrics'] = explode("\t", $record); 
+			}
+			else {
+				$music['lyrics'] = "";
+			}
+		}
+
 		// 获得当前音乐的音乐人的信息 以及全部音乐
-		$musician = $this->musician_model->check_id($music['musician_id']);
-		$musician['all_music'] = $this->music_model->getallmusic_by_musician_id($music['musician_id']);
+		$musician = $this->user_model->get_user_by_musician_id($music['musician_id']);
+		$musician['all_music'] = $this->music_model->get_all_music_by_musician_id($music['musician_id']);
 		
 		// 获得用户数据 $user
 		if (!empty($user_id)) {
-		    // 如果要合并 user 和 musician 两张表，修改这里就好
-		    if ($user_type == 1) { // 普通用户
-		        $this->load->model('collect_model');
-	            $this->load->model('follow_model');
-                $this->load->model('copyright_model');
-                $user = $this->user_model->get_exposable_row($user_id);
-		    }
-		    else { // 音乐人
-		        $this->load->model('collectm_model', 'collect_model');
-		        $this->load->model('followm_model', 'follow_model');
-		        $this->load->model('copyrightm_model', 'copyright_model');
-		        $user = $this->musician_model->get_exposable_row($user_id);
-		    }
+	        $this->load->model('collect_model');
+            $this->load->model('follow_model');
+            $user = $this->user_model->get_exposable_row($user_id);
 		    
 		    // 往当前音乐 $music 中添加和用户有关的信息
 		    $music['is_follow'] = $this->follow_model->is_follow($user_id, $music['musician_id']);
 		    $music['is_collect'] = $this->collect_model->is_collect($user_id, $music['music_id']);
-		    $music['is_copyright_sign'] = $this->copyright_model->is_copyright_sign($user_id, $music['music_id']);
 		    
 		    // 用户的收藏
 		    $collection = $this->collect_model->display($user_id);
@@ -88,7 +86,6 @@ class Home extends CI_Controller {
 		    // 往当前音乐 $music 中添加和用户有关的信息
 		    $music['is_follow'] = false;
 		    $music['is_collect'] = false;
-		    $music['is_copyright_sign'] = false;
 		    
 		    // 用户的收藏
 		    $collection = null;

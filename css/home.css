@@ -108,7 +108,7 @@ ul {
             display: block;
             position: absolute;
             left: 0px;
-            bottom: 100px;
+            bottom: 130px;
             padding: 10px;
             
             background-color: #f0f0f0;
@@ -172,9 +172,9 @@ ul {
                 border: 1px solid #e84782;
             }
             #container-logo #logo #forms-outer .hover-form input[type="submit"] {
-                background-color: #f2f64b;
+                background-color: #FFB90F;
                 border: medium none;
-                color: #000;
+                color: #969696;
                 
                 width: 100%;
                 display: inline-block;
@@ -199,7 +199,7 @@ ul {
             }
             #container-logo #logo #forms-outer .hover-form input[type="submit"]:hover {
                 background-color: #222;
-                color: #fff;
+                color: #ffff;
             }
             #container-logo #logo #forms-outer .hover-form .prompt{
                 text-align: center;
@@ -210,24 +210,24 @@ ul {
         }
             #container-logo #logo #light-button{
                 cursor: pointer;
-                width: 25px;
-                height: 25px;
+                width: 34px;
+                height: 34px;
                 position: absolute;
-                top: 1px;
-                left: 82px;
-                
-                background-color: #fff;
-                box-shadow: 0px 3px 5px #444;
-                border-radius: 13px;
+                top: -10px;
+                left: 77px;
+                color: #FFFFFF;
+                background-color: rgb(75,75,75);
+                box-shadow: 0px 30px 5px #FFFFFF;
+                border-radius: 50%;
                 
                 -webkit-animation-name: breathingLight;
-                -webkit-animation-duration: 3s;
+                -webkit-animation-duration: 4s;
                 -webkit-animation-iteration-count: infinite;
             }
 /* @end */        
 
 /* @group container-mask */
-#container-mask{width:100%;height:100%;margin:0 0 0 0;float:left;position:absolute;left:0;top:0;right:0;bottom:0;z-index:98;background-color:rgba(0, 0, 0, .2);display:block;}
+#container-mask{width:100%;height:100%;margin:0 0 0 0;float:left;position:absolute;left:0;top:0;right:0;bottom:0;z-index:98;background:rgb(75,75,75); opacity:0.8; -moz-opacity:0.8; filter:alpha(opacity=10);display:block;}
 
 #container-mask *
 {
@@ -245,22 +245,34 @@ ul {
             z-index: 1050;
             */
             float: right;
-            vertical-align: center;
-            line-height: 35px;
+            position:absolute; top:10px; right:30px;
         }
-            #mask-nav a{
-                color: #eee;
-                font-size: 25px;
+
+            #mask-nav a{    
+			    color:#FFFFF;
+				float:left; display:inline; width:40px; height:40px; margin-right:5px;			
+				
             }
-            #mask-nav i{
-                padding: 5px;
-                cursor: pointer;
-            }   
-            #mask-search {
+			#mask-nav a.iconhome,#mask-nav a.iconheartempty,#mask-nav a.iconsignal,#mask-nav a.iconsearch{ background:url(../image/btn_icon.png) no-repeat;}
+			#mask-nav a.iconhome { background-position:-90px 0;}
+            #mask-nav a.iconhome:hover { background-position:-90px -44px;}
+
+            #mask-nav a.iconheartempty { background-position:-136px 0;}
+            #mask-nav a.iconheartempty:hover { background-position:-136px -44px;}
+
+            #mask-nav a.iconsignal { background-position:0 0;}
+            #mask-nav a.iconsignal:hover { background-position:0px -44px;}
+
+            #mask-nav a.iconsearch { background-position:-43px 0;}
+            #mask-nav a.iconsearch:hover { background-position:-43px -44px;}
+            
+            #mask-search {			 
                 display: inline-block;
+				padding-top:20px;
             }
             #mask-search-input {
                 width: 0;
+				
                 display: none;
             }
 
@@ -268,8 +280,8 @@ ul {
         position: absolute;
         top: 50%;
         left: 50%;
-        margin-top: -93px;
-        margin-left: -121px;
+        margin-top: -73px;
+        margin-left: -100px;
     }
         #mask-motto {
             background: url(../image/center_btn.png) no-repeat;
@@ -279,14 +291,15 @@ ul {
         #mask-play {
             position: relative;
             left: 46px;
-            top: 40px;
+            top: 20px;
             background: url(../image/center_btn.png) no-repeat;
-            width: 142px;
-            height: 113px;
+            width: 152px;
+            height: 123px;
             background-position: 0 -33px;
         }
+
         #mask-play:hover {
-            background-position: -142px -33px;
+            background-position: -152px -33px;
         }
             #mask-play-button {
                 cursor: pointer;
@@ -604,9 +617,9 @@ ul {
                             border-bottom: 1px solid #ddd;
                         }
         section.right{
-            width:210px; 
+            width:230px; 
             height: 100%;
-            padding: 20px 30px 20px 30px;
+            padding:20px;
             text-align: center;
             
             -webkit-box-shadow: 7px 0px 12px rgba(0,0,0, 0.2);
@@ -670,42 +683,18 @@ img.motto{float:left;position:absolute;left:533px;top:200px;}
 	margin: 10px auto;
 }
 
-button.demo {
-	border:0px;
-	float:left;
-	position:absolute;left:139px;top:534px;right:0;bottom:0;display:none;
-	z-index:99;
-    display:block;
-	width: 40px; 
-	height: 40px;
-	-moz-border-radius: 50px; 
-	-webkit-border-radius: 50px; 
-	border-radius: 50px; 
-    text-align: center;
-    margin: 0;
-    background: #80CB1B;
-    padding: 0;
-    -moz-box-shadow: 0 0 5px #343434;
-    -webkit-box-shadow: 0 0 5px #fff;
-    box-shadow: 0 0 5px #343434;
-    color: #fff;
-    font-weight: bold;
-	-webkit-animation-name: breathingLight;
-	-webkit-animation-duration: 3s;
-	-webkit-animation-iteration-count: infinite;
-}
 @-webkit-keyframes 'breathingLight' {
         from {
-                background-color: #FFFFFF;
-                -webkit-box-shadow:0 0 10px #ccc;
+                background-color: rgba(105,105,105,0.5);
+                -webkit-box-shadow:0 0 10px rgba(105,105,105,1);
         }
 	50% {
-                background-color: rgb(246,205,38);
-                -webkit-box-shadow:0 0 40px rgb(246,205,38);
+                background-color: rgba(1000, 1000, 1000,1);
+                -webkit-box-shadow:0 0 60px rgba(1000, 1000, 1000, 1);
         }
 	to {
-                 background-color: #FFFFFF;
-                -webkit-box-shadow:0 0 10px #ccc;
+                 background-color: rgba(105,105,105,0.5);
+                -webkit-box-shadow:0 0 10px rgba(105,105,105,1);
         }
 }
 

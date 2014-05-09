@@ -4,6 +4,19 @@ class musician_model extends CI_Model{
 		parent::__construct();
 	}
 
+    function get_by_id($id) {
+        // TODO
+        $sql='SELECT * FROM musician NATURAL JOIN user where musician.musician_id=?';
+        $query=$this->db->query($sql,$id);
+        if ($query->num_rows() > 0) {
+        	return $query->row_array();
+    	}
+    	else {
+            return null;
+        }
+    }
+
+    /*
 	//登录
 	function login($email,$password){//登录检查
 		$sql="SELECT * FROM musician WHERE email=?";
@@ -18,6 +31,20 @@ class musician_model extends CI_Model{
 		}
      	else{return 3;}//无此用户
 	
+	}
+	//查询用户是否存在和获取用户所有信息
+	function check($email){
+		$sql="SELECT * FROM user WHERE email=?";
+		$query=$this->db->query($sql,array($email));
+		return $query->result_array();
+	}
+	function register_all($email,$password,$name,$nickname,$gender,$birthday,$reg_time){//全部项
+		$sql="INSERT INTO user (email,password,name,nickname,gender,birthday,reg_time) VALUES (?,?,?,?,?,?,?)";
+		$this->db->query($sql,array($email,$password,$name,$nickname,$gender,$birthday,$reg_time));	
+	}
+	function register_simple($email,$password,$reg_time){//必填项
+		$sql="INSERT INTO user (email,password,reg_time) VALUES (?,?,?)";
+		$this->db->query($sql,array($email,$password,$reg_time));	
 	}
 	//查询用户是否存在相片
 	function check_photo($id){
@@ -53,12 +80,12 @@ class musician_model extends CI_Model{
 		$this->db->query($sql,array($nickname,$name,$gender,$birthday,$identity,$introduction,$attention,$portaitdir));
 	}
    	function update_by_id($map,$id){//更改某些项
-		/*例如：
-			$map['gender']='1';
-			$map['name']='hello';
-			$this->user_model->update_by_id($map,$id);
-		 * *
-		 */
+		//例如：
+		//	$map['gender']='1';
+		//	$map['name']='hello';
+		//	$this->user_model->update_by_id($map,$id);
+		 //
+		 
 		foreach($map as $key=>$var){
 	    	$sql="UPDATE musician SET ".$key."=? WHERE musician_id=?";
 			$result=$this->db->query($sql,array($var,$id));
@@ -160,4 +187,5 @@ class musician_model extends CI_Model{
     	$result['user_id'] = $result['musician_id']; // for controller's convenience
         return $result;
     }
+    */
 }

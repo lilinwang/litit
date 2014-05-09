@@ -3,6 +3,46 @@ class music_model extends CI_Model{
    function __construct(){
         parent::__construct();
     }
+    
+    function get_by_random(){
+        $sql = 'select * from music order by rand() limit 1';
+        $query = $this->db->query($sql);
+        if ($query->num_rows() > 0) {
+            return $query->row_array();
+        }
+        else {
+            return [];
+        }
+    }
+    
+    function get_by_id($id){
+        $query = $this->db->query(
+            'SELECT * FROM music WHERE music_id=? LIMIT 1',
+            array($id)
+        );
+        if($query->num_rows() > 0){
+            return $query->row_array();
+        }else{
+            return [];
+        }
+    }
+    
+    function get_all_music_by_musician_id($musician_id){
+        $sql='select musician_id,music_id,name,story from music where musician_id=?';
+        $query=$this->db->query($sql,$musician_id);
+        $result=$query->result_array();
+        return $result;
+    }
+    
+    function rand_return_only_ids($count){
+        $query = $this->db->query(
+            'select music_id from music order by rand() limit ?', 
+            array($count)
+        );
+        $result=$query->result_array();
+        return $result;
+    }
+    /*
 	function insert_new_music($name,$story,$musician_id){    //上传成功后更新数据库
 
 	     $sql='INSERT INTO music(name,musician_id,story,download_cnt,share_cnt,collect_cnt,view_cnt,randable) values (?,?,?,?,?,?,?,?)';
@@ -37,7 +77,7 @@ class music_model extends CI_Model{
     }
 
     function insert_new_no_url(
-        $musician_id, $music_name, /*$album, */
+        $musician_id, $music_name, 
         $lyrics_by, $composed_by, $arranged_by,
         $disc_company, $perform_time, $story)
     {   
@@ -48,7 +88,7 @@ class music_model extends CI_Model{
             values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
         $params = array(
-            $musician_id, '', '', '', $music_name, /*$album,*/ $lyrics_by, $composed_by, $arranged_by,
+            $musician_id, '', '', '', $music_name, $lyrics_by, $composed_by, $arranged_by,
             $disc_company, $perform_time, $story,
             0,0,0,0,0
         );
@@ -196,18 +236,16 @@ class music_model extends CI_Model{
         return; 
     }
     	function update_by_id($map,$id){//更改某些项
-		/*例如：
-			$map['image_dir']='path';
-			$map['name']='hello';
-			$this->user_model->update_by_id($map,$id);
-		 * *
-		 */
+		//例如：
+		//	$map['image_dir']='path';
+		//	$map['name']='hello';
+		//	$this->user_model->update_by_id($map,$id);
 		foreach($map as $key=>$var){
 	    	$sql="UPDATE music SET ".$key."=? WHERE music_id=?";
 			$result=$this->db->query($sql,array($var,$id));
 		}
 	}
-	
+	*/
 
 }
 ?>
