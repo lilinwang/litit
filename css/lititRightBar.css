@@ -1,0 +1,80 @@
+.litit-right-bar .item ,
+.litit-right-bar .item > .img > img {
+transition: 200ms;
+-webkit-transition: 200ms;
+-moz-transition: 200ms;
+-o-transition: 200ms;
+}
+
+.litit-right-bar {
+display:none;
+overflow: auto;
+width: 265px;
+background: #4B4B4B;
+box-shadow: inset 8px 0 16px #000;
+}
+.litit-right-bar .item {
+cursor:pointer;
+cursor:hand;
+list-style: none;
+min-height: 70px;
+overflow: hidden;
+margin: 8px 0 8px 60px;
+padding-left:40px;
+background: #8D8D8D;
+}
+.litit-right-bar .item:hover {
+margin-left:55px;
+}
+.litit-right-bar .item > .img {
+position: absolute;
+margin-left: -80px;
+}
+.litit-right-bar .item > .img > img {
+width: 70px;
+height: 70px;
+border-radius: 50%;
+}
+.litit-right-bar .item > .img > img:hover {
+box-shadow:0 0 20px black;
+}
+.litit-right-bar .item > .text {
+width:160px;
+overflow:hidden;
+float:left;
+color:black;
+font:20px/1 "黑体";
+padding:10px 0;
+}
+.litit-right-bar  input{
+overflow: auto;
+position:absolute;top:50%;
+padding:10px 0;
+}
+.litit-right-bar-list {
+overflow: auto;
+position: absolute;
+top: 40px;
+left:5px;
+bottom: 0;
+}
+
+/******************/
+.litit-right-bar-list::-webkit-scrollbar {
+width: 8px;
+height: 14px;
+}
+.litit-right-bar-list::-webkit-scrollbar-thumb {
+border-width: 0;
+border-style: solid;
+border-radius: 6px;
+background: #7E7E7E;
+}
+.litit-right-bar-list::-webkit-scrollbar-button {
+display: none;
+}
+.litit-right-bar-list::-webkit-scrollbar-track, ::-webkit-scrollbar-track-piece {
+background: -webkit-gradient(linear,left top,right top,from(#969696),color-stop(50%,#BDBDBD),color-stop(75%,#9E9E9E),to(#535353));
+width: 11px;
+height: 11px;
+}

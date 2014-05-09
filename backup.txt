@@ -1,0 +1,10 @@
+﻿1、image文件夹：存网站图片素材
+2、upload文件夹：portrait文件夹：头像
+				 album：单曲封面
+				 music：上传音乐
+3、js文件夹：存js文件
+4、css文件夹：存css文件
+
+（bootstrap的文件看着分存）
+
+5、git更新的时候一定要先pull，再push
